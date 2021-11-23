@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "servermysql",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -20,13 +20,15 @@
     "strapi-plugin-email": "3.6.8",
     "strapi-plugin-upload": "3.6.8",
     "strapi-plugin-i18n": "3.6.8",
-    "strapi-connector-mongoose": "3.6.8"
+    "strapi-connector-bookshelf": "3.6.8",
+    "knex": "0.21.18",
+    "mysql": "2.18.1"
   },
   "author": {
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "a3d893cd-240c-4c2e-9450-170c8386effb"
+    "uuid": "3dd4e800-a062-42b2-ab82-878d6994b489"
   },
   "engines": {
     "node": ">=10.16.0 <=14.x.x",
