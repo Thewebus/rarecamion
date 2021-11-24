@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rarecamion/pages/login_page.dart';
+import 'package:rarecamion/pages/recordings_page.dart';
 import 'package:rarecamion/pages/register_page.dart';
 
 void main() {
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RARE CAMION v1',
       routes: {
+        '/records': (BuildContext context) => RecordingsPage(),
         '/login': (BuildContext context) => LoginPage(),
         '/register': (BuildContext context) => RegisterPage()
       },
