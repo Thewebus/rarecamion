@@ -92,8 +92,6 @@ class RegisterPageState extends State<RegisterPage> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      // print('Username: $_username, Email: $_email, Password: $_password');
-
       _registerUser();
     }
   }
