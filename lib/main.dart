@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         '/register': (BuildContext context) => RegisterPage()
       },
       theme: ThemeData(
-        primaryColor: Colors.blue[600],
+        primaryColor: Colors.blue,
         colorScheme:
             ColorScheme.fromSwatch().copyWith(secondary: Colors.red[600]),
         textTheme: TextTheme(

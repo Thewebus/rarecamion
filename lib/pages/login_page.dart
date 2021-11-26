@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -6,9 +9,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  bool _obscuredText = true;
+  bool _isSubmitting, _obscuredText = true;
   String _email, _password;
+  Widget _showLogo() {
+    return Padding(
+        padding: EdgeInsets.only(top: 20.0),
+        child: Container(
+          height: 150.0,
+          width: 150.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/logorarecamion.png'),
+              fit: BoxFit.fill,
+            ),
+            shape: BoxShape.circle,
+          ),
+        ));
+  }
+
   Widget _showTitle() {
     return Text('Login', style: Theme.of(context).textTheme.headline1);
   }
@@ -50,19 +70,23 @@ class LoginPageState extends State<LoginPage> {
     return Padding(
         padding: EdgeInsets.only(top: 20.0),
         child: Column(children: [
-          RaisedButton(
-              child: Text('Connexion',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(color: Colors.white)),
-              elevation: 8.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              color: Theme.of(context).primaryColor,
-              onPressed: _submit),
+          _isSubmitting == true
+              ? CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(Theme.of(context).primaryColor))
+              : RaisedButton(
+                  child: Text('Connexion',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(color: Colors.white)),
+                  elevation: 8.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  color: Theme.of(context).primaryColor,
+                  onPressed: _submit),
           FlatButton(
-              child: Text('Pas de compte ? Faire la demande'),
+              child: Text('Pas de compte ? Lancer la demande'),
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, '/register'))
         ]));
@@ -72,13 +96,75 @@ class LoginPageState extends State<LoginPage> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      print('Email: $_email, Password: $_password');
+      _registerUser();
     }
+  }
+
+  void _registerUser() async {
+    setState(() => _isSubmitting = true);
+    http.Response response = await http.post(
+        Uri.parse('http://localhost:1337/auth/local'),
+        body: {"identifier": _email, "password": _password});
+
+    final responseData = json.decode(response.body);
+    if (response.statusCode == 200) {
+      storeUserData(responseData);
+      setState(() => _isSubmitting = false);
+      _showSuccessSnack();
+      _redirectUser();
+      print(responseData);
+    } else {
+      print(responseData);
+      setState(() => _isSubmitting = false);
+      //final String errorMsg = responseData['message'];
+      final String errorMsg = 'Identifiants incorrects !';
+      _showErrorSnack(errorMsg);
+    }
+  }
+
+  void storeUserData(responseData) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> user = responseData['user'];
+    user.putIfAbsent('jwt', () => responseData['jwt']);
+    prefs.setString('user', json.encode(user));
+  }
+
+  void _showSuccessSnack() {
+    final snackbar = SnackBar(
+        content: Text(
+          'Utilisateur connecté avec succès !',
+          style: TextStyle(color: Colors.green),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(milliseconds: 3000));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    _formKey.currentState.reset();
+  }
+
+  void _showErrorSnack(String errorMsg) {
+    final snackbar = SnackBar(
+        content: Text(
+          errorMsg,
+          style: TextStyle(color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(milliseconds: 3000));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    //throw Exception('Erreur : $errorMsg');
+  }
+
+  void _redirectUser() {
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, '/records');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text('RARE CAMION'),
         ),
@@ -88,13 +174,14 @@ class LoginPageState extends State<LoginPage> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     stops: [0.1, 0.2],
-                    colors: const [Colors.blue, Colors.white])),
+                    colors: const [Colors.lightBlueAccent, Colors.white])),
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Center(
                 child: SingleChildScrollView(
               child: Form(
                   key: _formKey,
                   child: Column(children: [
+                    _showLogo(),
                     _showTitle(),
                     _showEmailInput(),
                     _showPasswordInput(),

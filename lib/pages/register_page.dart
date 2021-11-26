@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -88,7 +89,7 @@ class RegisterPageState extends State<RegisterPage> {
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
               : RaisedButton(
-                  child: Text('Créer un utilisateur',
+                  child: Text('Demander création de compte',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
@@ -122,37 +123,49 @@ class RegisterPageState extends State<RegisterPage> {
     final responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
+      storeUserData(responseData);
       _showSuccessSnack();
       _redirectUser();
       print(responseData);
     } else {
       setState(() => _isSubmitting = false);
-      final String errorMsg = responseData['message'];
+      //final String errorMsg = responseData['message'];
 
+      //Map<String, dynamic> errorMsg = responseData['message'];
+      final String errorMsg = 'Erreur !!!';
       _showErrorSnack(errorMsg);
     }
+  }
+
+  void storeUserData(responseData) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> user = responseData['user'];
+    user.putIfAbsent('jwt', () => responseData['jwt']);
+    prefs.setString('user', json.encode(user));
   }
 
   void _showSuccessSnack() {
     final snackbar = SnackBar(
         content: Text('Utilisateur $_username enregistré avec succès !',
-            style: TextStyle(color: Colors.green)));
-    _scaffoldKey.currentState.showSnackBar(snackbar);
-
+            style: TextStyle(color: Colors.green)),
+        duration: Duration(milliseconds: 3000));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
   }
 
   void _showErrorSnack(String errorMsg) {
-    final snackbar =
-        SnackBar(content: Text(errorMsg, style: TextStyle(color: Colors.red)));
-    _scaffoldKey.currentState.showSnackBar(snackbar);
-
-    throw Exception('Erreur rencontrée: $errorMsg');
+    final snackbar = SnackBar(
+        content: Text(errorMsg, style: TextStyle(color: Colors.red)),
+        duration: Duration(milliseconds: 3000));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    //throw Exception('Erreur : $errorMsg');
   }
 
   void _redirectUser() {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/records');
+      Navigator.pushReplacementNamed(context, '/login');
     });
   }
 
@@ -169,7 +182,7 @@ class RegisterPageState extends State<RegisterPage> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     stops: [0.1, 0.2],
-                    colors: const [Colors.blue, Colors.white])),
+                    colors: const [Colors.lightBlueAccent, Colors.white])),
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Center(
                 child: SingleChildScrollView(
