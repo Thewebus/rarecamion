@@ -36,7 +36,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showUsernameInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
             onSaved: (val) => _username = val,
             validator: (val) => val.length < 6 ? 'Nom trop court' : null,
@@ -49,7 +49,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showEmailInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
             onSaved: (val) => _email = val,
             validator: (val) => !val.contains('@') ? 'Adresse invalide' : null,
@@ -62,7 +62,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showPasswordInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
             onSaved: (val) => _password = val,
             obscureText: _obscuredText,
@@ -82,7 +82,7 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showFormActions() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: Column(children: [
           _isSubmitting == true
               ? CircularProgressIndicator(
@@ -188,14 +188,18 @@ class RegisterPageState extends State<RegisterPage> {
                 child: SingleChildScrollView(
               child: Form(
                   key: _formKey,
-                  child: Column(children: [
-                    _showLogo(),
-                    _showTitle(),
-                    _showUsernameInput(),
-                    _showEmailInput(),
-                    _showPasswordInput(),
-                    _showFormActions(),
-                  ])),
+                  child: Column(
+                      /*crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,*/
+                      children: [
+                        _showLogo(),
+                        _showTitle(),
+                        _showUsernameInput(),
+                        _showEmailInput(),
+                        _showPasswordInput(),
+                        _showFormActions(),
+                      ])),
             ))));
   }
 }

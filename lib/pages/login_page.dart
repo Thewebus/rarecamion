@@ -35,7 +35,7 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _showEmailInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
             onSaved: (val) => _email = val,
             validator: (val) => !val.contains('@') ? 'Adresse invalide' : null,
@@ -48,7 +48,7 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _showPasswordInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
             onSaved: (val) => _password = val,
             obscureText: _obscuredText,
@@ -68,7 +68,7 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _showFormActions() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: Column(children: [
           _isSubmitting == true
               ? CircularProgressIndicator(
@@ -180,13 +180,17 @@ class LoginPageState extends State<LoginPage> {
                 child: SingleChildScrollView(
               child: Form(
                   key: _formKey,
-                  child: Column(children: [
-                    _showLogo(),
-                    _showTitle(),
-                    _showEmailInput(),
-                    _showPasswordInput(),
-                    _showFormActions(),
-                  ])),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _showLogo(),
+                        _showTitle(),
+                        _showEmailInput(),
+                        _showPasswordInput(),
+                        _showFormActions(),
+                      ])),
             ))));
   }
 }
