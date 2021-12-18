@@ -117,7 +117,7 @@ class RegisterPageState extends State<RegisterPage> {
   void _registerUser() async {
     setState(() => _isSubmitting = true);
     http.Response response = await http.post(
-        Uri.parse('http://localhost:1337/auth/local/register'),
+        Uri.parse('http://rarecamion.com:1337/auth/local/register'),
         body: {"username": _username, "email": _email, "password": _password});
 
     final responseData = json.decode(response.body);

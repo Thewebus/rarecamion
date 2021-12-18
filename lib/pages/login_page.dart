@@ -9,13 +9,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   bool _isSubmitting, _obscuredText = true;
   String _email, _password;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void storeUserData(responseData) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> user = responseData['user'];
+    user.putIfAbsent('jwt', () => responseData['jwt']);
+    prefs.setString('user', json.encode(user));
+  }
+
   Widget _showLogo() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 0.0),
         child: Container(
           height: 150.0,
           width: 150.0,
@@ -30,7 +38,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget _showTitle() {
-    return Text('Login', style: Theme.of(context).textTheme.headline1);
+    return Text('Connexion', style: Theme.of(context).textTheme.headline1);
   }
 
   Widget _showEmailInput() {
@@ -75,7 +83,7 @@ class LoginPageState extends State<LoginPage> {
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
               : RaisedButton(
-                  child: Text('Connexion',
+                  child: Text('Connectez-vous',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1
@@ -103,7 +111,7 @@ class LoginPageState extends State<LoginPage> {
   void _registerUser() async {
     setState(() => _isSubmitting = true);
     http.Response response = await http.post(
-        Uri.parse('http://localhost:1337/auth/local'),
+        Uri.parse('http://rarecamion.com:1337/auth/local'),
         body: {"identifier": _email, "password": _password});
 
     final responseData = json.decode(response.body);
@@ -120,13 +128,6 @@ class LoginPageState extends State<LoginPage> {
       final String errorMsg = 'Identifiants incorrects !';
       _showErrorSnack(errorMsg);
     }
-  }
-
-  void storeUserData(responseData) async {
-    final prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> user = responseData['user'];
-    user.putIfAbsent('jwt', () => responseData['jwt']);
-    prefs.setString('user', json.encode(user));
   }
 
   void _showSuccessSnack() {

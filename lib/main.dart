@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RARE CAMION v1',
+      title: 'RARE CAMION',
       routes: {
         '/records': (BuildContext context) => RecordingsPage(),
         '/login': (BuildContext context) => LoginPage(),
@@ -23,12 +23,12 @@ class MyApp extends StatelessWidget {
         colorScheme:
             ColorScheme.fromSwatch().copyWith(secondary: Colors.red[600]),
         textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            subtitle1: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            bodyText1: TextStyle(fontSize: 12)),
+            headline1: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            subtitle1: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+            bodyText1: TextStyle(fontSize: 11)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: RegisterPage(),
+      home: LoginPage(),
     );
   }
 }
