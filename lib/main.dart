@@ -1,35 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/redux/actions.dart';
+import 'package:rarecamion/redux/reducers.dart';
 import 'package:rarecamion/pages/login_page.dart';
 import 'package:rarecamion/pages/recordings_page.dart';
 import 'package:rarecamion/pages/register_page.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux/redux.dart';
 
 void main() {
-  runApp(MyApp());
+  final store = Store<AppState>(appReducer,
+      initialState: AppState.initial(), middleware: [thunkMiddleware]);
+  runApp(MyApp(store: store));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+  final Store<AppState> store;
+  MyApp({this.store});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'RARE CAMION',
-      routes: {
-        '/records': (BuildContext context) => RecordingsPage(),
-        '/login': (BuildContext context) => LoginPage(),
-        '/register': (BuildContext context) => RegisterPage()
-      },
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        colorScheme:
-            ColorScheme.fromSwatch().copyWith(secondary: Colors.red[600]),
-        textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            subtitle1: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-            bodyText1: TextStyle(fontSize: 11)),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoginPage(),
-    );
+    return StoreProvider(
+        store: store,
+        child: MaterialApp(
+          title: 'RARE CAMION',
+          routes: {
+            '/records': (BuildContext context) => RecordingsPage(onInit: () {
+                  StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                  // dispatch an action (getUserAction) to grab user data
+                }),
+            '/login': (BuildContext context) => LoginPage(),
+            '/register': (BuildContext context) => RegisterPage()
+          },
+          theme: ThemeData(
+            primaryColor: Colors.blue,
+            colorScheme:
+                ColorScheme.fromSwatch().copyWith(secondary: Colors.red[600]),
+            textTheme: TextTheme(
+                headline1: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                subtitle1: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                bodyText1: TextStyle(fontSize: 11)),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: LoginPage(),
+        ));
   }
 }
 /*
