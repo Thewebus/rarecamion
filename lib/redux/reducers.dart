@@ -1,15 +1,14 @@
 import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/redux/actions.dart';
 
-AppState appReducer(state, action) {
+AppState appReducer(AppState state, dynamic action) {
   return AppState(user: userReducer(state.user, action));
 }
 
-userReducer(user, action) {
+User userReducer(User user, dynamic action) {
   if (action is GetUserAction) {
-    //return user from action
     return action.user;
   }
-
   return user;
 }

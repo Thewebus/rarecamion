@@ -16,8 +16,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
   final Store<AppState> store;
   MyApp({this.store});
 
@@ -26,11 +24,9 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
         store: store,
         child: MaterialApp(
-          title: 'RARE CAMION',
           routes: {
             '/records': (BuildContext context) => RecordingsPage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
-                  // dispatch an action (getUserAction) to grab user data
                 }),
             '/login': (BuildContext context) => LoginPage(),
             '/register': (BuildContext context) => RegisterPage()
