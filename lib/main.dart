@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/pages/add_vehicule_page.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'package:rarecamion/redux/reducers.dart';
 import 'package:rarecamion/pages/login_page.dart';
@@ -27,9 +28,15 @@ class MyApp extends StatelessWidget {
           routes: {
             '/records': (BuildContext context) => RecordingsPage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(getRecordingsAction);
                 }),
             '/login': (BuildContext context) => LoginPage(),
-            '/register': (BuildContext context) => RegisterPage()
+            '/register': (BuildContext context) => RegisterPage(),
+            '/addvehicule': (BuildContext context) =>
+                AddVehiculePage(onInit: () {
+                  StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                }),
           },
           theme: ThemeData(
             primaryColor: Colors.blue,

@@ -3,7 +3,9 @@ import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/redux/actions.dart';
 
 AppState appReducer(AppState state, dynamic action) {
-  return AppState(user: userReducer(state.user, action));
+  return AppState(
+      user: userReducer(state.user, action),
+      recordings: productsReducer(state.recordings, action));
 }
 
 User userReducer(User user, dynamic action) {
@@ -11,4 +13,11 @@ User userReducer(User user, dynamic action) {
     return action.user;
   }
   return user;
+}
+
+productsReducer(recordings, action) {
+  if (action is GetRecordingsAction) {
+    return action.recordings;
+  }
+  return recordings;
 }
