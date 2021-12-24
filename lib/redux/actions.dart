@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/models/recording.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -34,15 +35,24 @@ ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
 
   Map<String, dynamic> dataHash =
       new Map<String, dynamic>.from(json.decode(response.body));
+
   //print(dataHash['data']);
   final List<dynamic> responseData = dataHash['data'];
-  store.dispatch(GetRecordingsAction(responseData));
+  print(dataHash);
+
+  List<Recording> recordings = [];
+  responseData.forEach((recordingData) {
+    final Recording recording = Recording.fromJson(recordingData);
+
+    print(recording.dechargement);
+    recordings.add(recording);
+  });
+
+  store.dispatch(GetRecordingsAction(recordings));
 };
 
 class GetRecordingsAction {
-  final List<dynamic> _recordings;
-
-  List<dynamic> get recordings => this._recordings;
-
+  final List<Recording> _recordings;
+  List<Recording> get recordings => this._recordings;
   GetRecordingsAction(this._recordings);
 }

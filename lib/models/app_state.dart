@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
+import 'package:rarecamion/models/recording.dart';
+import 'package:rarecamion/models/user.dart';
 
 @immutable
 class AppState {
-  final dynamic user;
-  final List<dynamic> recordings;
+  final User user;
+  final List<Recording> recordings;
 
   AppState({@required this.user, @required this.recordings});
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rarecamion/widgets/recording_item.dart';
 
 class RecordingsPage extends StatefulWidget {
   final void Function() onInit;
@@ -70,9 +71,9 @@ class RecordingsPageState extends State<RecordingsPage> {
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2),
-                              itemBuilder: (context, i) => Text(
-                                  state.recordings[i]['attributes']
-                                      ['dechargement']))))
+                              itemBuilder: (context, i) => RecordingItem(
+                                    item: state.recordings[i],
+                                  ))))
                 ]);
               })),
       floatingActionButton: FloatingActionButton(
