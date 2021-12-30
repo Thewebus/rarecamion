@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
+  deep_pick:
+    dependency: "direct main"
+    description:
+      name: deep_pick
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0"
   fake_async:
     dependency: transitive
     description:

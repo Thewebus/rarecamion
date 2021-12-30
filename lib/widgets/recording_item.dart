@@ -11,7 +11,7 @@ class RecordingItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //final String itemURL = item['thumbnail']['url'];
     //final String pictureUrl =     'http://rarecamion.com:1337/api/upload/files/$itemURL';
-    print('Affichage matricule... ${item.matricule}');
+    //print('Affichage matricule... ${item.matricule}');
     return GridTile(
       child: Container(),
       /*Image.network(

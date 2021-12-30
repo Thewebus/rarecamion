@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/recording.dart';
@@ -24,30 +25,24 @@ class GetUserAction {
 
 /* Recordings Actions */
 ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
-  Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  };
+  http.Response response =
+      await http.get(Uri.parse('http://rarecamion.com:1337/api/vehicules'));
 
-  http.Response response = await http.get(
-      Uri.parse('http://rarecamion.com:1337/api/vehicules'),
-      headers: headers);
-
-  Map<String, dynamic> dataHash =
+  Map<String, dynamic> datas =
       new Map<String, dynamic>.from(json.decode(response.body));
 
-  //print(dataHash['data']);
-  final List<dynamic> responseData = dataHash['data'];
-  print(dataHash);
+  final data = pick(datas, 'data', 0).required().asMapOrThrow();
+  print('data');
+
+  final List<dynamic> responseData = json.decode(data.toString());
+  //final List<dynamic> responseData = json.decode(response.body);
 
   List<Recording> recordings = [];
   responseData.forEach((recordingData) {
     final Recording recording = Recording.fromJson(recordingData);
-
     print(recording.dechargement);
     recordings.add(recording);
   });
-
   store.dispatch(GetRecordingsAction(recordings));
 };
 
