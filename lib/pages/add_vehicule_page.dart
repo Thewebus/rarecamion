@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:rarecamion/models/app_state.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddVehiculePage extends StatefulWidget {
   final void Function() onInit;
@@ -11,38 +12,173 @@ class AddVehiculePage extends StatefulWidget {
 }
 
 class AddVehiculePageState extends State<AddVehiculePage> {
-  void initState() {
-    super.initState();
-    widget.onInit();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  bool _isSubmitting, _obscuredText = true;
+  String _username, _email, _password;
+
+  Widget _showLogo() {
+    return Padding(
+        padding: EdgeInsets.only(top: 20.0),
+        child: Container(
+          height: 150.0,
+          width: 150.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/logorarecamion.png'),
+              fit: BoxFit.fill,
+            ),
+            shape: BoxShape.circle,
+          ),
+        ));
   }
 
-  final _appBar = PreferredSize(
-      preferredSize: Size.fromHeight(60.0),
-      child: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, state) {
-            return AppBar(
-                centerTitle: true,
-                title: SizedBox(
-                    child: state.user != null
-                        ? Text(state.user.username)
-                        : Text('')),
-                leading: Icon(Icons.store),
-                actions: [
-                  Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: state.user != null
-                          ? IconButton(
-                              icon: Icon(Icons.exit_to_app),
-                              onPressed: () => print('pressed'))
-                          : Text(''))
-                ]);
-          }));
+  Widget _showTitle() {
+    return Text('Bienvenue', style: Theme.of(context).textTheme.headline1);
+  }
+
+  Widget _showUsernameInput() {
+    return Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: TextFormField(
+            onSaved: (val) => _username = val,
+            validator: (val) => val.length < 6 ? 'Nom trop court' : null,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Nom',
+                hintText: 'Entrer le nom ',
+                icon: Icon(Icons.face, color: Colors.grey))));
+  }
+
+  Widget _showEmailInput() {
+    return Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: TextFormField(
+            onSaved: (val) => _email = val,
+            validator: (val) => !val.contains('@') ? 'Adresse invalide' : null,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email',
+                hintText: 'Enter une adresse email valide',
+                icon: Icon(Icons.mail, color: Colors.grey))));
+  }
+
+  Widget _showPasswordInput() {
+    return Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: TextFormField(
+            onSaved: (val) => _password = val,
+            obscureText: _obscuredText,
+            decoration: InputDecoration(
+                suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() => _obscuredText = !_obscuredText);
+                    },
+                    child: Icon(_obscuredText
+                        ? Icons.visibility
+                        : Icons.visibility_off)),
+                border: OutlineInputBorder(),
+                labelText: 'Mot de passe',
+                hintText: 'Créer un mot de passe, 6 charactères minimum',
+                icon: Icon(Icons.lock, color: Colors.grey))));
+  }
+
+  Widget _showFormActions() {
+    return Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: Column(children: [
+          _isSubmitting == true
+              ? CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(Theme.of(context).primaryColor))
+              : RaisedButton(
+                  child: Text('Demander création de compte',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .copyWith(color: Colors.white)),
+                  elevation: 8.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  color: Theme.of(context).primaryColor,
+                  onPressed: _submit),
+          FlatButton(
+              child: Text('Deja un compte ? Connexion'),
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/login'))
+        ]));
+  }
+
+  void _submit() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      _registerUser();
+    }
+  }
+
+  void _registerUser() async {
+    setState(() => _isSubmitting = true);
+    http.Response response = await http.post(
+        Uri.parse('http://rarecamion.com:1337/api/auth/local/register'),
+        body: {"username": _username, "email": _email, "password": _password});
+
+    final responseData = json.decode(response.body);
+    if (response.statusCode == 200) {
+      setState(() => _isSubmitting = false);
+      storeUserData(responseData);
+      _showSuccessSnack();
+      _redirectUser();
+      print(responseData);
+    } else {
+      setState(() => _isSubmitting = false);
+      //final String errorMsg = responseData['message'];
+
+      //Map<String, dynamic> errorMsg = responseData['message'];
+      final String errorMsg = 'Erreur !!!';
+      _showErrorSnack(errorMsg);
+    }
+  }
+
+  void storeUserData(responseData) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> user = responseData['user'];
+    user.putIfAbsent('jwt', () => responseData['jwt']);
+    prefs.setString('user', json.encode(user));
+  }
+
+  void _showSuccessSnack() {
+    final snackbar = SnackBar(
+        content: Text('Utilisateur $_username enregistré avec succès !',
+            style: TextStyle(color: Colors.green)),
+        duration: Duration(milliseconds: 3000));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    _formKey.currentState.reset();
+  }
+
+  void _showErrorSnack(String errorMsg) {
+    final snackbar = SnackBar(
+        content: Text(errorMsg, style: TextStyle(color: Colors.red)),
+        duration: Duration(milliseconds: 3000));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    //throw Exception('Erreur : $errorMsg');
+  }
+
+  void _redirectUser() {
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, '/login');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _appBar,
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('RARE CAMION'),
+        ),
         body: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -50,11 +186,23 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                     end: Alignment.topCenter,
                     stops: [0.1, 0.2],
                     colors: const [Colors.lightBlueAccent, Colors.white])),
-            //padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: StoreConnector<AppState, AppState>(
-                converter: (store) => store.state,
-                builder: (_, state) {
-                  return Container();
-                })));
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Center(
+                child: SingleChildScrollView(
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                      /*crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,*/
+                      children: [
+                        _showLogo(),
+                        _showTitle(),
+                        _showUsernameInput(),
+                        _showEmailInput(),
+                        _showPasswordInput(),
+                        _showFormActions(),
+                      ])),
+            ))));
   }
 }
