@@ -3,6 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/recording.dart';
+import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -25,29 +26,30 @@ class GetUserAction {
 
 /* Recordings Actions */
 ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
-  http.Response response =
-      await http.get(Uri.parse('http://rarecamion.com:1337/api/vehicules'));
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
 
-  Map<String, dynamic> datas =
+  http.Response response = await http.get(
+      Uri.parse('http://rarecamion.com:1337/api/vehicules'),
+      headers: headers);
+  Map<String, dynamic> vehiculesRawData =
       new Map<String, dynamic>.from(json.decode(response.body));
+  final vehiculesData = vehiculesRawData['data'];
 
-  final data = pick(datas, 'data', 0).required().asMapOrThrow();
-  print('data');
+//Debut du process de refactoring ...
+  final List<Vehicules> vehicules = [];
 
-  final List<dynamic> responseData = json.decode(data.toString());
-  //final List<dynamic> responseData = json.decode(response.body);
-
-  List<Recording> recordings = [];
-  responseData.forEach((recordingData) {
-    final Recording recording = Recording.fromJson(recordingData);
-    print(recording.dechargement);
-    recordings.add(recording);
+  vehiculesData.forEach((productData) {
+    final Vehicules vehicule = Vehicules.fromJson(productData);
+    vehicules.add(vehicule);
   });
-  store.dispatch(GetRecordingsAction(recordings));
+  store.dispatch(GetRecordingsAction(vehicules));
 };
 
 class GetRecordingsAction {
-  final List<Recording> _recordings;
-  List<Recording> get recordings => this._recordings;
-  GetRecordingsAction(this._recordings);
+  final List<Vehicules> _vehicules;
+  List<Vehicules> get recordings => this._vehicules;
+  GetRecordingsAction(this._vehicules);
 }

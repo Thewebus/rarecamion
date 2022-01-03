@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/recording.dart';
+import 'package:rarecamion/models/vehicule.dart';
 
 class RecordingItem extends StatelessWidget {
-  final Recording item;
+  final Vehicules item;
   RecordingItem({this.item});
 
   @override
@@ -22,8 +23,10 @@ class RecordingItem extends StatelessWidget {
           title: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
-              child: Text('item.matricule', style: TextStyle(fontSize: 14.0))),
-          subtitle: Text('item.dechargement', style: TextStyle(fontSize: 16.0)),
+              child:
+                  Text(item.id.toString(), style: TextStyle(fontSize: 14.0))),
+          subtitle:
+              Text(item.attributes.matricule, style: TextStyle(fontSize: 16.0)),
 
           // subtitle: Text("\$${item.price}", style: TextStyle(fontSize: 16.0)),
           backgroundColor: Color(0xBB000000),

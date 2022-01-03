@@ -1,6 +1,7 @@
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/recording.dart';
 import 'package:rarecamion/models/user.dart';
+import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/redux/actions.dart';
 
 AppState appReducer(AppState state, dynamic action) {
@@ -16,7 +17,7 @@ User userReducer(User user, dynamic action) {
   return user;
 }
 
-List<Recording> recordingsReducer(List<Recording> recordings, dynamic action) {
+List<Vehicules> recordingsReducer(List<Vehicules> recordings, dynamic action) {
   if (action is GetRecordingsAction) {
     return action.recordings;
   }

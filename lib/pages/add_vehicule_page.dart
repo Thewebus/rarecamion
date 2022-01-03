@@ -91,21 +91,22 @@ class AddVehiculePageState extends State<AddVehiculePage> {
               ? CircularProgressIndicator(
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
-              : RaisedButton(
-                  child: Text('Demander création de compte',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          .copyWith(color: Colors.white)),
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  color: Theme.of(context).primaryColor,
-                  onPressed: _submit),
-          FlatButton(
-              child: Text('Deja un compte ? Connexion'),
+              : ElevatedButton(
+                  onPressed: _submit,
+                  child: Text('Créer un compte'),
+                ),
+          ElevatedButton(
+            onPressed: _submit,
+            child: Text('Demander création de compte',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .copyWith(color: Colors.white)),
+          ),
+          ElevatedButton(
               onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/login'))
+                  Navigator.pushReplacementNamed(context, '/login'),
+              child: Text('Deja un compte ? Connexion'))
         ]));
   }
 
