@@ -137,7 +137,7 @@ class LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Colors.green),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(milliseconds: 3000));
+        duration: Duration(milliseconds: 2000));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();

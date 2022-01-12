@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rarecamion/redux/actions.dart';
 import 'package:rarecamion/widgets/recording_item.dart';
 
 class RecordingsPage extends StatefulWidget {
@@ -17,9 +18,15 @@ class RecordingsPageState extends State<RecordingsPage> {
     widget.onInit();
   }
 
-  void _redirectUser() {
+  void _redirectUserToAddVehicule() {
     Future.delayed(Duration(seconds: 1), () {
       Navigator.pushReplacementNamed(context, '/addvehicule');
+    });
+  }
+
+  void _redirectUserToLogging() {
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.pushReplacementNamed(context, '/records');
     });
   }
 
@@ -33,21 +40,28 @@ class RecordingsPageState extends State<RecordingsPage> {
                 title: SizedBox(
                     child: state.user != null
                         ? Text(state.user.username)
-                        : Text('')),
-                leading: Icon(Icons.store),
+                        : Text('Utilisateur deconnecté(e) !')),
+                leading:
+                    state.user != null ? Icon(Icons.account_box) : Text(''),
                 actions: [
                   Padding(
                       padding: EdgeInsets.only(right: 12.0),
-                      child: state.user != null
-                          ? IconButton(
-                              icon: Icon(Icons.exit_to_app),
-                              onPressed: () => print('pressed'))
-                          : Text(''))
+                      child: StoreConnector<AppState, VoidCallback>(
+                          converter: (store) {
+                        return () => store.dispatch(logoutUserAction);
+                      }, builder: (_, callback) {
+                        return state.user != null
+                            ? IconButton(
+                                icon: Icon(Icons.exit_to_app),
+                                onPressed: callback)
+                            : Text('');
+                      }))
                 ]);
           }));
 
   @override
   Widget build(BuildContext context) {
+    // bool _isLoggedIn = true;
     return Scaffold(
       appBar: _appBar,
       body: Container(
@@ -61,23 +75,24 @@ class RecordingsPageState extends State<RecordingsPage> {
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
               builder: (_, state) {
-                return Column(children: [
+                return Row(children: [
                   Expanded(
-                      child: SafeArea(
-                          top: false,
-                          bottom: false,
-                          child: GridView.builder(
-                              itemCount: state.recordings.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
-                              itemBuilder: (context, i) => RecordingItem(
-                                    item: state.recordings[i],
-                                  ))))
+                    child: SafeArea(
+                        top: false,
+                        bottom: false,
+                        child: ListView.separated(
+                            itemCount: state.recordings.length,
+                            itemBuilder: (context, i) => RecordingItem(
+                                  item: state.recordings[i],
+                                ),
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider())),
+                  )
                 ]);
               })),
       floatingActionButton: FloatingActionButton(
-        onPressed: _redirectUser,
+        onPressed: _redirectUserToAddVehicule,
         tooltip: 'Ajouter un enregistrement',
         child: Icon(Icons.add),
       ),

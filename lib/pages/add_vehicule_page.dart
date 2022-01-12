@@ -16,6 +16,9 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   final _formKey = GlobalKey<FormState>();
   bool _isSubmitting, _obscuredText = true;
   String _username, _email, _password;
+  String dropdownValue = 'One';
+
+  String _matricule, _typeproduit, _dechargement;
 
   Widget _showLogo() {
     return Padding(
@@ -34,53 +37,66 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   }
 
   Widget _showTitle() {
-    return Text('Bienvenue', style: Theme.of(context).textTheme.headline1);
+    return Text('Enregistrer un véhicule',
+        style: Theme.of(context).textTheme.headline1);
   }
 
-  Widget _showUsernameInput() {
+  Widget _showMatriculeInput() {
     return Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
-            onSaved: (val) => _username = val,
-            validator: (val) => val.length < 6 ? 'Nom trop court' : null,
+            onSaved: (val) => _matricule = val,
+            validator: (val) =>
+                val.isEmpty ? 'Entrez le numéro matricule !' : null,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Nom',
-                hintText: 'Entrer le nom ',
-                icon: Icon(Icons.face, color: Colors.grey))));
+                labelText: 'Matricule',
+                hintText: 'Entrer le Matricule ',
+                icon: Icon(Icons.article_outlined, color: Colors.grey))));
   }
 
-  Widget _showEmailInput() {
+  Widget _showTypeProduitInput() {
     return Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
-            onSaved: (val) => _email = val,
-            validator: (val) => !val.contains('@') ? 'Adresse invalide' : null,
+            onSaved: (val) => _typeproduit = val,
+            validator: (val) =>
+                val.isEmpty ? 'Entrez un type de produit !' : null,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Email',
-                hintText: 'Enter une adresse email valide',
-                icon: Icon(Icons.mail, color: Colors.grey))));
+                labelText: 'Type de produit',
+                hintText: 'Entrez le type de produit',
+                icon: Icon(Icons.add_business_outlined, color: Colors.grey))));
   }
 
   Widget _showPasswordInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: TextFormField(
-            onSaved: (val) => _password = val,
-            obscureText: _obscuredText,
-            decoration: InputDecoration(
-                suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() => _obscuredText = !_obscuredText);
-                    },
-                    child: Icon(_obscuredText
-                        ? Icons.visibility
-                        : Icons.visibility_off)),
-                border: OutlineInputBorder(),
-                labelText: 'Mot de passe',
-                hintText: 'Créer un mot de passe, 6 charactères minimum',
-                icon: Icon(Icons.lock, color: Colors.grey))));
+      padding: EdgeInsets.only(top: 10.0),
+      child: DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownValue = newValue!;
+        });
+      },
+      items: <String>['One', 'Two', 'Free', 'Four']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    )
+
+              
+    );
   }
 
   Widget _showFormActions() {
@@ -91,22 +107,14 @@ class AddVehiculePageState extends State<AddVehiculePage> {
               ? CircularProgressIndicator(
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
-              : ElevatedButton(
+              : RaisedButton(
                   onPressed: _submit,
-                  child: Text('Créer un compte'),
+                  child: Text('Procéder à l\'enregistrement du Véhicule'),
                 ),
-          ElevatedButton(
-            onPressed: _submit,
-            child: Text('Demander création de compte',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    .copyWith(color: Colors.white)),
-          ),
-          ElevatedButton(
+          FlatButton(
               onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/login'),
-              child: Text('Deja un compte ? Connexion'))
+                  Navigator.pushReplacementNamed(context, '/records'),
+              child: Text('Voir tous les enregistrements'))
         ]));
   }
 
@@ -136,7 +144,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
       //final String errorMsg = responseData['message'];
 
       //Map<String, dynamic> errorMsg = responseData['message'];
-      final String errorMsg = 'Erreur !!!';
+      final String errorMsg = 'Impossible d\'enregistrer le véhicule !';
       _showErrorSnack(errorMsg);
     }
   }
@@ -150,9 +158,10 @@ class AddVehiculePageState extends State<AddVehiculePage> {
 
   void _showSuccessSnack() {
     final snackbar = SnackBar(
-        content: Text('Utilisateur $_username enregistré avec succès !',
+        content: Text(
+            'Le véhicule mat: $_matricule a été enregistré avec succès !',
             style: TextStyle(color: Colors.green)),
-        duration: Duration(milliseconds: 3000));
+        duration: Duration(milliseconds: 2000));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
@@ -169,7 +178,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
 
   void _redirectUser() {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/records');
     });
   }
 
@@ -197,10 +206,9 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,*/
                       children: [
-                        _showLogo(),
                         _showTitle(),
-                        _showUsernameInput(),
-                        _showEmailInput(),
+                        _showMatriculeInput(),
+                        _showTypeProduitInput(),
                         _showPasswordInput(),
                         _showFormActions(),
                       ])),

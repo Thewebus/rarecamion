@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:rarecamion/models/recording.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehicule.dart';
 
