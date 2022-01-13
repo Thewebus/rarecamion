@@ -7,6 +7,7 @@ import 'package:rarecamion/redux/reducers.dart';
 import 'package:rarecamion/pages/login_page.dart';
 import 'package:rarecamion/pages/recordings_page.dart';
 import 'package:rarecamion/pages/register_page.dart';
+import 'package:rarecamion/splash.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
 
@@ -34,6 +35,10 @@ class MyApp extends StatelessWidget {
             '/login': (BuildContext context) => LoginPage(),
             '/register': (BuildContext context) => RegisterPage(),
             '/addvehicule': (BuildContext context) =>
+                AddVehiculePage(onInit: () {
+                  StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                }),
+            '/addstatustovehicule': (BuildContext context) =>
                 AddVehiculePage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                 }),

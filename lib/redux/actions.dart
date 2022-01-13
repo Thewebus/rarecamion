@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:deep_pick/deep_pick.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/app_state.dart';
-import 'package:rarecamion/models/recording.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:redux/redux.dart';
@@ -18,18 +16,18 @@ ThunkAction<AppState> getUserAction = (Store<AppState> store) async {
   store.dispatch(GetUserAction(user));
 };
 
+class GetUserAction {
+  final User _user;
+  User get user => this._user;
+  GetUserAction(this._user);
+}
+
 ThunkAction<AppState> logoutUserAction = (Store<AppState> store) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('user');
   User user;
   store.dispatch(LogoutUserAction(user));
 };
-
-class GetUserAction {
-  final User _user;
-  User get user => this._user;
-  GetUserAction(this._user);
-}
 
 class LogoutUserAction {
   final User _user;

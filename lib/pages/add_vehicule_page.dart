@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
+import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AddVehiculePage extends StatefulWidget {
   final void Function() onInit;
@@ -15,26 +17,11 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   bool _isSubmitting, _obscuredText = true;
-  String _username, _email, _password;
-  String dropdownValue = 'One';
 
-  String _matricule, _typeproduit, _dechargement;
-
-  Widget _showLogo() {
-    return Padding(
-        padding: EdgeInsets.only(top: 20.0),
-        child: Container(
-          height: 150.0,
-          width: 150.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/logorarecamion.png'),
-              fit: BoxFit.fill,
-            ),
-            shape: BoxShape.circle,
-          ),
-        ));
-  }
+  String _matricule, _typeproduit;
+  String _dropDechargement = 'CAMION';
+  String _dropEtatProduit = 'BON';
+  String _dropUsine = 'IRA';
 
   Widget _showTitle() {
     return Text('Enregistrer un véhicule',
@@ -69,34 +56,86 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                 icon: Icon(Icons.add_business_outlined, color: Colors.grey))));
   }
 
-  Widget _showPasswordInput() {
+  Widget _showDechargementInput() {
     return Padding(
-      padding: EdgeInsets.only(top: 10.0),
-      child: DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-        });
-      },
-      items: <String>['One', 'Two', 'Free', 'Four']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    )
+        padding: EdgeInsets.only(top: 10.0),
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: _dropDechargement,
+          icon: const Icon(Icons.arrow_downward),
+          elevation: 16,
+          style: const TextStyle(color: Colors.blue),
+          underline: Container(
+            height: 2,
+            color: Colors.blueAccent,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              _dropDechargement = newValue;
+            });
+          },
+          items: <String>['CAMION', 'BENNE', 'REMORQUE', 'TRICYCLE', 'KIA']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ));
+  }
 
-              
-    );
+  Widget _showEtatProduitInput() {
+    return Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: DropdownButton<String>(
+          value: _dropEtatProduit,
+          icon: const Icon(Icons.arrow_downward),
+          elevation: 16,
+          style: const TextStyle(color: Colors.blue),
+          underline: Container(
+            height: 2,
+            color: Colors.blueAccent,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              _dropEtatProduit = newValue;
+            });
+          },
+          items: <String>['BON', 'MOYEN', 'MAUVAIS']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ));
+  }
+
+  Widget _showUsineInput() {
+    return Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: DropdownButton<String>(
+          value: _dropUsine,
+          icon: const Icon(Icons.arrow_downward),
+          elevation: 16,
+          style: const TextStyle(color: Colors.blue),
+          underline: Container(
+            height: 2,
+            color: Colors.blueAccent,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              _dropUsine = newValue;
+            });
+          },
+          items: <String>['IRA', 'DOKOUE']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ));
   }
 
   Widget _showFormActions() {
@@ -107,7 +146,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
               ? CircularProgressIndicator(
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
-              : RaisedButton(
+              : ElevatedButton(
                   onPressed: _submit,
                   child: Text('Procéder à l\'enregistrement du Véhicule'),
                 ),
@@ -122,20 +161,34 @@ class AddVehiculePageState extends State<AddVehiculePage> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      _registerUser();
+      _addVehiculeProcess();
     }
   }
 
-  void _registerUser() async {
+  void _addVehiculeProcess() async {
     setState(() => _isSubmitting = true);
-    http.Response response = await http.post(
-        Uri.parse('http://rarecamion.com:1337/api/auth/local/register'),
-        body: {"username": _username, "email": _email, "password": _password});
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+
+    http.Response response =
+        await http.post(Uri.parse('http://rarecamion.com:1337/api/vehicules'),
+            headers: headers,
+            body: jsonEncode({
+              "data": {
+                "matricule": _matricule,
+                "dechargement": _dropDechargement,
+                "typeProduit": _typeproduit,
+                "etatProduit": _dropEtatProduit,
+                "usineVehicule": _dropUsine
+              }
+            }));
 
     final responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
-      storeUserData(responseData);
       _showSuccessSnack();
       _redirectUser();
       print(responseData);
@@ -147,13 +200,6 @@ class AddVehiculePageState extends State<AddVehiculePage> {
       final String errorMsg = 'Impossible d\'enregistrer le véhicule !';
       _showErrorSnack(errorMsg);
     }
-  }
-
-  void storeUserData(responseData) async {
-    final prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> user = responseData['user'];
-    user.putIfAbsent('jwt', () => responseData['jwt']);
-    prefs.setString('user', json.encode(user));
   }
 
   void _showSuccessSnack() {
@@ -182,13 +228,40 @@ class AddVehiculePageState extends State<AddVehiculePage> {
     });
   }
 
+  final _appBar = PreferredSize(
+      preferredSize: Size.fromHeight(60.0),
+      child: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, state) {
+            return AppBar(
+                centerTitle: true,
+                title: SizedBox(
+                    child: state.user != null
+                        ? Text(state.user.username)
+                        : Text('')),
+                leading:
+                    state.user != null ? Icon(Icons.account_box) : Text(''),
+                actions: [
+                  Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: StoreConnector<AppState, VoidCallback>(
+                          converter: (store) {
+                        return () => store.dispatch(logoutUserAction);
+                      }, builder: (_, callback) {
+                        return state.user != null
+                            ? IconButton(
+                                icon: Icon(Icons.exit_to_app),
+                                onPressed: callback)
+                            : Text('');
+                      }))
+                ]);
+          }));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('RARE CAMION'),
-        ),
+        appBar: _appBar,
         body: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -202,15 +275,21 @@ class AddVehiculePageState extends State<AddVehiculePage> {
               child: Form(
                   key: _formKey,
                   child: Column(
-                      /*crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,*/
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         _showTitle(),
+                        Text(''),
+                        Text(''),
                         _showMatriculeInput(),
                         _showTypeProduitInput(),
-                        _showPasswordInput(),
+                        _showDechargementInput(),
+                        Text(''),
+                        _showEtatProduitInput(),
+                        _showUsineInput(),
+                        Text(''),
                         _showFormActions(),
+                        Text(''),
                       ])),
             ))));
   }

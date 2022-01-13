@@ -19,14 +19,14 @@ class RecordingsPageState extends State<RecordingsPage> {
   }
 
   void _redirectUserToAddVehicule() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       Navigator.pushReplacementNamed(context, '/addvehicule');
     });
   }
 
-  void _redirectUserToLogging() {
-    Future.delayed(Duration(seconds: 1), () {
-      Navigator.pushReplacementNamed(context, '/records');
+  void _redirectUserToAddstatusToVehicule() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/addvehicule');
     });
   }
 
@@ -40,7 +40,7 @@ class RecordingsPageState extends State<RecordingsPage> {
                 title: SizedBox(
                     child: state.user != null
                         ? Text(state.user.username)
-                        : Text('Utilisateur deconnecté(e) !')),
+                        : Text('')),
                 leading:
                     state.user != null ? Icon(Icons.account_box) : Text(''),
                 actions: [

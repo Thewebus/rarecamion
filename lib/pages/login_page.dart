@@ -115,7 +115,7 @@ class LoginPageState extends State<LoginPage> {
       _redirectUser();
       print(responseData);
     } else {
-      print(responseData);
+      //print(responseData);
       setState(() => _isSubmitting = false);
       //final String errorMsg = responseData['message'];
       final String errorMsg = 'Identifiants incorrects !';
@@ -128,6 +128,7 @@ class LoginPageState extends State<LoginPage> {
     Map<String, dynamic> user = responseData['user'];
     user.putIfAbsent('jwt', () => responseData['jwt']);
     prefs.setString('user', json.encode(user));
+    print(prefs.getString('user'));
   }
 
   void _showSuccessSnack() {
