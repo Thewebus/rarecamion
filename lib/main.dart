@@ -27,13 +27,13 @@ class MyApp extends StatelessWidget {
         store: store,
         child: MaterialApp(
           routes: {
+            '/login': (BuildContext context) => LoginPage(),
+            '/register': (BuildContext context) => RegisterPage(),
             '/records': (BuildContext context) => RecordingsPage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context)
                       .dispatch(getRecordingsAction);
                 }),
-            '/login': (BuildContext context) => LoginPage(),
-            '/register': (BuildContext context) => RegisterPage(),
             '/addvehicule': (BuildContext context) =>
                 AddVehiculePage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
@@ -57,6 +57,9 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
+
+
+
 /*
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

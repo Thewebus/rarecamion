@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
+import 'package:rarecamion/pages/add_status_to_vehicule.dart';
 import 'package:rarecamion/pages/recording_detail_page.dart';
 
 class RecordingItem extends StatelessWidget {
@@ -10,6 +11,7 @@ class RecordingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(item);
     //final String itemURL = item['thumbnail']['url'];
     //final String pictureUrl =     'http://rarecamion.com:1337/api/upload/files/$itemURL';
     //print('Affichage matricule... ${item.matricule}');
@@ -32,9 +34,12 @@ class RecordingItem extends StatelessWidget {
             builder: (_, state) {
               return state.user != null
                   ? IconButton(
-                      icon: Icon(Icons.arrow_forward_ios_sharp),
+                      icon: Icon(Icons.add_box_outlined),
                       color: Colors.blueAccent,
-                      onPressed: () => print('pressed'))
+                      onPressed: () => Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return AddStatusPage(item: item);
+                          })))
                   : Text('');
             }),
         onLongPress: () {

@@ -2,66 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
 
-class AddVehiculePage extends StatefulWidget {
-  final void Function() onInit;
-  AddVehiculePage({this.onInit});
+class AddStatusPage extends StatefulWidget {
+  final Vehicules item;
+  AddStatusPage({this.item});
 
   @override
-  AddVehiculePageState createState() => AddVehiculePageState();
+  AddStatusPageState createState() => AddStatusPageState();
 }
 
-class AddVehiculePageState extends State<AddVehiculePage> {
+class AddStatusPageState extends State<AddStatusPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   bool _isSubmitting, _obscuredText = true;
 
-  String _matricule, _typeproduit;
-  String _dropDechargement = 'CAMION';
-  String _dropEtatProduit = 'BON';
-  String _dropUsine = 'IRA';
+  String _matricule, _observationsStatus;
+  String _statusVehicule = 'EN ATTENTE';
+
+  int idVehicule;
 
   Widget _showTitle() {
-    return Text('Enregistrer un véhicule',
+    return Text('Ajouter status pour ce véhicule',
         style: Theme.of(context).textTheme.headline1);
   }
 
-  Widget _showMatriculeInput() {
+  Widget _showObservationsStatus() {
     return Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: TextFormField(
-            onSaved: (val) => _matricule = val,
-            validator: (val) =>
-                val.isEmpty ? 'Entrez le numéro matricule !' : null,
+            onSaved: (val) => _observationsStatus = val,
             decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Matricule',
-                hintText: 'Entrer le Matricule ',
-                icon: Icon(Icons.article_outlined, color: Colors.grey))));
-  }
-
-  Widget _showTypeProduitInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: TextFormField(
-            onSaved: (val) => _typeproduit = val,
-            validator: (val) =>
-                val.isEmpty ? 'Entrez un type de produit !' : null,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Type de produit',
-                hintText: 'Entrez le type de produit',
-                icon: Icon(Icons.add_business_outlined, color: Colors.grey))));
+              border: OutlineInputBorder(),
+              labelText: 'Observations ...',
+              hintText: 'Entrez vos remarques ici ...',
+            )));
   }
 
   Widget _showDechargementInput() {
     return Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: DropdownButton<String>(
-          isExpanded: true,
-          value: _dropDechargement,
+          value: _statusVehicule,
           icon: const Icon(Icons.arrow_downward),
           elevation: 16,
           style: const TextStyle(color: Colors.blue),
@@ -71,65 +55,16 @@ class AddVehiculePageState extends State<AddVehiculePage> {
           ),
           onChanged: (String newValue) {
             setState(() {
-              _dropDechargement = newValue;
+              _statusVehicule = newValue;
             });
           },
-          items: <String>['CAMION', 'BENNE', 'REMORQUE', 'TRICYCLE', 'KIA']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ));
-  }
-
-  Widget _showEtatProduitInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: DropdownButton<String>(
-          value: _dropEtatProduit,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
-          ),
-          onChanged: (String newValue) {
-            setState(() {
-              _dropEtatProduit = newValue;
-            });
-          },
-          items: <String>['BON', 'MOYEN', 'MAUVAIS']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ));
-  }
-
-  Widget _showUsineInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: DropdownButton<String>(
-          value: _dropUsine,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
-          ),
-          onChanged: (String newValue) {
-            setState(() {
-              _dropUsine = newValue;
-            });
-          },
-          items: <String>['IRA', 'DOKOUE']
-              .map<DropdownMenuItem<String>>((String value) {
+          items: <String>[
+            'EN ATTENTE',
+            'EN PENTE',
+            'VALIDE',
+            'REFOULE',
+            'ANNULE'
+          ].map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -148,12 +83,12 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
               : ElevatedButton(
                   onPressed: _submit,
-                  child: Text('Procéder à l\'enregistrement du Véhicule'),
+                  child: Text('Entrez le status actuel du Véhicule'),
                 ),
           FlatButton(
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, '/records'),
-              child: Text('Voir tous les enregistrements'))
+              child: Text('Aller à vos enregistrements'))
         ]));
   }
 
@@ -173,18 +108,15 @@ class AddVehiculePageState extends State<AddVehiculePage> {
       'Accept': 'application/json'
     };
 
-    http.Response response =
-        await http.post(Uri.parse('http://rarecamion.com:1337/api/vehicules'),
-            headers: headers,
-            body: jsonEncode({
-              "data": {
-                "matricule": _matricule,
-                "dechargement": _dropDechargement,
-                "typeProduit": _typeproduit,
-                "etatProduit": _dropEtatProduit,
-                "usineVehicule": _dropUsine
-              }
-            }));
+    http.Response response = await http.post(
+        Uri.parse('http://rarecamion.com:1337/api/status-vehicules'),
+        headers: headers,
+        body: jsonEncode({
+          "data": {
+            "libelleStatus": _statusVehicule,
+            "observationStatus": _observationsStatus,
+          }
+        }));
 
     final responseData = json.decode(response.body);
     if (response.statusCode == 200) {
@@ -235,14 +167,12 @@ class AddVehiculePageState extends State<AddVehiculePage> {
           builder: (context, state) {
             return AppBar(
                 centerTitle: true,
-                /*
-                leading:
-                    state.user != null ? Icon(Icons.account_box) : Text(''),
-                */
                 title: SizedBox(
                     child: state.user != null
                         ? Text(state.user.username)
                         : Text('')),
+                leading:
+                    state.user != null ? Icon(Icons.account_box) : Text(''),
                 actions: [
                   Padding(
                       padding: EdgeInsets.only(right: 12.0),
@@ -282,14 +212,9 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       children: [
                         _showTitle(),
                         Text(''),
-                        Text(''),
-                        _showMatriculeInput(),
-                        _showTypeProduitInput(),
                         _showDechargementInput(),
                         Text(''),
-                        _showEtatProduitInput(),
-                        _showUsineInput(),
-                        Text(''),
+                        _showObservationsStatus(),
                         _showFormActions(),
                         Text(''),
                       ])),

@@ -24,12 +24,6 @@ class RecordingsPageState extends State<RecordingsPage> {
     });
   }
 
-  void _redirectUserToAddstatusToVehicule() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/addvehicule');
-    });
-  }
-
   final _appBar = PreferredSize(
       preferredSize: Size.fromHeight(60.0),
       child: StoreConnector<AppState, AppState>(
@@ -37,12 +31,12 @@ class RecordingsPageState extends State<RecordingsPage> {
           builder: (context, state) {
             return AppBar(
                 centerTitle: true,
+                /*leading:
+                    state.user != null ? Icon(Icons.account_box) : Text(''),*/
                 title: SizedBox(
                     child: state.user != null
                         ? Text(state.user.username)
                         : Text('')),
-                leading:
-                    state.user != null ? Icon(Icons.account_box) : Text(''),
                 actions: [
                   Padding(
                       padding: EdgeInsets.only(right: 12.0),
