@@ -11,17 +11,12 @@ import 'package:path_provider/path_provider.dart';
 
 double textSize = 20;
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
-}
-
-class MyApp extends StatefulWidget {
+class TakeMedia extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _TakeMediaState createState() => _TakeMediaState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _TakeMediaState extends State<TakeMedia> {
   String firstButtonText = 'Take photo';
   String secondButtonText = 'Record video';
 
