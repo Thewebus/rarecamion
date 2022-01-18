@@ -1,5 +1,4 @@
 import 'package:rarecamion/models/app_state.dart';
-import 'package:rarecamion/models/recording.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/redux/actions.dart';

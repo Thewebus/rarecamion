@@ -25,17 +25,22 @@ class RecordingItem extends StatelessWidget {
               return RecordingDetailPage(item: item);
             })),
         tileColor: Colors.blueAccent,
-        title: Text('MAT: ${item.attributes.matricule}',
-            style: TextStyle(fontSize: 14.0)),
-        subtitle: Text('Déchargement: ${item.attributes.dechargement}',
-            style: TextStyle(fontSize: 16.0)),
+        title: Row(
+          children: [
+            Text('Matricule ', style: TextStyle(fontSize: 11.0)),
+            Text('${item.attributes.matricule}',
+                style: TextStyle(fontSize: 16.0)),
+          ],
+        ),
+        subtitle: Text('${item.attributes.dechargement}',
+            style: TextStyle(fontSize: 22.0)),
         trailing: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
             builder: (_, state) {
               return state.user != null
                   ? IconButton(
                       icon: Icon(Icons.add_box_outlined),
-                      color: Colors.blueAccent,
+                      color: Colors.grey[800],
                       onPressed: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             return AddStatusPage(item: item);

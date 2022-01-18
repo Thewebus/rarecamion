@@ -69,27 +69,55 @@ class RecordingsPageState extends State<RecordingsPage> {
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
               builder: (_, state) {
-                return Row(children: [
-                  Expanded(
-                    child: SafeArea(
-                        top: false,
-                        bottom: false,
-                        child: ListView.separated(
-                            itemCount: state.recordings.length,
-                            itemBuilder: (context, i) => RecordingItem(
-                                  item: state.recordings[i],
-                                ),
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const Divider())),
-                  )
-                ]);
+                return state.user != null
+                    ? Row(children: [
+                        Expanded(
+                          child: SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView.separated(
+                                    itemCount: state.recordings.length,
+                                    itemBuilder: (context, i) => RecordingItem(
+                                          item: state.recordings[i],
+                                        ),
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            const Divider()),
+                              )),
+                        )
+                      ])
+                    : Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Au revoir !',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            ElevatedButton(
+                                onPressed: () => Navigator.pushReplacementNamed(
+                                    context, '/login'),
+                                child: Text('Se Connecter'))
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                        ),
+                      );
               })),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _redirectUserToAddVehicule,
-        tooltip: 'Ajouter un enregistrement',
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (_, state) {
+            return state.user != null
+                ? FloatingActionButton(
+                    //backgroundColor: Colors.blue[800],
+                    onPressed: _redirectUserToAddVehicule,
+                    tooltip: 'Ajouter nouveau véhicule ...',
+                    child: Icon(Icons.add),
+                  )
+                : Text('');
+          }),
     );
   }
 }
