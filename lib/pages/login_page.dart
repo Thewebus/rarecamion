@@ -75,19 +75,18 @@ class LoginPageState extends State<LoginPage> {
               ? CircularProgressIndicator(
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
-              : RaisedButton(
-                  child: Text('Connectez-vous',
+              : ElevatedButton(
+                  child: Text('Connexion',
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText1
+                          .bodyText2
                           .copyWith(color: Colors.white)),
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  color: Theme.of(context).primaryColor,
                   onPressed: _submit),
-          FlatButton(
-              child: Text('Pas de compte ? Lancer la demande'),
+          TextButton(
+              child: Text(
+                'Pas de compte ? Inscrivez-vous !',
+                style: TextStyle(fontSize: 12),
+              ),
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, '/register'))
         ]));
@@ -138,7 +137,7 @@ class LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Colors.green),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(milliseconds: 2000));
+        duration: Duration(milliseconds: 500));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
@@ -151,14 +150,14 @@ class LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(milliseconds: 3000));
+        duration: Duration(milliseconds: 1000));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     //throw Exception('Erreur : $errorMsg');
   }
 
   void _redirectUser() {
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       Navigator.pushReplacementNamed(context, '/records');
     });
   }
@@ -177,7 +176,7 @@ class LoginPageState extends State<LoginPage> {
                     end: Alignment.topCenter,
                     stops: [0.1, 0.2],
                     colors: const [Colors.lightBlueAccent, Colors.white])),
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: Center(
                 child: SingleChildScrollView(
               child: Form(

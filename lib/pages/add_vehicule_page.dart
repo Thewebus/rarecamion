@@ -73,95 +73,132 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   }
 
   Widget _showDechargementInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: DropdownButton<String>(
-          isExpanded: true,
-          value: _dropDechargement,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            'Déchargement:',
+            style: Theme.of(context).textTheme.bodyText2,
           ),
-          onChanged: (String newValue) {
-            setState(() {
-              _dropDechargement = newValue;
-            });
-          },
-          items: <String>['CAMION', 'BENNE', 'REMORQUE', 'TRICYCLE', 'KIA']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ));
+        ),
+        Padding(
+            padding: EdgeInsets.only(top: 10.0),
+            child: DropdownButton<String>(
+              //isExpanded: true,
+              value: _dropDechargement,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.blue),
+              underline: Container(
+                height: 2,
+                color: Colors.blueAccent,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  _dropDechargement = newValue;
+                });
+              },
+              items: <String>['CAMION', 'BENNE', 'REMORQUE', 'TRICYCLE', 'KIA']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            )),
+      ],
+    );
   }
 
   Widget _showEtatProduitInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: DropdownButton<String>(
-          value: _dropEtatProduit,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            'État du produit:',
+            style: Theme.of(context).textTheme.bodyText2,
           ),
-          onChanged: (String newValue) {
-            setState(() {
-              _dropEtatProduit = newValue;
-            });
-          },
-          items: <String>['BON', 'MOYEN', 'MAUVAIS']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ));
+        ),
+        Padding(
+            padding: EdgeInsets.only(top: 10.0),
+            child: DropdownButton<String>(
+              value: _dropEtatProduit,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.blue),
+              underline: Container(
+                height: 2,
+                color: Colors.blueAccent,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  _dropEtatProduit = newValue;
+                });
+              },
+              items: <String>['BON', 'MOYEN', 'MAUVAIS']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            )),
+      ],
+    );
   }
 
   Widget _showUsineInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: DropdownButton<String>(
-          value: _dropUsine,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            'Usine:',
+            style: Theme.of(context).textTheme.bodyText2,
           ),
-          onChanged: (String newValue) {
-            setState(() {
-              _dropUsine = newValue;
-            });
-          },
-          items: <String>['IRA', 'DOKOUE']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ));
+        ),
+        Padding(
+            padding: EdgeInsets.only(top: 10.0),
+            child: DropdownButton<String>(
+              value: _dropUsine,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.blue),
+              underline: Container(
+                height: 2,
+                color: Colors.blueAccent,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  _dropUsine = newValue;
+                });
+              },
+              items: <String>['IRA', 'DOKOUE']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            )),
+      ],
+    );
   }
 
   Widget _showPhotoButtonInput() {
-    return TextButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.blue),
-      ),
+    return IconButton(
+      icon: Icon(Icons.photo_camera),
+      iconSize: 50,
+      color: Colors.blue,
       onPressed: _takePhoto,
-      child: Text(firstButtonText,
-          style: TextStyle(fontSize: textSize, color: Colors.white)),
     );
   }
 
@@ -175,9 +212,9 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
               : ElevatedButton(
                   onPressed: _submit,
-                  child: Text('Procéder à l\'enregistrement du Véhicule'),
+                  child: Text('ENREGISTRER VEHICULE'),
                 ),
-          FlatButton(
+          TextButton(
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, '/records'),
               child: Text('Voir tous les enregistrements'))
@@ -356,29 +393,24 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                     end: Alignment.topCenter,
                     stops: [0.1, 0.2],
                     colors: const [Colors.lightBlueAccent, Colors.white])),
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 50.0),
             child: Center(
                 child: SingleChildScrollView(
               child: Form(
                   key: _formKey,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         _showTitle(),
-                        Text(''),
-                        Text(''),
                         _showMatriculeInput(),
                         _showTypeProduitInput(),
                         _showDechargementInput(),
-                        Text(''),
                         _showEtatProduitInput(),
                         _showUsineInput(),
-                        Text(''),
                         _showPhotoButtonInput(),
-                        Text(''),
                         _showFormActions(),
-                        Text(''),
+                        SizedBox(height: 150)
                       ])),
             ))));
   }

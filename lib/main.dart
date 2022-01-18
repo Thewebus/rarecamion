@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/pages/add_vehicule_page.dart';
-import 'package:rarecamion/pages/take_media.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'package:rarecamion/redux/reducers.dart';
 import 'package:rarecamion/pages/login_page.dart';
 import 'package:rarecamion/pages/recordings_page.dart';
 import 'package:rarecamion/pages/register_page.dart';
-import 'package:rarecamion/splash.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux/redux.dart';
 
