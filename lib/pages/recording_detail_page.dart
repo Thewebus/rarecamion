@@ -8,7 +8,7 @@ class RecordingDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget _showTitle() {
-      return Text('PHOTO', style: Theme.of(context).textTheme.headline1);
+      return Text('PHOTO', style: Theme.of(context).textTheme.bodyText1);
     }
 
     final String pictureUrl =
@@ -27,14 +27,18 @@ class RecordingDetailPage extends StatelessWidget {
             child: Center(
                 child: SingleChildScrollView(
                     child: Column(children: [
-              _showTitle(),
-              Image.network(pictureUrl,
-                  width: orientation == Orientation.portrait ? 300 : 100,
-                  height: orientation == Orientation.portrait ? 250 : 200,
-                  fit: BoxFit.contain),
               Text(item.attributes.matricule,
                   style: Theme.of(context).textTheme.headline1),
-              Text('${item.attributes.publishedAt}')
+              Text('${item.attributes.publishedAt}'),
+              SizedBox(height: 20),
+              Placeholder(
+                fallbackHeight: 150,
+              ),
+              SizedBox(height: 150),
+              /*Image.network(pictureUrl,
+                  width: orientation == Orientation.portrait ? 300 : 100,
+                  height: orientation == Orientation.portrait ? 250 : 200,
+                  fit: BoxFit.contain),*/
             ])))));
   }
 }

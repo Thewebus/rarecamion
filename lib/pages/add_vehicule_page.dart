@@ -299,10 +299,11 @@ class AddVehiculePageState extends State<AddVehiculePage> {
           builder: (context, state) {
             return AppBar(
                 centerTitle: true,
-                /*
-                leading:
-                    state.user != null ? Icon(Icons.account_box) : Text(''),
-                */
+                leading: IconButton(
+                    icon: Icon(Icons.close_outlined),
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/records');
+                    }),
                 title: SizedBox(
                     child: state.user != null
                         ? Text(state.user.username)

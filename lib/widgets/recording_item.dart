@@ -27,13 +27,13 @@ class RecordingItem extends StatelessWidget {
         tileColor: Colors.blueAccent,
         title: Row(
           children: [
-            Text('Matricule ', style: TextStyle(fontSize: 11.0)),
+            Text('Mat. ', style: TextStyle(fontSize: 11.0)),
             Text('${item.attributes.matricule}',
-                style: TextStyle(fontSize: 16.0)),
+                style: TextStyle(fontSize: 18.0)),
           ],
         ),
         subtitle: Text('${item.attributes.dechargement}',
-            style: TextStyle(fontSize: 22.0)),
+            style: TextStyle(fontSize: 16.0)),
         trailing: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
             builder: (_, state) {
