@@ -47,14 +47,14 @@ class RecordingDetailPage extends StatelessWidget {
             child: Center(
                 child: SingleChildScrollView(
                     child: Column(children: [
-              /*Placeholder(
+              Placeholder(
                 fallbackHeight: 100,
-              ),*/
-              Image.network(pictureUrl, fit: BoxFit.contain,
+              ),
+              /*Image.network(pictureUrl, fit: BoxFit.contain,
                   loadingBuilder: (context, child, progress) {
                 return progress == null ? child : LinearProgressIndicator();
-              }),
-              Text('DATA: ${item.attributes}'),
+              }),*/
+              //Text('DATA: ${item.attributes}'),
               _showVDetails('Déchargement', '${item.attributes.dechargement}'),
               _showVDetails('Produit', '${item.attributes.etatProduit}'),
               _showVDetails('Usine', '${item.attributes.usineVehicule}'),
