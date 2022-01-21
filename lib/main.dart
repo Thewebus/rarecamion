@@ -47,9 +47,14 @@ class MyApp extends StatelessWidget {
             colorScheme:
                 ColorScheme.fromSwatch().copyWith(secondary: Colors.red[600]),
             textTheme: TextTheme(
-                headline1: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                subtitle1: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                bodyText1: TextStyle(fontSize: 11)),
+              headline1: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              subtitle1: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+              bodyText1: TextStyle(fontSize: 11),
+              bodyText2: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
+            ),
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           //home: LoginPage(),

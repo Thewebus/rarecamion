@@ -59,8 +59,8 @@ class DatumAttributes {
     this.typeProduit,
     this.etatProduit,
     this.usineVehicule,
-    this.user,
     this.photoVehicule,
+    this.user,
   });
 
   String matricule;
@@ -71,8 +71,8 @@ class DatumAttributes {
   String typeProduit;
   String etatProduit;
   String usineVehicule;
-  User user;
   PhotoVehicule photoVehicule;
+  User user;
 
   factory DatumAttributes.fromJson(Map<String, dynamic> json) =>
       DatumAttributes(
@@ -84,8 +84,8 @@ class DatumAttributes {
         typeProduit: json["typeProduit"],
         etatProduit: json["etatProduit"],
         usineVehicule: json["usineVehicule"],
-        user: User.fromJson(json["user"]),
         photoVehicule: PhotoVehicule.fromJson(json["photoVehicule"]),
+        user: User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,8 +97,8 @@ class DatumAttributes {
         "typeProduit": typeProduit,
         "etatProduit": etatProduit,
         "usineVehicule": usineVehicule,
-        "user": user.toJson(),
         "photoVehicule": photoVehicule.toJson(),
+        "user": user.toJson(),
       };
 }
 
@@ -303,11 +303,11 @@ class User {
   UserData data;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        data: json["data"] == null ? null : UserData.fromJson(json["data"]),
+        data: UserData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null ? null : data.toJson(),
+        "data": data.toJson(),
       };
 }
 

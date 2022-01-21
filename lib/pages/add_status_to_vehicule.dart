@@ -21,12 +21,8 @@ class AddStatusPageState extends State<AddStatusPage> {
 
   String _matricule, _observationsStatus;
   String _statusVehicule = 'EN ATTENTE';
-
-  int idVehicule;
-
   Widget _showTitle() {
-    return Text('Ajouter status pour ce véhicule',
-        style: Theme.of(context).textTheme.headline1);
+    return Text('Ajouter Status', style: Theme.of(context).textTheme.headline1);
   }
 
   Widget _showObservationsStatus() {
@@ -41,39 +37,52 @@ class AddStatusPageState extends State<AddStatusPage> {
             )));
   }
 
-  Widget _showDechargementInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: DropdownButton<String>(
-          value: _statusVehicule,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
+  Widget _addStatus() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Text(
+            'Sélectionnez le status:',
+            style: Theme.of(context).textTheme.bodyText2,
           ),
-          onChanged: (String newValue) {
-            setState(() {
-              _statusVehicule = newValue;
-            });
-          },
-          items: <String>[
-            'EN ATTENTE',
-            'EN PENTE',
-            'VALIDE',
-            'REFOULE',
-            'ANNULE'
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ));
+        ),
+        Padding(
+            padding: EdgeInsets.only(top: 10.0),
+            child: DropdownButton<String>(
+              value: _statusVehicule,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.blue),
+              underline: Container(
+                height: 2,
+                color: Colors.blueAccent,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  _statusVehicule = newValue;
+                });
+              },
+              items: <String>[
+                'EN ATTENTE',
+                'EN PENTE',
+                'VALIDE',
+                'REFOULE',
+                'ANNULE'
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            )),
+      ],
+    );
   }
 
-  Widget _showFormActions() {
+  Widget _showFormActions(int _idVehiculeRelated) {
     return Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: Column(children: [
@@ -82,25 +91,23 @@ class AddStatusPageState extends State<AddStatusPage> {
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
               : ElevatedButton(
-                  onPressed: _submit,
+                  onPressed: () {
+                    final form = _formKey.currentState;
+                    if (form.validate()) {
+                      form.save();
+                      _addVehiculeProcess(_idVehiculeRelated);
+                    }
+                  },
                   child: Text('Entrez le status actuel du Véhicule'),
                 ),
-          FlatButton(
+          TextButton(
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, '/records'),
               child: Text('Aller à vos enregistrements'))
         ]));
   }
 
-  void _submit() {
-    final form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      _addVehiculeProcess();
-    }
-  }
-
-  void _addVehiculeProcess() async {
+  void _addVehiculeProcess(int _idVehiculeRelated) async {
     setState(() => _isSubmitting = true);
 
     Map<String, String> headers = {
@@ -115,6 +122,7 @@ class AddStatusPageState extends State<AddStatusPage> {
           "data": {
             "libelleStatus": _statusVehicule,
             "observationStatus": _observationsStatus,
+            "vehicule_related": _idVehiculeRelated
           }
         }));
 
@@ -129,17 +137,16 @@ class AddStatusPageState extends State<AddStatusPage> {
       //final String errorMsg = responseData['message'];
 
       //Map<String, dynamic> errorMsg = responseData['message'];
-      final String errorMsg = 'Impossible d\'enregistrer le véhicule !';
+      final String errorMsg = 'Impossible d\'enregistrer le status !';
       _showErrorSnack(errorMsg);
     }
   }
 
   void _showSuccessSnack() {
     final snackbar = SnackBar(
-        content: Text(
-            'Le véhicule mat: $_matricule a été enregistré avec succès !',
+        content: Text('Status enregistré avec succès !',
             style: TextStyle(color: Colors.green)),
-        duration: Duration(milliseconds: 2000));
+        duration: Duration(milliseconds: 3000));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
@@ -201,7 +208,7 @@ class AddStatusPageState extends State<AddStatusPage> {
                     end: Alignment.topCenter,
                     stops: [0.1, 0.2],
                     colors: const [Colors.lightBlueAccent, Colors.white])),
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 50.0),
             child: Center(
                 child: SingleChildScrollView(
               child: Form(
@@ -212,10 +219,10 @@ class AddStatusPageState extends State<AddStatusPage> {
                       children: [
                         _showTitle(),
                         Text(''),
-                        _showDechargementInput(),
+                        _addStatus(),
                         Text(''),
                         _showObservationsStatus(),
-                        _showFormActions(),
+                        _showFormActions(widget.item.id),
                         Text(''),
                       ])),
             ))));

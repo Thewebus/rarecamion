@@ -43,7 +43,8 @@ ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
   };
 
   http.Response response = await http.get(
-      Uri.parse('http://rarecamion.com:1337/api/vehicules'),
+      Uri.parse(
+          'http://rarecamion.com:1337/api/vehicules?populate=photoVehicule,user'),
       headers: headers);
   Map<String, dynamic> vehiculesRawData =
       new Map<String, dynamic>.from(json.decode(response.body));
