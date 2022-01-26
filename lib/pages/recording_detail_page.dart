@@ -66,7 +66,7 @@ class RecordingDetailPage extends StatelessWidget {
               ),
               //List below all status details recordered by this related vehicule ...
 
-              //SizedBox(height: 150),
+              SizedBox(height: 500),
 
               /*Image.network(pictureUrl,
                   width: orientation == Orientation.portrait ? 300 : 100,
