@@ -92,13 +92,14 @@ class RecordingsPageState extends State<RecordingsPage> {
                         child: Column(
                           children: [
                             Text(
-                              'Au revoir !',
+                              'Vous êtes deconnecté(e) avec succès',
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
+                            SizedBox(height: 10),
                             ElevatedButton(
                                 onPressed: () => Navigator.pushReplacementNamed(
                                     context, '/login'),
-                                child: Text('Se Connecter'))
+                                child: Text('Aller à l\'accueil'))
                           ],
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,

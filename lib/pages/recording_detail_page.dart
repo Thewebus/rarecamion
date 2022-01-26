@@ -8,7 +8,8 @@ class RecordingDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget _showTitle() {
-      return Text('PHOTO', style: Theme.of(context).textTheme.bodyText1);
+      return Text('Liste des status ...',
+          style: Theme.of(context).textTheme.bodyText1);
     }
 
     Widget _showVDetails(String libelle, String value) {
@@ -17,7 +18,7 @@ class RecordingDetailPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 5),
             child: Text(
               '$libelle',
               style: Theme.of(context).textTheme.bodyText2,
@@ -47,20 +48,25 @@ class RecordingDetailPage extends StatelessWidget {
             child: Center(
                 child: SingleChildScrollView(
                     child: Column(children: [
-              Placeholder(
-                fallbackHeight: 100,
-              ),
               /*Image.network(pictureUrl, fit: BoxFit.contain,
                   loadingBuilder: (context, child, progress) {
                 return progress == null ? child : LinearProgressIndicator();
               }),*/
               //Text('DATA: ${item.attributes}'),
+
               _showVDetails('Déchargement', '${item.attributes.dechargement}'),
               _showVDetails('Produit', '${item.attributes.etatProduit}'),
               _showVDetails('Usine', '${item.attributes.usineVehicule}'),
               _showVDetails('Type produit', '${item.attributes.typeProduit}'),
               SizedBox(height: 10),
-              SizedBox(height: 150),
+              // Text('All status ...'),
+              SizedBox(height: 10),
+              Placeholder(
+                fallbackHeight: 5,
+              ),
+              //List below all status details recordered by this related vehicule ...
+
+              //SizedBox(height: 150),
 
               /*Image.network(pictureUrl,
                   width: orientation == Orientation.portrait ? 300 : 100,

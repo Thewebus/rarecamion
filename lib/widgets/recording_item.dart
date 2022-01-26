@@ -27,6 +27,7 @@ class RecordingItem extends StatelessWidget {
         tileColor: Colors.blueAccent,
         title: Row(
           children: [
+            Icon(Icons.car_repair),
             Text('Mat. ', style: TextStyle(fontSize: 11.0)),
             Text('${item.attributes.matricule}',
                 style: TextStyle(fontSize: 18.0)),

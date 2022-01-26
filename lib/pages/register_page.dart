@@ -147,7 +147,7 @@ class RegisterPageState extends State<RegisterPage> {
     final snackbar = SnackBar(
         content: Text('Utilisateur $_username enregistré avec succès !',
             style: TextStyle(color: Colors.green)),
-        duration: Duration(milliseconds: 500));
+        duration: Duration(milliseconds: 2000));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();

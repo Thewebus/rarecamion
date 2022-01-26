@@ -1,12 +1,15 @@
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehicule.dart';
+import 'package:rarecamion/models/status_vehicule.dart';
 import 'package:rarecamion/redux/actions.dart';
 
 AppState appReducer(AppState state, dynamic action) {
   return AppState(
-      user: userReducer(state.user, action),
-      recordings: recordingsReducer(state.recordings, action));
+    user: userReducer(state.user, action),
+    recordings: recordingsReducer(state.recordings, action),
+    statusvehicule: statusVehiculeReducer(state.statusvehicule, action),
+  );
 }
 
 User userReducer(User user, dynamic action) {
@@ -23,4 +26,12 @@ List<Vehicules> recordingsReducer(List<Vehicules> recordings, dynamic action) {
     return action.recordings;
   }
   return recordings;
+}
+
+List<StatusVehicule> statusVehiculeReducer(
+    List<StatusVehicule> statusvehicule, dynamic action) {
+  if (action is GetStatusAction) {
+    return action.statusvehicule;
+  }
+  return statusvehicule;
 }
