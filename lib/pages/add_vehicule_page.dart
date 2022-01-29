@@ -31,7 +31,8 @@ class AddVehiculePageState extends State<AddVehiculePage> {
 
   String albumName = 'Media';
 
-  String _matricule, _typeproduit;
+  String _matricule;
+  String _typeproduit = 'HEVEA';
   String _dropDechargement = 'CAMION';
   String _dropEtatProduit = 'BON';
   String _dropUsine = 'IRA';
@@ -234,6 +235,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
       'Accept': 'application/json'
     };
 
+// TODO: Agent: Rattacher l'enregistrement véhicule à l'agent enregistreur
     http.Response response =
         await http.post(Uri.parse('http://rarecamion.com:1337/api/vehicules'),
             headers: headers,
