@@ -36,6 +36,8 @@ class MyApp extends StatelessWidget {
             '/addvehicule': (BuildContext context) =>
                 AddVehiculePage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(GetFournisseursAction);
                 }),
             '/addstatustovehicule': (BuildContext context) =>
                 AddVehiculePage(onInit: () {

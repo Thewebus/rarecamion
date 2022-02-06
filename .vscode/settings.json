@@ -2,5 +2,8 @@
     "prettier.printWidth": 1000,
     "dart.previewFlutterUiGuides": true,
     "dart.previewFlutterUiGuidesCustomTracking": true,
-    "dart.previewBazelWorkspaceCustomScripts": true
+    "dart.previewBazelWorkspaceCustomScripts": true,
+    "errorLens.removeLinebreaks": false,
+    "html.format.wrapLineLength": 0,
+    "prettier.proseWrap": "never"
 }
