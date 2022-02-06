@@ -53,24 +53,20 @@ ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
-
   String url =
       'http://rarecamion.com:1337/api/vehicules?populate=*&filters[user][email][\$eq]=$userEmail';
 
-  print(url);
-
   http.Response response = await http.get(Uri.parse(url), headers: headers);
-  Map<String, dynamic> fournisseursDataRAW =
+  Map<String, dynamic> vehiculesDataRAW =
       new Map<String, dynamic>.from(json.decode(response.body));
-  final fournisseursDatas = fournisseursDataRAW['data'];
+  final vehiculesDatas = vehiculesDataRAW['data'];
 
-  final List<Vehicules> vehicules = [];
-
-  fournisseursDatas.forEach((fournisseurData) {
+  final List<Vehicules> listOfVehiculesObjects = [];
+  vehiculesDatas.forEach((fournisseurData) {
     final Vehicules vehicule = Vehicules.fromJson(fournisseurData);
-    vehicules.add(vehicule);
+    listOfVehiculesObjects.add(vehicule);
   });
-  store.dispatch(GetRecordingsAction(vehicules));
+  store.dispatch(GetRecordingsAction(listOfVehiculesObjects));
 };
 
 class GetRecordingsAction {
@@ -94,15 +90,18 @@ ThunkAction<AppState> getstatusAction = (Store<AppState> store) async {
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
-  Map<String, dynamic> fournisseursDataRAW =
+  Map<String, dynamic> statusDatasRAW =
       new Map<String, dynamic>.from(json.decode(response.body));
-  final fournisseursDatas = fournisseursDataRAW['data'];
-  final List<StatusVehicule> statusall = [];
-  fournisseursDatas.forEach((fournisseurData) {
-    final StatusVehicule status = StatusVehicule.fromJson(fournisseurData);
-    statusall.add(status);
+
+  final statusDatas = statusDatasRAW['data'];
+
+  final List<StatusVehicule> listOfStatusObjects = [];
+
+  statusDatas.forEach((statusData) {
+    final StatusVehicule status = StatusVehicule.fromJson(statusData);
+    listOfStatusObjects.add(status);
   });
-  store.dispatch(GetStatusAction(statusall));
+  store.dispatch(GetStatusAction(listOfStatusObjects));
 };
 
 class GetStatusAction {
@@ -132,6 +131,8 @@ ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
     final Fournisseur fournisseur = Fournisseur.fromJson(fournisseurData);
     fournisseurs.add(fournisseur);
   });
+
+  print(fournisseurs);
   store.dispatch(GetFournisseursAction(fournisseurs));
 };
 

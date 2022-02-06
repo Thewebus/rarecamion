@@ -1,3 +1,6 @@
 {
-    "prettier.printWidth": 1000
+    "prettier.printWidth": 1000,
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    "dart.previewBazelWorkspaceCustomScripts": true
 }

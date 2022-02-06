@@ -34,6 +34,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   String _matricule;
   String _typeproduit = 'HEVEA';
   String _dropDechargement = 'CAMION';
+  String _dropFournisseur = 'CAMION';
   String _dropEtatProduit = 'BON';
   String _dropUsine = 'IRA';
 
@@ -109,6 +110,34 @@ class AddVehiculePageState extends State<AddVehiculePage> {
             )),
       ],
     );
+  }
+
+  Widget _showFournisseursInput() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  'Traitant / Fournisseur:',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: state.fournisseurs == null
+                      ? Text(
+                          'Erreur lors du chargement !',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : Text('Liste: ${state.fournisseurs}')),
+            ],
+          );
+        });
   }
 
   Widget _showEtatProduitInput() {
@@ -404,7 +433,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       children: [
                         _showTitle(),
                         _showMatriculeInput(),
-                        _showTypeProduitInput(),
+                        _showFournisseursInput(),
                         _showDechargementInput(),
                         _showEtatProduitInput(),
                         _showUsineInput(),

@@ -112,7 +112,7 @@ class LoginPageState extends State<LoginPage> {
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
       _redirectUser();
-      print(responseData);
+      //print(responseData);
     } else {
       //print(responseData);
       setState(() => _isSubmitting = false);
@@ -127,7 +127,7 @@ class LoginPageState extends State<LoginPage> {
     Map<String, dynamic> user = responseData['user'];
     user.putIfAbsent('jwt', () => responseData['jwt']);
     prefs.setString('user', json.encode(user));
-    print(prefs.getString('user'));
+    //print(prefs.getString('user'));
   }
 
   void _showSuccessSnack() {
