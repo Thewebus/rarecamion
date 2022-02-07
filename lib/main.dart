@@ -39,10 +39,6 @@ class MyApp extends StatelessWidget {
                   StoreProvider.of<AppState>(context)
                       .dispatch(GetFournisseursAction);
                 }),
-            '/addstatustovehicule': (BuildContext context) =>
-                AddVehiculePage(onInit: () {
-                  StoreProvider.of<AppState>(context).dispatch(getUserAction);
-                }),
           },
           theme: ThemeData(
             primaryColor: Colors.blue,

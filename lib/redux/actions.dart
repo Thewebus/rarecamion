@@ -120,9 +120,14 @@ ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
   };
 
   String url = 'http://rarecamion.com:1337/api/fournisseurs';
+
   http.Response response = await http.get(Uri.parse(url), headers: headers);
+
   Map<String, dynamic> fournisseursDataRAW =
       new Map<String, dynamic>.from(json.decode(response.body));
+
+  print('Liste des fournisseurs: $fournisseursDataRAW');
+
   final fournisseursDatas = fournisseursDataRAW['data'];
 
   final List<Fournisseur> fournisseurs = [];
@@ -132,7 +137,6 @@ ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
     fournisseurs.add(fournisseur);
   });
 
-  print(fournisseurs);
   store.dispatch(GetFournisseursAction(fournisseurs));
 };
 

@@ -16,11 +16,15 @@ class AddStatusPage extends StatefulWidget {
 
 class AddStatusPageState extends State<AddStatusPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final _formKey = GlobalKey<FormState>();
+
   bool _isSubmitting, _obscuredText = true;
 
   String _matricule, _observationsStatus;
+
   String _statusVehicule = 'EN ATTENTE';
+
   Widget _showTitle() {
     return Text('Ajouter Status', style: Theme.of(context).textTheme.headline1);
   }

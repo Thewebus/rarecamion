@@ -19,7 +19,7 @@ class RecordingsPageState extends State<RecordingsPage> {
   }
 
   void _redirectUserToAddVehicule() {
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 100), () {
       Navigator.pushReplacementNamed(context, '/addvehicule');
     });
   }

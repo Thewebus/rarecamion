@@ -11,10 +11,17 @@ class RecordingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(item);
+    //print(item);
     //final String itemURL = item['thumbnail']['url'];
     //final String pictureUrl =     'http://rarecamion.com:1337/api/upload/files/$itemURL';
     //print('Affichage matricule... ${item.matricule}');
+
+    void _redirectUserToAddStatus() {
+      Future.delayed(Duration(milliseconds: 100), () {
+        Navigator.pushReplacementNamed(context, '/addstatustovehicule');
+      });
+    }
+
     return ListTile(
         /*Image.network(
       pictureUrl,

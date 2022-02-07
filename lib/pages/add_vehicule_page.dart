@@ -57,18 +57,29 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                 icon: Icon(Icons.article_outlined, color: Colors.grey))));
   }
 
-  Widget _showTypeProduitInput() {
-    return Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: TextFormField(
-            onSaved: (val) => _typeproduit = val,
-            validator: (val) =>
-                val.isEmpty ? 'Entrez un type de produit !' : null,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Type de produit',
-                hintText: 'Entrez le type de produit',
-                icon: Icon(Icons.add_business_outlined, color: Colors.grey))));
+  Widget _showFournisseursInput() {
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  'Traitant / Fournisseur:',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: state.fournisseurs != null
+                      ? Text('Liste: ${state.fournisseurs.length}')
+                      : Text('Liste: NA')),
+            ],
+          );
+        });
   }
 
   Widget _showDechargementInput() {
@@ -110,34 +121,6 @@ class AddVehiculePageState extends State<AddVehiculePage> {
             )),
       ],
     );
-  }
-
-  Widget _showFournisseursInput() {
-    return StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (context, state) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Text(
-                  'Traitant / Fournisseur:',
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: state.fournisseurs == null
-                      ? Text(
-                          'Erreur lors du chargement !',
-                          style: TextStyle(color: Colors.red),
-                        )
-                      : Text('Liste: ${state.fournisseurs}')),
-            ],
-          );
-        });
   }
 
   Widget _showEtatProduitInput() {
@@ -229,7 +212,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
     );
   }
 
-  Widget _showFormActions() {
+  Widget _showFormActions(int _userID) {
     return Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: Column(children: [
@@ -238,7 +221,13 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                   valueColor:
                       AlwaysStoppedAnimation(Theme.of(context).primaryColor))
               : ElevatedButton(
-                  onPressed: _submit,
+                  onPressed: () {
+                    final form = _formKey.currentState;
+                    if (form.validate()) {
+                      form.save();
+                      _addVehiculeProcess(_userID);
+                    }
+                  },
                   child: Text('ENREGISTRER VEHICULE'),
                 ),
           TextButton(
@@ -248,15 +237,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
         ]));
   }
 
-  void _submit() {
-    final form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      _addVehiculeProcess();
-    }
-  }
-
-  void _addVehiculeProcess() async {
+  void _addVehiculeProcess(int _userID) async {
     setState(() => _isSubmitting = true);
 
     Map<String, String> headers = {
@@ -264,7 +245,6 @@ class AddVehiculePageState extends State<AddVehiculePage> {
       'Accept': 'application/json'
     };
 
-// TODO: Agent: Rattacher l'enregistrement véhicule à l'agent enregistreur
     http.Response response =
         await http.post(Uri.parse('http://rarecamion.com:1337/api/vehicules'),
             headers: headers,
@@ -274,23 +254,24 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                 "dechargement": _dropDechargement,
                 "typeProduit": _typeproduit,
                 "etatProduit": _dropEtatProduit,
-                "usineVehicule": _dropUsine
+                "usineVehicule": _dropUsine,
+                "user": _userID
               }
             }));
 
-    final responseData = json.decode(response.body);
+    //final responseData = json.decode(response.body);
+
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
       _redirectUser();
-      print(responseData);
+      //print(responseData);
     } else {
       setState(() => _isSubmitting = false);
       //final String errorMsg = responseData['message'];
 
       //Map<String, dynamic> errorMsg = responseData['message'];
-      final String errorMsg = 'Impossible d\'enregistrer le véhicule !';
-      _showErrorSnack(errorMsg);
+      _showErrorSnack();
     }
   }
 
@@ -305,9 +286,10 @@ class AddVehiculePageState extends State<AddVehiculePage> {
     _formKey.currentState.reset();
   }
 
-  void _showErrorSnack(String errorMsg) {
+  void _showErrorSnack() {
     final snackbar = SnackBar(
-        content: Text(errorMsg, style: TextStyle(color: Colors.red)),
+        content: Text('Impossible d\'enregistrer le véhicule !',
+            style: TextStyle(color: Colors.red)),
         duration: Duration(milliseconds: 3000));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -415,32 +397,48 @@ class AddVehiculePageState extends State<AddVehiculePage> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: _appBar,
-        body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    stops: [0.1, 0.2],
-                    colors: const [Colors.lightBlueAccent, Colors.white])),
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
-            child: Center(
-                child: SingleChildScrollView(
-              child: Form(
-                  key: _formKey,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _showTitle(),
-                        _showMatriculeInput(),
-                        _showFournisseursInput(),
-                        _showDechargementInput(),
-                        _showEtatProduitInput(),
-                        _showUsineInput(),
-                        _showPhotoButtonInput(),
-                        _showFormActions(),
-                        SizedBox(height: 150)
-                      ])),
-            ))));
+        body: StoreConnector<AppState, AppState>(
+            converter: (store) => store.state,
+            builder: (_, state) {
+              return state.user != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              stops: [
+                            0.1,
+                            0.2
+                          ],
+                              colors: const [
+                            Colors.lightBlueAccent,
+                            Colors.white
+                          ])),
+                      padding: EdgeInsets.symmetric(horizontal: 50.0),
+                      child: Center(
+                          child: SingleChildScrollView(
+                        child: Form(
+                            key: _formKey,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _showTitle(),
+                                  _showMatriculeInput(),
+                                  _showFournisseursInput(),
+                                  _showDechargementInput(),
+                                  _showEtatProduitInput(),
+                                  _showUsineInput(),
+                                  _showPhotoButtonInput(),
+                                  _showFormActions(state.user.id),
+                                  SizedBox(height: 150)
+                                ])),
+                      )))
+                  : Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                          'Impossible de récuperer les données de l\'utilisateur'),
+                    );
+            }));
   }
 }
