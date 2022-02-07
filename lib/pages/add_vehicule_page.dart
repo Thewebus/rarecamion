@@ -89,6 +89,11 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                         _dropFournisseur = newValue;
                       });
                     },
+
+                    ///TODO: Fetch datas from STRAPI API ...
+                    ////*
+                    ///https://stackoverflow.com/questions/68651197/flutter-fill-dropdownmenuitem-from-list
+                    ///*/
                     items: <String>[
                       'ETS PAC',
                       'PALMEVA',

@@ -9,27 +9,20 @@ class RecordingDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _showTitle() {
-      return Text('Liste des status ...',
-          style: Theme.of(context).textTheme.bodyText1);
-    }
-
     Widget _showVDetails(String libelle, String value) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 0),
-            child: Text(
-              '$libelle',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
+            padding: EdgeInsets.only(top: 5),
+            child: Text('$libelle',
+                style: TextStyle(fontSize: 12, color: Colors.black)),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 0),
-              child:
-                  Text('$value', style: Theme.of(context).textTheme.bodyText1)),
+              padding: EdgeInsets.only(top: 5),
+              child: Text('$value',
+                  style: TextStyle(fontSize: 13, color: Colors.blue))),
         ],
       );
     }
@@ -40,72 +33,94 @@ class RecordingDetailPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: Text(item.attributes.matricule)),
         body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    stops: [0.1, 0.2],
-                    colors: const [Colors.lightBlueAccent, Colors.white])),
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
-            child: Center(
-                child: SingleChildScrollView(
-                    child: Column(children: [
-              /*Image.network(pictureUrl, fit: BoxFit.contain,
-                  loadingBuilder: (context, child, progress) {
-                return progress == null ? child : LinearProgressIndicator();
+            padding: EdgeInsets.all(10.0),
+            child: SingleChildScrollView(
+                child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  height: 130,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), //color of shadow
+                        spreadRadius: 1, //spread radius
+                        blurRadius: 1, // blur radius
+                        offset: Offset(0, 1), // changes position of shadow
+                      ),
+                      //you can set more BoxShadow() here
+                    ],
+                  ),
+                  child: Column(children: [
+                    /*Image.network(pictureUrl, fit: BoxFit.contain,
+              loadingBuilder: (context, child, progress) {
+            return progress == null ? child : LinearProgressIndicator();
               }),*/
-              //Text('DATA: ${item.attributes}'),
+                    _showVDetails(
+                        'Fournisseur', '${item.attributes.fournisseur}'),
+                    _showVDetails(
+                        'Déchargement', '${item.attributes.dechargement}'),
+                    _showVDetails('Produit', '${item.attributes.etatProduit}'),
+                    _showVDetails('Usine', '${item.attributes.usineVehicule}'),
+                    _showVDetails(
+                        'Type produit', '${item.attributes.typeProduit}'),
+                    //SizedBox(height: 10),
+                    // Text('All status ...'),
 
-              _showVDetails('Fournisseur', '${item.attributes.fournisseur}'),
-              _showVDetails('Déchargement', '${item.attributes.dechargement}'),
-              _showVDetails('Produit', '${item.attributes.etatProduit}'),
-              _showVDetails('Usine', '${item.attributes.usineVehicule}'),
-              _showVDetails('Type produit', '${item.attributes.typeProduit}'),
-              //SizedBox(height: 10),
-              // Text('All status ...'),
-              SizedBox(height: 10),
-              Placeholder(
-                fallbackHeight: 1,
-              ),
-              //List below all status details recordered by this related vehicule ...
+                    //List below all status details recordered by this related vehicule ...
 
-              Container(
-                child: StoreConnector<AppState, AppState>(
-                    converter: (store) => store.state,
-                    builder: (_, state) {
-                      return state.user != null
-                          ? Text('${state.statusvehicule}')
-                          : Center(
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'Erreur chargement ..., veuillez réessayer svp !',
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  SizedBox(height: 10),
-                                  /*
-                            ElevatedButton(
-                                onPressed: () => Navigator.pushReplacementNamed(
-                                    context, '/records'),
-                                child: Text('Aller à l\'accueil')),
-*/
-                                ],
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                              ),
-                            );
-                    }),
-              ),
+                    //SizedBox(height: 500),
 
-              SizedBox(height: 500),
+                    /*Image.network(pictureUrl,
+              width: orientation == Orientation.portrait ? 300 : 100,
+              height: orientation == Orientation.portrait ? 250 : 200,
+              fit: BoxFit.contain),*/
+                  ]),
+                ),
+                SizedBox(height: 10),
+                Expanded(
+                    child: ListView.builder(
+                  itemBuilder: (context, index) => StatusVehiculeWidget(),
+                )),
+              ],
+            ))));
+  }
+}
 
-              /*Image.network(pictureUrl,
-                  width: orientation == Orientation.portrait ? 300 : 100,
-                  height: orientation == Orientation.portrait ? 250 : 200,
-                  fit: BoxFit.contain),*/
-            ])))));
+class StatusVehiculeWidget extends StatelessWidget {
+  final Vehicules vehicule;
+  final Function press;
+  const StatusVehiculeWidget({
+    Key key,
+    this.vehicule,
+    this.press,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 0, 0, 0),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('EN ATTENTE',
+              style: TextStyle(
+                  fontSize: 19, color: Color.fromARGB(255, 255, 255, 255))),
+          Text('07/02/2022',
+              style: TextStyle(
+                  fontSize: 11.0, color: Color.fromARGB(255, 255, 255, 255))),
+          Text('EDITION',
+              style: TextStyle(
+                  fontSize: 10.0, color: Color.fromARGB(255, 35, 250, 53))),
+        ],
+      ),
+    );
   }
 }
