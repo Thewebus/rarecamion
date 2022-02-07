@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
 
 class RecordingDetailPage extends StatelessWidget {
@@ -18,16 +20,16 @@ class RecordingDetailPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 0),
             child: Text(
               '$libelle',
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 10.0),
+              padding: EdgeInsets.only(top: 0),
               child:
-                  Text('$value', style: Theme.of(context).textTheme.headline1)),
+                  Text('$value', style: Theme.of(context).textTheme.bodyText1)),
         ],
       );
     }
@@ -54,17 +56,49 @@ class RecordingDetailPage extends StatelessWidget {
               }),*/
               //Text('DATA: ${item.attributes}'),
 
+              _showVDetails('Fournisseur', '${item.attributes.fournisseur}'),
               _showVDetails('Déchargement', '${item.attributes.dechargement}'),
               _showVDetails('Produit', '${item.attributes.etatProduit}'),
               _showVDetails('Usine', '${item.attributes.usineVehicule}'),
               _showVDetails('Type produit', '${item.attributes.typeProduit}'),
-              SizedBox(height: 10),
+              //SizedBox(height: 10),
               // Text('All status ...'),
               SizedBox(height: 10),
               Placeholder(
-                fallbackHeight: 5,
+                fallbackHeight: 1,
               ),
               //List below all status details recordered by this related vehicule ...
+
+              Container(
+                child: StoreConnector<AppState, AppState>(
+                    converter: (store) => store.state,
+                    builder: (_, state) {
+                      return state.user != null
+                          ? Text('${state.statusvehicule}')
+                          : Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Erreur chargement ..., veuillez réessayer svp !',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  SizedBox(height: 10),
+                                  /*
+                            ElevatedButton(
+                                onPressed: () => Navigator.pushReplacementNamed(
+                                    context, '/records'),
+                                child: Text('Aller à l\'accueil')),
+*/
+                                ],
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                              ),
+                            );
+                    }),
+              ),
 
               SizedBox(height: 500),
 

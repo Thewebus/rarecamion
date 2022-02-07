@@ -34,7 +34,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   String _matricule;
   String _typeproduit = 'HEVEA';
   String _dropDechargement = 'CAMION';
-  String _dropFournisseur = 'CAMION';
+  String _dropFournisseur = 'ETS PAC';
   String _dropEtatProduit = 'BON';
   String _dropUsine = 'IRA';
 
@@ -74,9 +74,54 @@ class AddVehiculePageState extends State<AddVehiculePage> {
               ),
               Padding(
                   padding: EdgeInsets.only(top: 10.0),
-                  child: state.fournisseurs != null
-                      ? Text('Liste: ${state.fournisseurs.length}')
-                      : Text('Liste: NA')),
+                  child: DropdownButton<String>(
+                    //isExpanded: true,
+                    value: _dropFournisseur,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.blue),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.blueAccent,
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        _dropFournisseur = newValue;
+                      });
+                    },
+                    items: <String>[
+                      'ETS PAC',
+                      'PALMEVA',
+                      'CCNC',
+                      'LANSCOOPAD',
+                      'SCOOPS PHNI',
+                      'ANITCHE',
+                      'SOCOPA SCOOPS',
+                      'SOCAJPI',
+                      'SOCOFPA COULIBALY',
+                      'JMK',
+                      'UPA',
+                      'JZA',
+                      'SOCA GRAP',
+                      'SOCOFPA DIARRA',
+                      'ABU ELUM',
+                      'SOCOPHEA',
+                      'COPANEK',
+                      'SOCOPHEPAAM',
+                      'HE RURONG',
+                      'PENQUEL SCOOPS',
+                      'CAPID ZANGRE',
+                      'AIMA',
+                      'BECOM',
+                      'SCOOPS IPA',
+                      'SCOOPS ELIM'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value, style: TextStyle(fontSize: 12)),
+                      );
+                    }).toList(),
+                  )),
             ],
           );
         });
@@ -255,6 +300,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                 "typeProduit": _typeproduit,
                 "etatProduit": _dropEtatProduit,
                 "usineVehicule": _dropUsine,
+                "fournisseur": _dropFournisseur,
                 "user": _userID
               }
             }));

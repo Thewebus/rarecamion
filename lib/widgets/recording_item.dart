@@ -37,11 +37,12 @@ class RecordingItem extends StatelessWidget {
             Icon(Icons.car_repair),
             Text('Mat. ', style: TextStyle(fontSize: 11.0)),
             Text('${item.attributes.matricule}',
-                style: TextStyle(fontSize: 18.0)),
+                style: TextStyle(fontSize: 16.0)),
           ],
         ),
-        subtitle: Text('${item.attributes.dechargement}',
-            style: TextStyle(fontSize: 16.0)),
+        subtitle: Text(
+            '${item.attributes.dechargement} - ${item.attributes.fournisseur}',
+            style: TextStyle(fontSize: 12.0)),
         trailing: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
             builder: (_, state) {
