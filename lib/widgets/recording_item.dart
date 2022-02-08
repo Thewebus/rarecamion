@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
-import 'package:rarecamion/pages/add_status_to_vehicule.dart';
-import 'package:rarecamion/pages/recording_detail_page.dart';
+import 'package:rarecamion/pages/add_status_page.dart';
+import 'package:rarecamion/pages/vehicule_detail_page.dart';
 
 class RecordingItem extends StatelessWidget {
   final Vehicule item;
