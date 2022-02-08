@@ -6,7 +6,7 @@ import 'package:rarecamion/pages/add_status_to_vehicule.dart';
 import 'package:rarecamion/pages/recording_detail_page.dart';
 
 class RecordingItem extends StatelessWidget {
-  final Vehicules item;
+  final Vehicule item;
   RecordingItem({this.item});
 
   @override

@@ -61,17 +61,17 @@ ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
       new Map<String, dynamic>.from(json.decode(response.body));
   final vehiculesDatas = vehiculesDataRAW['data'];
 
-  final List<Vehicules> listOfVehiculesObjects = [];
+  final List<Vehicule> listOfVehiculesObjects = [];
   vehiculesDatas.forEach((fournisseurData) {
-    final Vehicules vehicule = Vehicules.fromJson(fournisseurData);
+    final Vehicule vehicule = Vehicule.fromJson(fournisseurData);
     listOfVehiculesObjects.add(vehicule);
   });
   store.dispatch(GetRecordingsAction(listOfVehiculesObjects));
 };
 
 class GetRecordingsAction {
-  final List<Vehicules> _vehicules;
-  List<Vehicules> get recordings => this._vehicules;
+  final List<Vehicule> _vehicules;
+  List<Vehicule> get recordings => this._vehicules;
   GetRecordingsAction(this._vehicules);
 }
 

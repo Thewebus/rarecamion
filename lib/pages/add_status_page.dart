@@ -7,7 +7,7 @@ import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
 
 class AddStatusPage extends StatefulWidget {
-  final Vehicules item;
+  final Vehicule item;
   AddStatusPage({this.item});
 
   @override

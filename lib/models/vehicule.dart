@@ -1,17 +1,17 @@
 // To parse this JSON data, do
 //
-//     final vehicules = vehiculesFromJson(jsonString);
+//     final vehicule = vehiculeFromJson(jsonString);
 
 import 'dart:convert';
 
-List<Vehicules> vehiculesFromJson(String str) =>
-    List<Vehicules>.from(json.decode(str).map((x) => Vehicules.fromJson(x)));
+List<Vehicule> vehiculeFromJson(String str) =>
+    List<Vehicule>.from(json.decode(str).map((x) => Vehicule.fromJson(x)));
 
-String vehiculesToJson(List<Vehicules> data) =>
+String vehiculeToJson(List<Vehicule> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Vehicules {
-  Vehicules({
+class Vehicule {
+  Vehicule({
     this.id,
     this.attributes,
   });
@@ -19,7 +19,7 @@ class Vehicules {
   int id;
   Attributes attributes;
 
-  factory Vehicules.fromJson(Map<String, dynamic> json) => Vehicules(
+  factory Vehicule.fromJson(Map<String, dynamic> json) => Vehicule(
         id: json["id"],
         attributes: Attributes.fromJson(json["attributes"]),
       );

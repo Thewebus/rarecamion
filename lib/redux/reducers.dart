@@ -23,7 +23,7 @@ User userReducer(User user, dynamic action) {
   return user;
 }
 
-List<Vehicules> recordingsReducer(List<Vehicules> recordings, dynamic action) {
+List<Vehicule> recordingsReducer(List<Vehicule> recordings, dynamic action) {
   if (action is GetRecordingsAction) {
     return action.recordings;
   }

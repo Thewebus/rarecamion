@@ -4,7 +4,7 @@ import 'package:rarecamion/models/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
 
 class RecordingDetailPage extends StatelessWidget {
-  final Vehicules item;
+  final Vehicule item;
   RecordingDetailPage({this.item});
 
   @override
@@ -80,47 +80,32 @@ class RecordingDetailPage extends StatelessWidget {
                   ]),
                 ),
                 SizedBox(height: 10),
-                Expanded(
-                    child: ListView.builder(
-                  itemBuilder: (context, index) => StatusVehiculeWidget(),
-                )),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('EN ATTENTE',
+                          style: TextStyle(
+                              fontSize: 19,
+                              color: Color.fromARGB(255, 255, 255, 255))),
+                      Text('07/02/2022',
+                          style: TextStyle(
+                              fontSize: 11.0,
+                              color: Color.fromARGB(255, 255, 255, 255))),
+                      Text('EDITION',
+                          style: TextStyle(
+                              fontSize: 10.0,
+                              color: Color.fromARGB(255, 35, 250, 53))),
+                    ],
+                  ),
+                ),
               ],
             ))));
-  }
-}
-
-class StatusVehiculeWidget extends StatelessWidget {
-  final Vehicules vehicule;
-  final Function press;
-  const StatusVehiculeWidget({
-    Key key,
-    this.vehicule,
-    this.press,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 0, 0, 0),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('EN ATTENTE',
-              style: TextStyle(
-                  fontSize: 19, color: Color.fromARGB(255, 255, 255, 255))),
-          Text('07/02/2022',
-              style: TextStyle(
-                  fontSize: 11.0, color: Color.fromARGB(255, 255, 255, 255))),
-          Text('EDITION',
-              style: TextStyle(
-                  fontSize: 10.0, color: Color.fromARGB(255, 35, 250, 53))),
-        ],
-      ),
-    );
   }
 }

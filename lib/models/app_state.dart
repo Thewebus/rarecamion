@@ -7,7 +7,7 @@ import 'package:rarecamion/models/status_vehicule.dart';
 @immutable
 class AppState {
   final User user;
-  final List<Vehicules> recordings;
+  final List<Vehicule> recordings;
   final List<StatusVehicule> statusvehicule;
   final List<Fournisseur> fournisseurs;
 
