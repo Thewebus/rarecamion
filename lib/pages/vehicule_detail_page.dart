@@ -1,37 +1,75 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:rarecamion/models/app_state.dart';
+import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/vehicule.dart';
 
-class RecordingDetailPage extends StatelessWidget {
-  final Vehicule item;
-  RecordingDetailPage({this.item});
+import '../models/status_vehicule.dart';
+
+class VehiculeDetailsPage extends StatefulWidget {
+ final Vehicule vehicule;
+
+  const VehiculeDetailsPage ({ Key? key, this.vehicule }): super(key: key);
+
+  @override
+  VehiculeDetailsPageState createState() => VehiculeDetailsPageState();
+}
+
+class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
+  final List<StatusVehicule> _allStatus = [];
+
+  Future<List<StatusVehicule>> fetchStatus() async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+
+    String vehiculeRelatedID = vehicule.id.toString();
+
+    String url =
+        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
+
+    print(url);
+
+    http.Response response = await http.get(Uri.parse(url), headers: headers);
+
+    Map<String, dynamic> statusDatasRAW =
+        new Map<String, dynamic>.from(json.decode(response.body));
+
+    final statusDatas = statusDatasRAW['data'];
+
+    final List<StatusVehicule> allStatus = [];
+
+    statusDatas.forEach((statusData) {
+      final StatusVehicule status = StatusVehicule.fromJson(statusData);
+      allStatus.add(status);
+    });
+
+    return allStatus;
+  }
+
+  Widget _showVDetails(String libelle, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 5),
+          child: Text('$libelle',
+              style: TextStyle(fontSize: 12, color: Colors.black)),
+        ),
+        Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: Text('$value',
+                style: TextStyle(fontSize: 13, color: Colors.blue))),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget _showVDetails(String libelle, String value) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Text('$libelle',
-                style: TextStyle(fontSize: 12, color: Colors.black)),
-          ),
-          Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: Text('$value',
-                  style: TextStyle(fontSize: 13, color: Colors.blue))),
-        ],
-      );
-    }
-
-    final String pictureUrl =
-        'http://rarecamion.com:1337/uploads/thumbnail_607_4251640570155_2d1bab0376.jpg';
-    final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
-        appBar: AppBar(title: Text(item.attributes.matricule)),
+        appBar: AppBar(title: Text(vehicule.attributes.matricule)),
         body: Container(
             padding: EdgeInsets.all(10.0),
             child: SingleChildScrollView(
@@ -54,32 +92,20 @@ class RecordingDetailPage extends StatelessWidget {
                     ],
                   ),
                   child: Column(children: [
-                    /*Image.network(pictureUrl, fit: BoxFit.contain,
-              loadingBuilder: (context, child, progress) {
-            return progress == null ? child : LinearProgressIndicator();
-              }),*/
                     _showVDetails(
-                        'Fournisseur', '${item.attributes.fournisseur}'),
+                        'Fournisseur', '${vehicule.attributes.fournisseur}'),
                     _showVDetails(
-                        'Déchargement', '${item.attributes.dechargement}'),
-                    _showVDetails('Produit', '${item.attributes.etatProduit}'),
-                    _showVDetails('Usine', '${item.attributes.usineVehicule}'),
+                        'Déchargement', '${vehicule.attributes.dechargement}'),
                     _showVDetails(
-                        'Type produit', '${item.attributes.typeProduit}'),
-                    //SizedBox(height: 10),
-                    // Text('All status ...'),
-
-                    //List below all status details recordered by this related vehicule ...
-
-                    //SizedBox(height: 500),
-
-                    /*Image.network(pictureUrl,
-              width: orientation == Orientation.portrait ? 300 : 100,
-              height: orientation == Orientation.portrait ? 250 : 200,
-              fit: BoxFit.contain),*/
+                        'Produit', '${vehicule.attributes.etatProduit}'),
+                    _showVDetails(
+                        'Usine', '${vehicule.attributes.usineVehicule}'),
+                    _showVDetails(
+                        'Type produit', '${vehicule.attributes.typeProduit}'),
                   ]),
                 ),
                 SizedBox(height: 10),
+                Text(''),
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(

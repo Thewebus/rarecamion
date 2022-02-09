@@ -8,8 +8,8 @@ import 'package:rarecamion/redux/actions.dart';
 AppState appReducer(AppState state, dynamic action) {
   return AppState(
     user: userReducer(state.user, action),
-    recordings: recordingsReducer(state.recordings, action),
-    statusvehicule: statusVehiculeReducer(state.statusvehicule, action),
+    vehicules: recordingsReducer(state.vehicules, action),
+    vehiculeAllStatus: statusVehiculeReducer(state.vehiculeAllStatus, action),
     fournisseurs: fournisseursReducer(state.fournisseurs, action),
   );
 }
@@ -24,7 +24,7 @@ User userReducer(User user, dynamic action) {
 }
 
 List<Vehicule> recordingsReducer(List<Vehicule> recordings, dynamic action) {
-  if (action is GetRecordingsAction) {
+  if (action is GetVehiculesAction) {
     return action.recordings;
   }
   return recordings;

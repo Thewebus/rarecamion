@@ -7,18 +7,18 @@ import 'package:rarecamion/models/status_vehicule.dart';
 @immutable
 class AppState {
   final User user;
-  final List<Vehicule> recordings;
-  final List<StatusVehicule> statusvehicule;
+  final List<Vehicule> vehicules;
+  final List<StatusVehicule> vehiculeAllStatus;
   final List<Fournisseur> fournisseurs;
 
   AppState(
       {@required this.user,
-      @required this.recordings,
-      @required this.statusvehicule,
+      @required this.vehicules,
+      @required this.vehiculeAllStatus,
       @required this.fournisseurs});
 
   factory AppState.initial() {
     return AppState(
-        user: null, recordings: [], statusvehicule: [], fournisseurs: []);
+        user: null, vehicules: [], vehiculeAllStatus: [], fournisseurs: []);
   }
 }

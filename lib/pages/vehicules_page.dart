@@ -4,15 +4,15 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'package:rarecamion/widgets/recording_item.dart';
 
-class RecordingsPage extends StatefulWidget {
+class VehiculesPage extends StatefulWidget {
   final void Function() onInit;
-  RecordingsPage({this.onInit});
+  VehiculesPage({this.onInit});
 
   @override
   RecordingsPageState createState() => RecordingsPageState();
 }
 
-class RecordingsPageState extends State<RecordingsPage> {
+class RecordingsPageState extends State<VehiculesPage> {
   void initState() {
     super.initState();
     widget.onInit();
@@ -78,9 +78,9 @@ class RecordingsPageState extends State<RecordingsPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListView.separated(
-                                    itemCount: state.recordings.length,
+                                    itemCount: state.vehicules.length,
                                     itemBuilder: (context, i) => RecordingItem(
-                                          item: state.recordings[i],
+                                          item: state.vehicules[i],
                                         ),
                                     separatorBuilder:
                                         (BuildContext context, int index) =>
@@ -112,7 +112,7 @@ class RecordingsPageState extends State<RecordingsPage> {
           builder: (_, state) {
             return state.user != null
                 ? FloatingActionButton(
-                    //backgroundColor: Colors.blue[800],
+                    backgroundColor: Colors.blue[800],
                     onPressed: _redirectUserToAddVehicule,
                     tooltip: 'Ajouter nouveau véhicule ...',
                     child: Icon(Icons.add),
@@ -122,6 +122,3 @@ class RecordingsPageState extends State<RecordingsPage> {
     );
   }
 }
-/*
-    
-*/

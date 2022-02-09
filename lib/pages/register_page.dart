@@ -125,7 +125,7 @@ class RegisterPageState extends State<RegisterPage> {
       storeUserData(responseData);
       _showSuccessSnack();
       _redirectUser();
-      print(responseData);
+      //print(responseData);
     } else {
       setState(() => _isSubmitting = false);
       //final String errorMsg = responseData['message'];

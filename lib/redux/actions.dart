@@ -38,15 +38,15 @@ class LogoutUserAction {
   LogoutUserAction(this._user);
 }
 
-/// VEHICULE
-/* Getting VEHICULES Actions */
-ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
+/// VEHICULES
+/* Getting VEHICULES Actions by User */
+ThunkAction<AppState> getVehiculesAction = (Store<AppState> store) async {
 //Getting the USER here ...
   final prefs = await SharedPreferences.getInstance();
   final String storedUser = prefs.getString('user');
   final user =
       storedUser != null ? User.fromJson(json.decode(storedUser)) : null;
-  String userEmail = user.email;
+  final String userEmail = user.email;
 
 //Getting the VEHICULES here ...
   Map<String, String> headers = {
@@ -57,26 +57,33 @@ ThunkAction<AppState> getRecordingsAction = (Store<AppState> store) async {
       'http://rarecamion.com:1337/api/vehicules?populate=*&filters[user][email][\$eq]=$userEmail';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
-  Map<String, dynamic> vehiculesDataRAW =
-      new Map<String, dynamic>.from(json.decode(response.body));
-  final vehiculesDatas = vehiculesDataRAW['data'];
 
-  final List<Vehicule> listOfVehiculesObjects = [];
-  vehiculesDatas.forEach((fournisseurData) {
-    final Vehicule vehicule = Vehicule.fromJson(fournisseurData);
-    listOfVehiculesObjects.add(vehicule);
-  });
-  store.dispatch(GetRecordingsAction(listOfVehiculesObjects));
+  final responseData = json.decode(response.body);
+
+  if (response.statusCode != 200) {
+    print(responseData);
+  } else {
+    Map<String, dynamic> vehiculesStrapiJson =
+        new Map<String, dynamic>.from(responseData);
+    final vehiculesJson = vehiculesStrapiJson['data'];
+
+    final List<Vehicule> vehicules = [];
+    vehiculesJson.forEach((vehiculeJson) {
+      final Vehicule vehicule = Vehicule.fromJson(vehiculeJson);
+      vehicules.add(vehicule);
+    });
+    store.dispatch(GetVehiculesAction(vehicules));
+  }
 };
 
-class GetRecordingsAction {
+class GetVehiculesAction {
   final List<Vehicule> _vehicules;
   List<Vehicule> get recordings => this._vehicules;
-  GetRecordingsAction(this._vehicules);
+  GetVehiculesAction(this._vehicules);
 }
 
-/// STATUS VEHICULE
-/* Getting STATUS VEHICULE Actions */
+/// ALL VEHICULE STATUS
+/* Getting ALL VEHICULE STATUS Actions */
 ThunkAction<AppState> getstatusAction = (Store<AppState> store) async {
   Map<String, String> headers = {
     'Content-Type': 'application/json',
@@ -111,7 +118,7 @@ class GetStatusAction {
 }
 
 /// FOURNISSEURS
-// Get Fournisseurs Actions ...
+/* Getting Fournisseurs Actions ... */
 ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
 //Getting the Fournisseurs here ...
   Map<String, String> headers = {
@@ -123,21 +130,25 @@ ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
-  Map<String, dynamic> fournisseursDataRAW =
-      new Map<String, dynamic>.from(json.decode(response.body));
+  final responseData = json.decode(response.body);
 
-  print('Liste des fournisseurs: $fournisseursDataRAW');
+  if (response.statusCode != 200) {
+    print(responseData);
+  } else {
+    Map<String, dynamic> fournisseursStrapiJson =
+        new Map<String, dynamic>.from(responseData);
 
-  final fournisseursDatas = fournisseursDataRAW['data'];
+    final fournisseursJson = fournisseursStrapiJson['data'];
 
-  final List<Fournisseur> fournisseurs = [];
+    final List<Fournisseur> fournisseurs = [];
 
-  fournisseursDatas.forEach((fournisseurData) {
-    final Fournisseur fournisseur = Fournisseur.fromJson(fournisseurData);
-    fournisseurs.add(fournisseur);
-  });
+    fournisseursJson.forEach((fournisseurJson) {
+      final Fournisseur fournisseur = Fournisseur.fromJson(fournisseurJson);
+      fournisseurs.add(fournisseur);
+    });
 
-  store.dispatch(GetFournisseursAction(fournisseurs));
+    store.dispatch(GetFournisseursAction(fournisseurs));
+  }
 };
 
 class GetFournisseursAction {

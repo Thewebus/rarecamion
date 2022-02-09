@@ -96,11 +96,11 @@ class LoginPageState extends State<LoginPage> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      _registerUser();
+      _loginUser();
     }
   }
 
-  void _registerUser() async {
+  void _loginUser() async {
     setState(() => _isSubmitting = true);
     http.Response response = await http.post(
         Uri.parse('http://rarecamion.com:1337/api/auth/local'),
@@ -127,7 +127,6 @@ class LoginPageState extends State<LoginPage> {
     Map<String, dynamic> user = responseData['user'];
     user.putIfAbsent('jwt', () => responseData['jwt']);
     prefs.setString('user', json.encode(user));
-    //print(prefs.getString('user'));
   }
 
   void _showSuccessSnack() {
