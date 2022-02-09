@@ -7,9 +7,9 @@ import 'package:rarecamion/models/vehicule.dart';
 import '../models/status_vehicule.dart';
 
 class VehiculeDetailsPage extends StatefulWidget {
- final Vehicule vehicule;
+  final Vehicule vehicule;
 
-  const VehiculeDetailsPage ({ Key? key, this.vehicule }): super(key: key);
+  const VehiculeDetailsPage({Key key, this.vehicule}) : super(key: key);
 
   @override
   VehiculeDetailsPageState createState() => VehiculeDetailsPageState();
@@ -18,13 +18,13 @@ class VehiculeDetailsPage extends StatefulWidget {
 class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
   final List<StatusVehicule> _allStatus = [];
 
-  Future<List<StatusVehicule>> fetchStatus() async {
+  Future<List<StatusVehicule>> _fetchStatus() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
 
-    String vehiculeRelatedID = vehicule.id.toString();
+    String vehiculeRelatedID = widget.vehicule.id.toString();
 
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
@@ -67,9 +67,20 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
   }
 
   @override
+  initState() {
+    super.initState();
+
+    _fetchStatus().then((value) {
+      setState(() {
+        this._allStatus.addAll(value);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(vehicule.attributes.matricule)),
+        appBar: AppBar(title: Text(widget.vehicule.attributes.matricule)),
         body: Container(
             padding: EdgeInsets.all(10.0),
             child: SingleChildScrollView(
@@ -92,46 +103,66 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                     ],
                   ),
                   child: Column(children: [
+                    _showVDetails('Fournisseur',
+                        '${widget.vehicule.attributes.fournisseur}'),
+                    _showVDetails('Déchargement',
+                        '${widget.vehicule.attributes.dechargement}'),
                     _showVDetails(
-                        'Fournisseur', '${vehicule.attributes.fournisseur}'),
+                        'Produit', '${widget.vehicule.attributes.etatProduit}'),
                     _showVDetails(
-                        'Déchargement', '${vehicule.attributes.dechargement}'),
-                    _showVDetails(
-                        'Produit', '${vehicule.attributes.etatProduit}'),
-                    _showVDetails(
-                        'Usine', '${vehicule.attributes.usineVehicule}'),
-                    _showVDetails(
-                        'Type produit', '${vehicule.attributes.typeProduit}'),
+                        'Usine', '${widget.vehicule.attributes.usineVehicule}'),
+                    _showVDetails('Type produit',
+                        '${widget.vehicule.attributes.typeProduit}'),
                   ]),
                 ),
                 SizedBox(height: 10),
                 Text(''),
                 Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('EN ATTENTE',
-                          style: TextStyle(
-                              fontSize: 19,
-                              color: Color.fromARGB(255, 255, 255, 255))),
-                      Text('07/02/2022',
-                          style: TextStyle(
-                              fontSize: 11.0,
-                              color: Color.fromARGB(255, 255, 255, 255))),
-                      Text('EDITION',
-                          style: TextStyle(
-                              fontSize: 10.0,
-                              color: Color.fromARGB(255, 35, 250, 53))),
-                    ],
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, i) {
+                      return _allStatus.length > 0
+                          ? StatusCard(statusVehicule: _allStatus[i])
+                          : Text('Aucun status !!',
+                              style: TextStyle(
+                                  fontSize: 11.0,
+                                  color: Color.fromARGB(255, 0, 0, 0)));
+                    },
+                    itemCount: _allStatus.length,
                   ),
                 ),
               ],
             ))));
+  }
+}
+
+class StatusCard extends StatelessWidget {
+  final StatusVehicule statusVehicule;
+  const StatusCard({Key key, this.statusVehicule}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Color.fromARGB(255, 0, 0, 0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('${this.statusVehicule.attributes.libelleStatus}',
+                  style: TextStyle(
+                      fontSize: 16, color: Color.fromARGB(255, 255, 255, 255))),
+              Text('${this.statusVehicule.attributes.updatedAt}',
+                  style: TextStyle(
+                      fontSize: 9.0,
+                      color: Color.fromARGB(255, 255, 255, 255))),
+              Text('${this.statusVehicule.attributes.libelleStatus}',
+                  style: TextStyle(
+                      fontSize: 10.0, color: Color.fromARGB(255, 35, 250, 53))),
+            ]),
+      ),
+    );
   }
 }

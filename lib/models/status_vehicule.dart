@@ -4,10 +4,12 @@
 
 import 'dart:convert';
 
-StatusVehicule statusVehiculeFromJson(String str) =>
-    StatusVehicule.fromJson(json.decode(str));
+List<StatusVehicule> statusVehiculeFromJson(String str) =>
+    List<StatusVehicule>.from(
+        json.decode(str).map((x) => StatusVehicule.fromJson(x)));
 
-String statusVehiculeToJson(StatusVehicule data) => json.encode(data.toJson());
+String statusVehiculeToJson(List<StatusVehicule> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class StatusVehicule {
   StatusVehicule({
@@ -36,6 +38,7 @@ class Attributes {
     this.createdAt,
     this.updatedAt,
     this.publishedAt,
+    this.statusEdition,
   });
 
   String libelleStatus;
@@ -43,6 +46,7 @@ class Attributes {
   DateTime createdAt;
   DateTime updatedAt;
   DateTime publishedAt;
+  String statusEdition;
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
         libelleStatus: json["libelleStatus"],
@@ -50,6 +54,7 @@ class Attributes {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         publishedAt: DateTime.parse(json["publishedAt"]),
+        statusEdition: json["statusEdition"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,5 +63,6 @@ class Attributes {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "publishedAt": publishedAt.toIso8601String(),
+        "statusEdition": statusEdition,
       };
 }

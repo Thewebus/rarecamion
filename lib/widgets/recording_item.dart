@@ -29,7 +29,7 @@ class RecordingItem extends StatelessWidget {
     )*/
         onTap: () =>
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return VehiculeDetailsPage(item);
+              return VehiculeDetailsPage(vehicule: item);
             })),
         tileColor: Colors.blueAccent,
         title: Row(
