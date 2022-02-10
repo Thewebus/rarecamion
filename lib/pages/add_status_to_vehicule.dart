@@ -21,9 +21,9 @@ class AddStatusPageState extends State<AddStatusPage> {
 
   bool _isSubmitting, _obscuredText = true;
 
-  String _matricule, _observationsStatus;
+  String _observationsStatus;
 
-  String _statusVehicule = 'EN ATTENTE';
+  String _statusVehicule = 'EN RANG';
 
   Widget _showTitle() {
     return Text('Ajouter Status', style: Theme.of(context).textTheme.headline1);
@@ -70,7 +70,7 @@ class AddStatusPageState extends State<AddStatusPage> {
                 });
               },
               items: <String>[
-                'EN ATTENTE',
+                'EN RANG',
                 'EN PENTE',
                 'VALIDE',
                 'REFOULE',

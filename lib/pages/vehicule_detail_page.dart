@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/vehicule.dart';
-
 import '../models/status_vehicule.dart';
+import 'package:date_format/date_format.dart';
 
 class VehiculeDetailsPage extends StatefulWidget {
   final Vehicule vehicule;
@@ -116,18 +116,12 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                   ]),
                 ),
                 SizedBox(height: 10),
-                Text(''),
                 Container(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return _allStatus.length > 0
-                          ? StatusCard(statusVehicule: _allStatus[i])
-                          : Text('Aucun status !!',
-                              style: TextStyle(
-                                  fontSize: 11.0,
-                                  color: Color.fromARGB(255, 0, 0, 0)));
+                      return StatusCard(statusVehicule: _allStatus[i]);
                     },
                     itemCount: _allStatus.length,
                   ),
@@ -141,6 +135,10 @@ class StatusCard extends StatelessWidget {
   final StatusVehicule statusVehicule;
   const StatusCard({Key key, this.statusVehicule}) : super(key: key);
 
+  String dtformat(DateTime d) {
+    return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn, ':', ss]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -148,19 +146,19 @@ class StatusCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('${this.statusVehicule.attributes.libelleStatus}',
                   style: TextStyle(
                       fontSize: 16, color: Color.fromARGB(255, 255, 255, 255))),
-              Text('${this.statusVehicule.attributes.updatedAt}',
+              Text('${dtformat(this.statusVehicule.attributes.updatedAt)}',
                   style: TextStyle(
                       fontSize: 9.0,
                       color: Color.fromARGB(255, 255, 255, 255))),
-              Text('${this.statusVehicule.attributes.libelleStatus}',
+              Text('${this.statusVehicule.attributes.statusEdition}',
                   style: TextStyle(
-                      fontSize: 10.0, color: Color.fromARGB(255, 35, 250, 53))),
+                      fontSize: 9.0, color: Color.fromARGB(255, 35, 250, 53))),
             ]),
       ),
     );
