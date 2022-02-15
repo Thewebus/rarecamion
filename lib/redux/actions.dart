@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/fournisseur.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
@@ -120,7 +120,6 @@ class GetStatusAction {
 /// FOURNISSEURS
 /* Getting Fournisseurs Actions ... */
 ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
-//Getting the Fournisseurs here ...
   Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -155,4 +154,38 @@ class GetFournisseursAction {
   final List<Fournisseur> _fournisseurs;
   List<Fournisseur> get fournisseurs => this._fournisseurs;
   GetFournisseursAction(this._fournisseurs);
+}
+
+/// LISTE DES UTILISATEURS
+/* Getting UsersList Actions ... */
+ThunkAction<AppState> getUsersListAction = (Store<AppState> store) async {
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
+
+  String url = 'http://rarecamion.com:1337/api/users/';
+
+  http.Response response = await http.get(Uri.parse(url), headers: headers);
+
+  final responseData = json.decode(response.body);
+
+  final List<User> usersList = [];
+
+  if (response.statusCode != 200) {
+    print(responseData);
+  } else {
+    responseData.forEach((dataJson) {
+      final User user = User.fromJson(dataJson);
+      usersList.add(user);
+    });
+
+    store.dispatch(GetUsersListAction(usersList));
+  }
+};
+
+class GetUsersListAction {
+  final List<User> _usersList;
+  List<User> get usersList => this._usersList;
+  GetUsersListAction(this._usersList);
 }

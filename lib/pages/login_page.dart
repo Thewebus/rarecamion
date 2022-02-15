@@ -103,13 +103,13 @@ class LoginPageState extends State<LoginPage> {
 
   void _redirectUser() {
     Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/records');
+      Navigator.pushReplacementNamed(context, '/vehicules');
     });
   }
 
   void _redirectAdmin() {
     Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/adminhome');
+      Navigator.pushReplacementNamed(context, '/adminHome');
     });
   }
 

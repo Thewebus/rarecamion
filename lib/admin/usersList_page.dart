@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
+import 'package:rarecamion/widgets/user_item.dart';
 import 'package:rarecamion/widgets/vehicule_item.dart';
 
-class UsersPage extends StatefulWidget {
+class UsersList extends StatefulWidget {
   final void Function() onInit;
-  UsersPage({this.onInit});
+  UsersList({this.onInit});
 
   @override
-  UsersPageState createState() => UsersPageState();
+  UsersListState createState() => UsersListState();
 }
 
-class UsersPageState extends State<UsersPage> {
+class UsersListState extends State<UsersList> {
   void initState() {
     super.initState();
     widget.onInit();
-  }
-
-  void _redirectUserToAddVehicule() {
-    Future.delayed(Duration(milliseconds: 100), () {
-      Navigator.pushReplacementNamed(context, '/addvehicule');
-    });
   }
 
   final _appBar = PreferredSize(
@@ -78,9 +73,9 @@ class UsersPageState extends State<UsersPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListView.separated(
-                                    itemCount: state.vehicules.length,
-                                    itemBuilder: (context, i) => VehiculeItem(
-                                          vehicule: state.vehicules[i],
+                                    itemCount: state.usersList.length,
+                                    itemBuilder: (context, i) => UserItem(
+                                          user: state.usersList[i],
                                         ),
                                     separatorBuilder:
                                         (BuildContext context, int index) =>
@@ -107,18 +102,6 @@ class UsersPageState extends State<UsersPage> {
                         ),
                       );
               })),
-      floatingActionButton: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (_, state) {
-            return state.user != null
-                ? FloatingActionButton(
-                    backgroundColor: Colors.blue[800],
-                    onPressed: _redirectUserToAddVehicule,
-                    tooltip: 'Ajouter nouveau véhicule ...',
-                    child: Icon(Icons.add),
-                  )
-                : Text('');
-          }),
     );
   }
 }

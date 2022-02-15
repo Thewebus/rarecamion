@@ -1,4 +1,4 @@
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
@@ -44,4 +44,11 @@ List<Fournisseur> fournisseursReducer(
     return action.fournisseurs;
   }
   return fournisseurs;
+}
+
+List<User> usersListReducer(List<User> usersList, dynamic action) {
+  if (action is GetUsersListAction) {
+    return action.usersList;
+  }
+  return usersList;
 }

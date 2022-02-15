@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
 
@@ -262,7 +262,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                 ),
           TextButton(
               onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/records'),
+                  Navigator.pushReplacementNamed(context, '/vehicules'),
               child: Text('Voir tous les enregistrements'))
         ]));
   }
@@ -329,7 +329,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
 
   void _redirectUser() {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/records');
+      Navigator.pushReplacementNamed(context, '/vehicules');
     });
   }
 
@@ -343,7 +343,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                 leading: IconButton(
                     icon: Icon(Icons.close_outlined),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/records');
+                      Navigator.pushReplacementNamed(context, '/vehicules');
                     }),
                 title: SizedBox(
                     child: state.user != null

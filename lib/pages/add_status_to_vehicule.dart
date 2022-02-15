@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
@@ -107,7 +107,7 @@ class AddStatusPageState extends State<AddStatusPage> {
                 ),
           TextButton(
               onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/records'),
+                  Navigator.pushReplacementNamed(context, '/vehicules'),
               child: Text('Aller à vos enregistrements'))
         ]));
   }
@@ -168,7 +168,7 @@ class AddStatusPageState extends State<AddStatusPage> {
 
   void _redirectUser() {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/records');
+      Navigator.pushReplacementNamed(context, '/vehicules');
     });
   }
 

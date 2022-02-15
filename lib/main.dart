@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/admin/usersList_page.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/pages/add_vehicule_page.dart';
 import 'package:rarecamion/admin/admin_home_page.dart';
 import 'package:rarecamion/redux/actions.dart';
@@ -31,34 +32,24 @@ class MyApp extends StatelessWidget {
           routes: {
             '/login': (BuildContext context) => LoginPage(),
             '/register': (BuildContext context) => RegisterPage(),
-            '/records': (BuildContext context) => VehiculesPage(onInit: () {
+            '/vehicules': (BuildContext context) => VehiculesPage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context)
                       .dispatch(getVehiculesAction);
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(getFournisseursAction);
                 }),
             '/addvehicule': (BuildContext context) =>
                 AddVehiculePage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context)
-                      .dispatch(getVehiculesAction);
-                  StoreProvider.of<AppState>(context)
                       .dispatch(getFournisseursAction);
                 }),
-            '/adminhome': (BuildContext context) => AdminHomePage(onInit: () {
+            '/adminHome': (BuildContext context) => AdminHomePage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(getVehiculesAction);
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(getFournisseursAction);
                 }),
-            '/adminusers': (BuildContext context) => VehiculesPage(onInit: () {
+            '/adminUsersList': (BuildContext context) => UsersList(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context)
-                      .dispatch(getVehiculesAction);
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(getFournisseursAction);
+                      .dispatch(getUsersListAction);
                 }),
           },
           theme: ThemeData(
@@ -78,6 +69,7 @@ class MyApp extends StatelessWidget {
           ),
           //home: LoginPage(),
           home: LoginPage(),
+          debugShowCheckedModeBanner: false,
         ));
   }
 }

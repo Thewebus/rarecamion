@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rarecamion/models/app_state.dart';
+import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
 
@@ -19,72 +19,9 @@ class AdminHomePageState extends State<AdminHomePage> {
 
   void _redirectToUsersPage() {
     Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/adminListUsers');
+      Navigator.pushReplacementNamed(context, '/adminUsersList');
     });
   }
-
-  final _adminHomeWidget = Expanded(
-    child: SafeArea(
-        top: false,
-        bottom: false,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      print('onTap');
-
-                      //_showSnack('Tapé !');
-                    },
-                    child: Card(
-                      color: Color.fromARGB(255, 240, 40, 15),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text('UTILISATEURS',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255))),
-                            ]),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      print('onTap');
-
-                      //_showSnack('Tapé !');
-                    },
-                    child: Card(
-                      color: Color.fromARGB(255, 240, 40, 15),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text('ENREGISTREMENTS',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255))),
-                            ]),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        )),
-  );
 
   final _appBar = PreferredSize(
       preferredSize: Size.fromHeight(60.0),
@@ -128,7 +65,82 @@ class AdminHomePageState extends State<AdminHomePage> {
               builder: (_, state) {
                 return state.user != null
                     ? Row(children: [
-                        _adminHomeWidget,
+                        Expanded(
+                          child: SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: Center(
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            print('_redirectToUsersPage');
+
+                                            this._redirectToUsersPage();
+                                          },
+                                          child: Card(
+                                            color: Color.fromARGB(
+                                                255, 240, 40, 15),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text('UTILISATEURS',
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    255,
+                                                                    255))),
+                                                  ]),
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            print('onTap');
+                                          },
+                                          child: Card(
+                                            color: Color.fromARGB(
+                                                255, 240, 40, 15),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text('ENREGISTREMENTS',
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    255,
+                                                                    255))),
+                                                  ]),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )),
+                        ),
                       ])
                     : Center(
                         child: Column(
