@@ -17,6 +17,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
+  // ignore: unused_field
   bool _isSubmitting, _obscuredText = true;
 
   String _matricule;

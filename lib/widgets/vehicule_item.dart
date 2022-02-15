@@ -5,9 +5,9 @@ import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/pages/add_status_to_vehicule.dart';
 import 'package:rarecamion/pages/vehicule_detail_page.dart';
 
-class RecordingItem extends StatelessWidget {
-  final Vehicule item;
-  RecordingItem({this.item});
+class VehiculeItem extends StatelessWidget {
+  final Vehicule vehicule;
+  VehiculeItem({this.vehicule});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +16,6 @@ class RecordingItem extends StatelessWidget {
     //final String pictureUrl =     'http://rarecamion.com:1337/api/upload/files/$itemURL';
     //print('Affichage matricule... ${item.matricule}');
 
-    void _redirectUserToAddStatus() {
-      Future.delayed(Duration(milliseconds: 100), () {
-        Navigator.pushReplacementNamed(context, '/addstatustovehicule');
-      });
-    }
-
     return ListTile(
         /*Image.network(
       pictureUrl,
@@ -29,19 +23,19 @@ class RecordingItem extends StatelessWidget {
     )*/
         onTap: () =>
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return VehiculeDetailsPage(vehicule: item);
+              return VehiculeDetailsPage(vehicule: vehicule);
             })),
         tileColor: Colors.blueAccent,
         title: Row(
           children: [
             Icon(Icons.car_repair),
             Text('Mat. ', style: TextStyle(fontSize: 11.0)),
-            Text('${item.attributes.matricule}',
+            Text('${vehicule.attributes.matricule}',
                 style: TextStyle(fontSize: 16.0)),
           ],
         ),
         subtitle: Text(
-            '${item.attributes.dechargement} - ${item.attributes.fournisseur}',
+            '${vehicule.attributes.dechargement} - ${vehicule.attributes.fournisseur}',
             style: TextStyle(fontSize: 12.0)),
         trailing: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
@@ -52,7 +46,7 @@ class RecordingItem extends StatelessWidget {
                       color: Colors.grey[800],
                       onPressed: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            return AddStatusPage(item: item);
+                            return AddStatusPage(vehicule: vehicule);
                           })))
                   : Text('');
             }),

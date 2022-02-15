@@ -7,8 +7,8 @@ import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
 
 class AddStatusPage extends StatefulWidget {
-  final Vehicule item;
-  AddStatusPage({this.item});
+  final Vehicule vehicule;
+  AddStatusPage({this.vehicule});
 
   @override
   AddStatusPageState createState() => AddStatusPageState();
@@ -19,6 +19,7 @@ class AddStatusPageState extends State<AddStatusPage> {
 
   final _formKey = GlobalKey<FormState>();
 
+  // ignore: unused_field
   bool _isSubmitting, _obscuredText = true;
 
   String _observationsStatus;
@@ -183,7 +184,8 @@ class AddStatusPageState extends State<AddStatusPage> {
                         ? Text(state.user.username)
                         : Text('')),
                 leading:
-                    state.user != null ? Icon(Icons.account_box) : Text(''),
+                    // state.user != null ? Icon(Icons.account_box) : Text(''),
+                    state.user != null ? Text('') : Text(''),
                 actions: [
                   Padding(
                       padding: EdgeInsets.only(right: 12.0),
@@ -226,7 +228,8 @@ class AddStatusPageState extends State<AddStatusPage> {
                         _addStatus(),
                         Text(''),
                         _showObservationsStatus(),
-                        _showFormActions(widget.item.id),
+                        Text(''),
+                        _showFormActions(widget.vehicule.id),
                         Text(''),
                       ])),
             ))));

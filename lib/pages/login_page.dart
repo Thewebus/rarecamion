@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:rarecamion/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -100,19 +101,43 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _redirectUser() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/records');
+    });
+  }
+
+  void _redirectAdmin() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/adminhome');
+    });
+  }
+
   void _loginUser() async {
     setState(() => _isSubmitting = true);
     http.Response response = await http.post(
         Uri.parse('http://rarecamion.com:1337/api/auth/local'),
         body: {"identifier": _email, "password": _password});
 
-    final responseData = json.decode(response.body);
+    final rBody = json.decode(response.body);
+
+    Map<String, dynamic> userStrapiJson = new Map<String, dynamic>.from(rBody);
+    final userJson = userStrapiJson['user'];
+
+    final User usr = User.fromJson(userJson);
+
     if (response.statusCode == 200) {
-      _storeUserData(responseData);
+      _storeUserData(rBody);
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
-      _redirectUser();
-      //print(responseData);
+
+      if (usr.status == 'administration') {
+        print('ADMINISTRATOR LOGIN');
+        _redirectAdmin();
+      } else {
+        print('NORMAL LOGIN');
+        _redirectUser();
+      }
     } else {
       //print(responseData);
       setState(() => _isSubmitting = false);
@@ -150,15 +175,7 @@ class LoginPageState extends State<LoginPage> {
           textAlign: TextAlign.center,
         ),
         duration: Duration(milliseconds: 1000));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    //throw Exception('Erreur : $errorMsg');
-  }
-
-  void _redirectUser() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/records');
-    });
   }
 
   @override

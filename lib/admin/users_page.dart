@@ -4,15 +4,15 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'package:rarecamion/widgets/vehicule_item.dart';
 
-class VehiculesPage extends StatefulWidget {
+class UsersPage extends StatefulWidget {
   final void Function() onInit;
-  VehiculesPage({this.onInit});
+  UsersPage({this.onInit});
 
   @override
-  RecordingsPageState createState() => RecordingsPageState();
+  UsersPageState createState() => UsersPageState();
 }
 
-class RecordingsPageState extends State<VehiculesPage> {
+class UsersPageState extends State<UsersPage> {
   void initState() {
     super.initState();
     widget.onInit();

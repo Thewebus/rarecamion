@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/vehicule.dart';
 import '../models/status_vehicule.dart';
-import 'package:date_format/date_format.dart';
+import 'package:rarecamion/widgets/status_item.dart';
 
 class VehiculeDetailsPage extends StatefulWidget {
   final Vehicule vehicule;
@@ -16,7 +16,20 @@ class VehiculeDetailsPage extends StatefulWidget {
 }
 
 class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
+  @override
+  initState() {
+    super.initState();
+
+    _fetchStatus().then((value) {
+      setState(() {
+        this._allStatus.addAll(value);
+      });
+    });
+  }
+
   final List<StatusVehicule> _allStatus = [];
+
+  String infoFlash = 'Double cliquer sur un status pour prendre une photo';
 
   Future<List<StatusVehicule>> _fetchStatus() async {
     Map<String, String> headers = {
@@ -67,17 +80,6 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
   }
 
   @override
-  initState() {
-    super.initState();
-
-    _fetchStatus().then((value) {
-      setState(() {
-        this._allStatus.addAll(value);
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text(widget.vehicule.attributes.matricule)),
@@ -87,11 +89,10 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                 child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(10.0),
-                  height: 130,
+                  padding: EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5), //color of shadow
@@ -116,6 +117,14 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                   ]),
                 ),
                 SizedBox(height: 10),
+                Text(
+                  '$infoFlash',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 8, 8, 8),
+                      fontSize: 11,
+                      fontWeight: FontWeight.normal),
+                ),
+                SizedBox(height: 10),
                 Container(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -128,39 +137,5 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                 ),
               ],
             ))));
-  }
-}
-
-class StatusCard extends StatelessWidget {
-  final StatusVehicule statusVehicule;
-  const StatusCard({Key key, this.statusVehicule}) : super(key: key);
-
-  String dtformat(DateTime d) {
-    return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn, ':', ss]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Color.fromARGB(255, 0, 0, 0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('${this.statusVehicule.attributes.libelleStatus}',
-                  style: TextStyle(
-                      fontSize: 16, color: Color.fromARGB(255, 255, 255, 255))),
-              Text('${dtformat(this.statusVehicule.attributes.updatedAt)}',
-                  style: TextStyle(
-                      fontSize: 9.0,
-                      color: Color.fromARGB(255, 255, 255, 255))),
-              Text('${this.statusVehicule.attributes.statusEdition}',
-                  style: TextStyle(
-                      fontSize: 9.0, color: Color.fromARGB(255, 35, 250, 53))),
-            ]),
-      ),
-    );
   }
 }

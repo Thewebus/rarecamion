@@ -2,27 +2,89 @@ import 'package:flutter/material.dart';
 import 'package:rarecamion/models/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
-import 'package:rarecamion/widgets/vehicule_item.dart';
 
-class VehiculesPage extends StatefulWidget {
+class AdminHomePage extends StatefulWidget {
   final void Function() onInit;
-  VehiculesPage({this.onInit});
+  AdminHomePage({this.onInit});
 
   @override
-  RecordingsPageState createState() => RecordingsPageState();
+  AdminHomePageState createState() => AdminHomePageState();
 }
 
-class RecordingsPageState extends State<VehiculesPage> {
+class AdminHomePageState extends State<AdminHomePage> {
   void initState() {
     super.initState();
     widget.onInit();
   }
 
-  void _redirectUserToAddVehicule() {
-    Future.delayed(Duration(milliseconds: 100), () {
-      Navigator.pushReplacementNamed(context, '/addvehicule');
+  void _redirectToUsersPage() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/adminListUsers');
     });
   }
+
+  final _adminHomeWidget = Expanded(
+    child: SafeArea(
+        top: false,
+        bottom: false,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      print('onTap');
+
+                      //_showSnack('Tapé !');
+                    },
+                    child: Card(
+                      color: Color.fromARGB(255, 240, 40, 15),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('UTILISATEURS',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255))),
+                            ]),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print('onTap');
+
+                      //_showSnack('Tapé !');
+                    },
+                    child: Card(
+                      color: Color.fromARGB(255, 240, 40, 15),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('ENREGISTREMENTS',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255))),
+                            ]),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )),
+  );
 
   final _appBar = PreferredSize(
       preferredSize: Size.fromHeight(60.0),
@@ -59,34 +121,14 @@ class RecordingsPageState extends State<VehiculesPage> {
     return Scaffold(
       appBar: _appBar,
       body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [0.1, 0.2],
-                  colors: const [Colors.lightBlueAccent, Colors.white])),
+
           //padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
               builder: (_, state) {
                 return state.user != null
                     ? Row(children: [
-                        Expanded(
-                          child: SafeArea(
-                              top: false,
-                              bottom: false,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListView.separated(
-                                    itemCount: state.vehicules.length,
-                                    itemBuilder: (context, i) => VehiculeItem(
-                                          vehicule: state.vehicules[i],
-                                        ),
-                                    separatorBuilder:
-                                        (BuildContext context, int index) =>
-                                            const Divider()),
-                              )),
-                        )
+                        _adminHomeWidget,
                       ])
                     : Center(
                         child: Column(
@@ -107,18 +149,6 @@ class RecordingsPageState extends State<VehiculesPage> {
                         ),
                       );
               })),
-      floatingActionButton: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (_, state) {
-            return state.user != null
-                ? FloatingActionButton(
-                    backgroundColor: Colors.blue[800],
-                    onPressed: _redirectUserToAddVehicule,
-                    tooltip: 'Ajouter nouveau véhicule ...',
-                    child: Icon(Icons.add),
-                  )
-                : Text('');
-          }),
     );
   }
 }
