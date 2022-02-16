@@ -164,7 +164,8 @@ ThunkAction<AppState> getUsersListAction = (Store<AppState> store) async {
     'Accept': 'application/json'
   };
 
-  String url = 'http://rarecamion.com:1337/api/users/';
+  String url =
+      'http://rarecamion.com:1337/api/users?filters[status][\$eq]=normal';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -178,7 +179,10 @@ ThunkAction<AppState> getUsersListAction = (Store<AppState> store) async {
     responseData.forEach((dataJson) {
       final User user = User.fromJson(dataJson);
       usersList.add(user);
+      //print('User listed: ${user.username}');
     });
+
+    //print('Users listed: $usersList');
 
     store.dispatch(GetUsersListAction(usersList));
   }

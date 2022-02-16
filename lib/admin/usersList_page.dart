@@ -3,7 +3,6 @@ import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'package:rarecamion/widgets/user_item.dart';
-import 'package:rarecamion/widgets/vehicule_item.dart';
 
 class UsersList extends StatefulWidget {
   final void Function() onInit;
@@ -71,15 +70,28 @@ class UsersListState extends State<UsersList> {
                               top: false,
                               bottom: false,
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListView.separated(
-                                    itemCount: state.usersList.length,
-                                    itemBuilder: (context, i) => UserItem(
-                                          user: state.usersList[i],
-                                        ),
-                                    separatorBuilder:
-                                        (BuildContext context, int index) =>
-                                            const Divider()),
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    ListView.separated(
+                                        shrinkWrap: true,
+                                        itemCount: state.usersList.length,
+                                        itemBuilder: (context, i) => UserItem(
+                                              user: state.usersList[i],
+                                            ),
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider()),
+                                    TextButton(
+                                        onPressed: () =>
+                                            Navigator.pushReplacementNamed(
+                                                context, '/adminHome'),
+                                        child: Text(
+                                          'Aller au menu principal',
+                                          style: TextStyle(fontSize: 12),
+                                        ))
+                                  ],
+                                ),
                               )),
                         )
                       ])

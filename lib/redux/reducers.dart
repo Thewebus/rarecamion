@@ -11,6 +11,7 @@ AppState appReducer(AppState state, dynamic action) {
     vehicules: recordingsReducer(state.vehicules, action),
     vehiculeAllStatus: statusVehiculeReducer(state.vehiculeAllStatus, action),
     fournisseurs: fournisseursReducer(state.fournisseurs, action),
+    usersList: usersListReducer(state.usersList, action),
   );
 }
 

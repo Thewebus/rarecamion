@@ -17,7 +17,7 @@ class AdminHomePageState extends State<AdminHomePage> {
     widget.onInit();
   }
 
-  void _redirectToUsersPage() {
+  void _redirectToUsersListPage() {
     Future.delayed(Duration(milliseconds: 500), () {
       Navigator.pushReplacementNamed(context, '/adminUsersList');
     });
@@ -77,9 +77,9 @@ class AdminHomePageState extends State<AdminHomePage> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            print('_redirectToUsersPage');
+                                            //print('_redirectToUsersPage');
 
-                                            this._redirectToUsersPage();
+                                            _redirectToUsersListPage();
                                           },
                                           child: Card(
                                             color: Color.fromARGB(
@@ -112,7 +112,7 @@ class AdminHomePageState extends State<AdminHomePage> {
                                           },
                                           child: Card(
                                             color: Color.fromARGB(
-                                                255, 240, 40, 15),
+                                                255, 216, 216, 216),
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(16.0),

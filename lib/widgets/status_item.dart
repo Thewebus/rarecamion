@@ -28,7 +28,7 @@ class StatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
+      onDoubleTap: () {
         _takePhotoStatusVehicule();
 
         //_showSnack('Tapé !');

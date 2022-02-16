@@ -45,6 +45,8 @@ class MyApp extends StatelessWidget {
                 }),
             '/adminHome': (BuildContext context) => AdminHomePage(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(getUsersListAction);
                 }),
             '/adminUsersList': (BuildContext context) => UsersList(onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
