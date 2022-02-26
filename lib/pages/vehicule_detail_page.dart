@@ -42,7 +42,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
 
-    print(url);
+    //print(url);
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -130,7 +130,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return StatusCard(statusVehicule: _allStatus[i]);
+                      return StatusItem(statusVehicule: _allStatus[i]);
                     },
                     itemCount: _allStatus.length,
                   ),
