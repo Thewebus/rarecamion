@@ -45,9 +45,7 @@ class StatusItem extends StatelessWidget {
 
     request.files.add(picture);
 
-    request.send().then((response) {
-      if (response.statusCode == 200) print("Uploaded!");
-    });
+    final response = await request.send().then((response) => null);
 
     /*
     http.Response response =
