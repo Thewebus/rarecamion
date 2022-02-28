@@ -2,20 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:rarecamion/models/vehicule.dart';
 import '../models/status_vehicule.dart';
-import 'package:rarecamion/widgets/status_item.dart';
 
-class VehiculeDetailsPage extends StatefulWidget {
-  final Vehicule vehicule;
+class StatusDetailPage extends StatefulWidget {
+  final StatusVehicule statusvehicule;
 
-  const VehiculeDetailsPage({Key key, this.vehicule}) : super(key: key);
+  const StatusDetailPage({Key key, this.statusvehicule}) : super(key: key);
 
   @override
-  VehiculeDetailsPageState createState() => VehiculeDetailsPageState();
+  StatusDetailPageState createState() => StatusDetailPageState();
 }
 
-class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
+class StatusDetailPageState extends State<StatusDetailPage> {
   @override
   initState() {
     super.initState();
@@ -29,7 +27,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
 
   final List<StatusVehicule> _allStatus = [];
 
-  String infoFlash = ' Double Clic: Détails / Appui long: prendre une photo ';
+  String infoFlash = 'Affichage des photos ...';
 
   Future<List<StatusVehicule>> _fetchStatus() async {
     Map<String, String> headers = {
@@ -37,7 +35,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
       'Accept': 'application/json'
     };
 
-    String vehiculeRelatedID = widget.vehicule.id.toString();
+    String vehiculeRelatedID = widget.statusvehicule.id.toString();
 
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
@@ -82,7 +80,9 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.vehicule.attributes.dechargement)),
+        appBar: AppBar(
+            title: Text(
+                widget.statusvehicule.attributes.libelleStatus.toUpperCase())),
         body: Container(
             padding: EdgeInsets.all(10.0),
             child: SingleChildScrollView(
@@ -91,7 +91,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                 Container(
                   padding: EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
@@ -104,23 +104,17 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                     ],
                   ),
                   child: Column(children: [
-                    _showVDetails('Fournisseur',
-                        '${widget.vehicule.attributes.fournisseur}'),
-                    _showVDetails(
-                        'Matricule', '${widget.vehicule.attributes.matricule}'),
-                    _showVDetails(
-                        'Produit', '${widget.vehicule.attributes.etatProduit}'),
-                    _showVDetails(
-                        'Usine', '${widget.vehicule.attributes.usineVehicule}'),
-                    _showVDetails('Type produit',
-                        '${widget.vehicule.attributes.typeProduit}'),
+                    _showVDetails('Etat de modification',
+                        '${widget.statusvehicule.attributes.statusEdition.toUpperCase()}'),
+                    _showVDetails('Observations',
+                        '${widget.statusvehicule.attributes.observationStatus}'),
                   ]),
                 ),
                 SizedBox(height: 10),
                 Text(
                   '$infoFlash',
                   style: TextStyle(
-                      color: Color.fromARGB(255, 8, 8, 8),
+                      color: Colors.black,
                       fontSize: 11,
                       fontWeight: FontWeight.normal),
                 ),
@@ -130,7 +124,8 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return StatusItem(statusVehicule: _allStatus[i]);
+                      return Text('');
+                      //return StatusItem(statusVehicule: _allStatus[i]);
                     },
                     itemCount: _allStatus.length,
                   ),

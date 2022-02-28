@@ -5,18 +5,40 @@ import 'package:image_picker/image_picker.dart';
 import 'package:date_format/date_format.dart';
 import '../models/status_vehicule.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
-class StatusItem extends StatelessWidget {
+import '../pages/status_detail_page.dart';
+
+class StatusItem extends StatefulWidget {
   final StatusVehicule statusVehicule;
   const StatusItem({Key key, this.statusVehicule}) : super(key: key);
+
+  @override
+  StatusItemState createState() => StatusItemState();
+}
+
+class StatusItemState extends State<StatusItem> {
+  bool _isSubmitting = false;
+  String _msg = '';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
   }
 
-  final String _flashInfo = '';
+  Widget _showFormActions() {
+    return Column(children: [
+      _isSubmitting == true
+          ? CircularProgressIndicator(
+              strokeWidth: 2,
+            )
+          : Text(_msg, style: TextStyle(color: Colors.yellow)),
+    ]);
+  }
 
   void _takePhotoStatusVehicule() async {
+    setState(() => _isSubmitting = true);
+    setState(() => _msg = 'Chargement en cours ...');
+
     final ImagePicker _picker = ImagePicker();
 
     final XFile photo = await _picker.pickImage(source: ImageSource.gallery);
@@ -24,66 +46,43 @@ class StatusItem extends StatelessWidget {
     final request = http.MultipartRequest(
         'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
 
-    //request.headers['Authorization'] = "";
     request.headers['Content-Type'] = "multipart/form-data;charset=utf-8";
     request.headers['Accept'] = "multipart/mixed'";
 
     request.fields['ref'] = "api::status-vehicule.status-vehicule";
     request.fields['field'] = "image";
-    request.fields['refId'] = statusVehicule.id.toString();
+    request.fields['refId'] = widget.statusVehicule.id.toString();
 
-    final picture =
-        http.MultipartFile.fromBytes('files', await photo.readAsBytes());
+    final im = await http.MultipartFile.fromPath('files', photo.path,
+        contentType: MediaType('image', 'jpeg'));
 
-    request.files.add(picture);
+    request.files.add(im);
 
-    final response = await request.send().then((response) => null);
-    final responseData = await response.stream.toBytes();
-
-    final result = String.fromCharCodes(responseData);
-
-    print(result);
-
-    /*
-    Map<String, String> headers = {
-      'Content-Type': 'application/json;charset=utf-8',
-      'Accept': 'multipart/mixed',
-    };
-    */
-
-    /*
-    http.Response response =
-        await http.post(Uri.parse('http://rarecamion.com:1337/api/upload/'),
-            headers: headers,
-            body: jsonEncode({
-              "data": {
-                "ref": "api::status-vehicule.status-vehicule",
-                "files": photo.path,
-                "field": "image",
-                "refId": this.statusVehicule.id.toString()
-              }
-            }));
-
-  
-    print('FILES : ${photo.path}');
-    print('REFID : ${this.statusVehicule.id.toString()}');
-
-    if (photo != null && photo.path != null) {
-      print('Prise de photo effectuée: ${photo.path}');
-    } else {
-      print("Aucune photo prise !");
-    }
-
-    */
+    request.send().then((response) {
+      setState(() => _msg = 'Patientez svp ...');
+      setState(() => _isSubmitting = false);
+      print('${photo.path}');
+      if (response.statusCode == 200) {
+        setState(() => _msg = 'Succès !');
+        print("Uploaded!");
+      } else {
+        setState(() => _msg = 'Erreur ... réessayer svp !');
+        print("Not Uploaded!");
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () {
+      onLongPress: () {
         _takePhotoStatusVehicule();
-
-        //_showSnack('Tapé !');
+      },
+      onDoubleTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return StatusDetailPage(statusvehicule: widget.statusVehicule);
+        }));
+        print("Double Tap!");
       },
       child: Card(
         color: Color.fromARGB(255, 15, 113, 241),
@@ -95,16 +94,16 @@ class StatusItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('${statusVehicule.attributes.libelleStatus}',
+                    Text('${widget.statusVehicule.attributes.libelleStatus}',
                         style: TextStyle(fontSize: 16, color: Colors.white)),
                     Text(
-                        '${dtformat(this.statusVehicule.attributes.updatedAt)}',
+                        '${dtformat(widget.statusVehicule.attributes.updatedAt)}',
                         style: TextStyle(
                             fontSize: 10.0, color: Colors.lightGreenAccent)),
                   ]),
               Row(
                 children: [
-                  Text('$_flashInfo'),
+                  _showFormActions(),
                 ],
               )
             ],
