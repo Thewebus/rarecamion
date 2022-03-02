@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:rarecamion/models/status_image.dart';
+import 'package:rarecamion/models/status_image.dart' as si;
 import '../models/status_vehicule.dart';
+import '../widgets/image_item.dart';
 
 class StatusDetailPage extends StatefulWidget {
   final StatusVehicule statusvehicule;
@@ -26,11 +27,11 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     });
   }
 
-  final List<StatusImage> _allImages = [];
+  final List<String> _allImages = [];
 
   String infoFlash = 'Affichage des photos ...';
 
-  Future<List<StatusImage>> _fetchImages() async {
+  Future<List<String>> _fetchImages() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -46,21 +47,21 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     Map<String, dynamic> dataRAW =
         new Map<String, dynamic>.from(json.decode(response.body));
 
-    final statusDatas = dataRAW['data'];
-
-    StatusImage imagesStock = StatusImage.fromJson(dataRAW);
+    si.StatusImage imagesStock = si.StatusImage.fromJson(dataRAW);
 
     dynamic datums = imagesStock.data.attributes.image.data;
 
-    final List<StatusImage> allStatus = [];
+    final List<String> imagesURL = [];
 
     datums.forEach((datum) {
-      final DatumAttributes status = DatumAttributes.fromJson(datum);
-      print(status);
-      // allStatus.add(status);
+      si.Datum d = datum;
+
+      //print(d.attributes.url);
+
+      imagesURL.add(d.attributes.url);
     });
 
-    return allStatus;
+    return imagesURL;
   }
 
   Widget _showTopStatusInfos(String libelle, String value) {
@@ -78,6 +79,25 @@ class StatusDetailPageState extends State<StatusDetailPage> {
             child: Text('$value',
                 style: TextStyle(fontSize: 13, color: Colors.blue))),
       ],
+    );
+  }
+
+  Widget _showImage(String url) {
+    return Image.network(
+      url,
+      fit: BoxFit.fill,
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes
+                : null,
+          ),
+        );
+      },
     );
   }
 
@@ -128,8 +148,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return Text('');
-                      //return StatusItem(statusVehicule: _allImages[i]);
+                      return ImageItem(imageURL: _allImages[i]);
                     },
                     itemCount: _allImages.length,
                   ),
