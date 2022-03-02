@@ -19,7 +19,7 @@ class StatusItem extends StatefulWidget {
 
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
-  String _msg = '';
+  String _msg = 'Appui long pour photo ...';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
@@ -31,7 +31,12 @@ class StatusItemState extends State<StatusItem> {
           ? CircularProgressIndicator(
               strokeWidth: 2,
             )
-          : Text(_msg, style: TextStyle(color: Colors.yellow)),
+          : Text(_msg,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.italic)),
     ]);
   }
 
@@ -41,7 +46,7 @@ class StatusItemState extends State<StatusItem> {
 
     final ImagePicker _picker = ImagePicker();
 
-    final XFile photo = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile photo = await _picker.pickImage(source: ImageSource.camera);
 
     final request = http.MultipartRequest(
         'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
@@ -61,7 +66,6 @@ class StatusItemState extends State<StatusItem> {
     request.send().then((response) {
       setState(() => _msg = 'Patientez svp ...');
       setState(() => _isSubmitting = false);
-      print('${photo.path}');
       if (response.statusCode == 200) {
         setState(() => _msg = 'Succès !');
         print("Uploaded!");
@@ -82,10 +86,9 @@ class StatusItemState extends State<StatusItem> {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return StatusDetailPage(statusvehicule: widget.statusVehicule);
         }));
-        print("Double Tap!");
       },
       child: Card(
-        color: Color.fromARGB(255, 15, 113, 241),
+        color: Colors.blue.shade800,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -99,7 +102,7 @@ class StatusItemState extends State<StatusItem> {
                     Text(
                         '${dtformat(widget.statusVehicule.attributes.updatedAt)}',
                         style: TextStyle(
-                            fontSize: 10.0, color: Colors.lightGreenAccent)),
+                            fontSize: 10.0, color: Color(0xFF78FF09))),
                   ]),
               Row(
                 children: [

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rarecamion/models/status_image.dart';
 import '../models/status_vehicule.dart';
 
 class StatusDetailPage extends StatefulWidget {
@@ -18,48 +19,51 @@ class StatusDetailPageState extends State<StatusDetailPage> {
   initState() {
     super.initState();
 
-    _fetchStatus().then((value) {
+    _fetchImages().then((value) {
       setState(() {
-        this._allStatus.addAll(value);
+        _allImages.addAll(value);
       });
     });
   }
 
-  final List<StatusVehicule> _allStatus = [];
+  final List<StatusImage> _allImages = [];
 
   String infoFlash = 'Affichage des photos ...';
 
-  Future<List<StatusVehicule>> _fetchStatus() async {
+  Future<List<StatusImage>> _fetchImages() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
 
-    String vehiculeRelatedID = widget.statusvehicule.id.toString();
+    String statusRelatedID = widget.statusvehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
-
-    //print(url);
+        'http://rarecamion.com:1337/api/status-vehicules/${statusRelatedID}?populate[0]=Image';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
-    Map<String, dynamic> statusDatasRAW =
+    Map<String, dynamic> dataRAW =
         new Map<String, dynamic>.from(json.decode(response.body));
 
-    final statusDatas = statusDatasRAW['data'];
+    final statusDatas = dataRAW['data'];
 
-    final List<StatusVehicule> allStatus = [];
+    StatusImage imagesStock = StatusImage.fromJson(dataRAW);
 
-    statusDatas.forEach((statusData) {
-      final StatusVehicule status = StatusVehicule.fromJson(statusData);
-      allStatus.add(status);
+    dynamic datums = imagesStock.data.attributes.image.data;
+
+    final List<StatusImage> allStatus = [];
+
+    datums.forEach((datum) {
+      final DatumAttributes status = DatumAttributes.fromJson(datum);
+      print(status);
+      // allStatus.add(status);
     });
 
     return allStatus;
   }
 
-  Widget _showVDetails(String libelle, String value) {
+  Widget _showTopStatusInfos(String libelle, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,9 +108,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     ],
                   ),
                   child: Column(children: [
-                    _showVDetails('Etat de modification',
+                    _showTopStatusInfos('Etat de modification',
                         '${widget.statusvehicule.attributes.statusEdition.toUpperCase()}'),
-                    _showVDetails('Observations',
+                    _showTopStatusInfos('Observations',
                         '${widget.statusvehicule.attributes.observationStatus}'),
                   ]),
                 ),
@@ -125,9 +129,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
                       return Text('');
-                      //return StatusItem(statusVehicule: _allStatus[i]);
+                      //return StatusItem(statusVehicule: _allImages[i]);
                     },
-                    itemCount: _allStatus.length,
+                    itemCount: _allImages.length,
                   ),
                 ),
               ],
