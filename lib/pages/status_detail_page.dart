@@ -21,15 +21,16 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     super.initState();
 
     _fetchImages().then((value) {
+      print(value);
       setState(() {
         _allImages.addAll(value);
       });
     });
   }
 
-  final List<String> _allImages = [];
+  String infoFlash = '';
 
-  String infoFlash = 'Affichage des photos ...';
+  final List<String> _allImages = [];
 
   Future<List<String>> _fetchImages() async {
     Map<String, String> headers = {
@@ -44,22 +45,35 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
+    //print(response.body);
+
     Map<String, dynamic> dataRAW =
         new Map<String, dynamic>.from(json.decode(response.body));
 
-    si.StatusImage imagesStock = si.StatusImage.fromJson(dataRAW);
+    si.StatusImage jsonStrapi = si.StatusImage.fromJson(dataRAW);
 
-    dynamic datums = imagesStock.data.attributes.image.data;
+    dynamic datums = jsonStrapi.data.attributes.image.data;
 
     final List<String> imagesURL = [];
 
-    datums.forEach((datum) {
-      si.Datum d = datum;
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load STATUS !');
+    } else {
+      if (datums != null) {
+        setState(() {
+          infoFlash = 'Affichage des photos ...';
+        });
 
-      //print(d.attributes.url);
-
-      imagesURL.add(d.attributes.url);
-    });
+        datums.forEach((datum) {
+          si.Datum d = datum;
+          imagesURL.add(d.attributes.url);
+        });
+      } else {
+        setState(() {
+          infoFlash = 'Aucune photo disponible pour ce status ...';
+        });
+      }
+    }
 
     return imagesURL;
   }
@@ -82,25 +96,6 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     );
   }
 
-  Widget _showImage(String url) {
-    return Image.network(
-      url,
-      fit: BoxFit.fill,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes
-                : null,
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,8 +104,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                 widget.statusvehicule.attributes.libelleStatus.toUpperCase())),
         body: Container(
             padding: EdgeInsets.all(10.0),
-            child: SingleChildScrollView(
-                child: Column(
+            child: Column(
               children: [
                 Container(
                   padding: EdgeInsets.all(12.0),
@@ -142,8 +136,8 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                       fontSize: 11,
                       fontWeight: FontWeight.normal),
                 ),
-                SizedBox(height: 10),
-                Container(
+                SizedBox(height: 5),
+                Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -154,6 +148,6 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                   ),
                 ),
               ],
-            ))));
+            )));
   }
 }

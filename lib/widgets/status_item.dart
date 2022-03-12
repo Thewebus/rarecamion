@@ -76,13 +76,50 @@ class StatusItemState extends State<StatusItem> {
     });
   }
 
+  void _takeVideoStatusVehicule() async {
+    setState(() => _isSubmitting = true);
+    setState(() => _msg = 'Chargement en cours ...');
+
+    final ImagePicker _picker = ImagePicker();
+
+    final XFile photo = await _picker.pickImage(source: ImageSource.camera);
+
+    final request = http.MultipartRequest(
+        'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
+
+    request.headers['Content-Type'] = "multipart/form-data;charset=utf-8";
+    request.headers['Accept'] = "multipart/mixed'";
+
+    request.fields['ref'] = "api::status-vehicule.status-vehicule";
+    request.fields['field'] = "image";
+    request.fields['refId'] = widget.statusVehicule.id.toString();
+
+    final im = await http.MultipartFile.fromPath('files', photo.path,
+        contentType: MediaType('image', 'jpeg'));
+
+    request.files.add(im);
+
+    request.send().then((response) {
+      setState(() => _msg = 'Patientez svp ...');
+      setState(() => _isSubmitting = false);
+      if (response.statusCode == 200) {
+        setState(() => _msg = 'Succès !');
+        print("Uploaded!");
+      } else {
+        setState(() => _msg = 'Erreur ... réessayer svp !');
+        print("Not Uploaded!");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
+      onLongPress: _takeVideoStatusVehicule,
+      onDoubleTap: () {
         _takePhotoStatusVehicule();
       },
-      onDoubleTap: () {
+      onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return StatusDetailPage(statusvehicule: widget.statusVehicule);
         }));

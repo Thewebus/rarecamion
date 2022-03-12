@@ -12,6 +12,7 @@ class ImageItem extends StatefulWidget {
 
 class ImageItemState extends State<ImageItem> {
   String serverURL = 'http://rarecamion.com:1337';
+
   Widget _showImage(String url) {
     return Image.network(
       url,

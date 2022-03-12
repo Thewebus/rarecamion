@@ -22,14 +22,14 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
 
     _fetchStatus().then((value) {
       setState(() {
-        this._allStatus.addAll(value);
+        _allStatus.addAll(value);
       });
     });
   }
 
-  final List<StatusVehicule> _allStatus = [];
+  String infoFlash = '';
 
-  String infoFlash = ' Double Clic: Détails / Appui long: prendre une photo ';
+  final List<StatusVehicule> _allStatus = [];
 
   Future<List<StatusVehicule>> _fetchStatus() async {
     Map<String, String> headers = {
@@ -53,10 +53,26 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
 
     final List<StatusVehicule> allStatus = [];
 
-    statusDatas.forEach((statusData) {
-      final StatusVehicule status = StatusVehicule.fromJson(statusData);
-      allStatus.add(status);
-    });
+    print(statusDatas);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load VEHICULES !');
+    } else {
+      if (statusDatas != null) {
+        setState(() {
+          infoFlash = 'Tous les status ... ';
+        });
+
+        statusDatas.forEach((statusData) {
+          final StatusVehicule status = StatusVehicule.fromJson(statusData);
+          allStatus.add(status);
+        });
+      } else {
+        setState(() {
+          infoFlash = ' Aucun status défini pour ce véhicule !';
+        });
+      }
+    }
 
     return allStatus;
   }

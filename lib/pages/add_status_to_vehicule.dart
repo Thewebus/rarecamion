@@ -5,7 +5,6 @@ import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
-import 'package:image_picker/image_picker.dart';
 
 class AddStatusPage extends StatefulWidget {
   final Vehicule vehicule;
@@ -75,7 +74,7 @@ class AddStatusPageState extends State<AddStatusPage> {
               items: <String>[
                 'EN RANG',
                 'EN PENTE',
-                'VALIDE',
+                'A LA PESEE',
                 'REFOULE',
                 'ANNULE'
               ].map<DropdownMenuItem<String>>((String value) {
@@ -172,18 +171,6 @@ class AddStatusPageState extends State<AddStatusPage> {
     Future.delayed(Duration(seconds: 2), () {
       Navigator.pushReplacementNamed(context, '/vehicules');
     });
-  }
-
-  void _takePhotoStatusVehicule() async {
-    final ImagePicker _picker = ImagePicker();
-
-    final XFile photo = await _picker.pickImage(source: ImageSource.camera);
-
-    if (photo != null && photo.path != null) {
-      print('Prise de photo effectuée: ${photo.path}');
-    } else {
-      print("Aucune photo prise !");
-    }
   }
 
   final _appBar = PreferredSize(

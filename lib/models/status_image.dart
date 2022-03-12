@@ -97,7 +97,9 @@ class Image {
   List<Datum> data;
 
   factory Image.fromJson(Map<String, dynamic> json) => Image(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: json["data"] == null
+            ? null
+            : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
