@@ -54,7 +54,7 @@ ThunkAction<AppState> getVehiculesAction = (Store<AppState> store) async {
     'Accept': 'application/json'
   };
   String url =
-      'http://rarecamion.com:1337/api/vehicules?populate=*&filters[user][email][\$eq]=$userEmail';
+      'http://rarecamion.com:1337/api/vehicules?populate=*&filters[user][email][\$eq]=$userEmail&sort[0]=updatedAt:desc';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 

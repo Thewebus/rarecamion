@@ -21,7 +21,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     super.initState();
 
     _fetchImages().then((value) {
-      print(value);
+      //print(value);
       setState(() {
         _allImages.addAll(value);
       });
@@ -57,7 +57,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     final List<String> imagesURL = [];
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to load STATUS !');
+      print('Failed to load STATUS !');
     } else {
       if (datums != null) {
         setState(() {
@@ -79,20 +79,23 @@ class StatusDetailPageState extends State<StatusDetailPage> {
   }
 
   Widget _showTopStatusInfos(String libelle, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 5),
-          child: Text('$libelle',
-              style: TextStyle(fontSize: 12, color: Colors.black)),
-        ),
-        Padding(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
             padding: EdgeInsets.only(top: 5),
-            child: Text('$value',
-                style: TextStyle(fontSize: 13, color: Colors.blue))),
-      ],
+            child: Text('$libelle',
+                style: TextStyle(fontSize: 12, color: Colors.black)),
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 5, left: 5),
+              child: Text('$value',
+                  style: TextStyle(fontSize: 13, color: Colors.blue))),
+        ],
+      ),
     );
   }
 
@@ -107,10 +110,11 @@ class StatusDetailPageState extends State<StatusDetailPage> {
             child: Column(
               children: [
                 Container(
+                  width: 400,
                   padding: EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5), //color of shadow
@@ -121,12 +125,14 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                       //you can set more BoxShadow() here
                     ],
                   ),
-                  child: Column(children: [
-                    _showTopStatusInfos('Etat de modification',
-                        '${widget.statusvehicule.attributes.statusEdition.toUpperCase()}'),
-                    _showTopStatusInfos('Observations',
-                        '${widget.statusvehicule.attributes.observationStatus}'),
-                  ]),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _showTopStatusInfos('Etat de modification',
+                            '${widget.statusvehicule.attributes.statusEdition.toUpperCase()}'),
+                        _showTopStatusInfos('Observations',
+                            '${widget.statusvehicule.attributes.observationStatus}'),
+                      ]),
                 ),
                 SizedBox(height: 10),
                 Text(

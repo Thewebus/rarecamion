@@ -27,7 +27,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     });
   }
 
-  String infoFlash = '';
+  String infoFlash = 'Recherche des status ...';
 
   final List<StatusVehicule> _allStatus = [];
 
@@ -56,11 +56,11 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     print(statusDatas);
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to load VEHICULES !');
+      print('FAILED TO LOAD VEHICULES');
     } else {
-      if (statusDatas != null) {
+      if (statusDatas.toString() != null) {
         setState(() {
-          infoFlash = 'Tous les status ... ';
+          infoFlash = 'LISTE DES STATUS';
         });
 
         statusDatas.forEach((statusData) {
@@ -69,7 +69,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
         });
       } else {
         setState(() {
-          infoFlash = ' Aucun status défini pour ce véhicule !';
+          infoFlash = 'AUCUN STATUS';
         });
       }
     }
@@ -107,8 +107,8 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                 Container(
                   padding: EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5), //color of shadow
