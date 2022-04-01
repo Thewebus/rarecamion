@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/status_image.dart' as si;
@@ -41,14 +42,14 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     String statusRelatedID = widget.statusvehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules/${statusRelatedID}?populate[0]=Image';
+        'http://rarecamion.com:1337/api/status-vehicules/$statusRelatedID?populate[0]=Image';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
     //print(response.body);
 
     Map<String, dynamic> dataRAW =
-        new Map<String, dynamic>.from(json.decode(response.body));
+        Map<String, dynamic>.from(json.decode(response.body));
 
     si.StatusImage jsonStrapi = si.StatusImage.fromJson(dataRAW);
 
@@ -57,7 +58,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     final List<String> imagesURL = [];
 
     if (response.statusCode != 200) {
-      print('Failed to load STATUS !');
+      if (kDebugMode) {
+        print('Failed to load STATUS !');
+      }
     } else {
       if (datums != null) {
         setState(() {
@@ -86,14 +89,14 @@ class StatusDetailPageState extends State<StatusDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Text('$libelle',
-                style: TextStyle(fontSize: 12, color: Colors.black)),
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(libelle,
+                style: const TextStyle(fontSize: 12, color: Colors.black)),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 5, left: 5),
-              child: Text('$value',
-                  style: TextStyle(fontSize: 13, color: Colors.blue))),
+              padding: const EdgeInsets.only(top: 5, left: 5),
+              child: Text(value,
+                  style: const TextStyle(fontSize: 13, color: Colors.blue))),
         ],
       ),
     );
@@ -106,12 +109,12 @@ class StatusDetailPageState extends State<StatusDetailPage> {
             title: Text(
                 widget.statusvehicule.attributes.libelleStatus.toUpperCase())),
         body: Container(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
                 Container(
                   width: 400,
-                  padding: EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
@@ -120,7 +123,8 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                         color: Colors.grey.withOpacity(0.5), //color of shadow
                         spreadRadius: 1, //spread radius
                         blurRadius: 1, // blur radius
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset:
+                            const Offset(0, 1), // changes position of shadow
                       ),
                       //you can set more BoxShadow() here
                     ],
@@ -128,21 +132,23 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _showTopStatusInfos('Etat de modification',
-                            '${widget.statusvehicule.attributes.statusEdition.toUpperCase()}'),
+                        _showTopStatusInfos(
+                            'Etat de modification',
+                            widget.statusvehicule.attributes.statusEdition
+                                .toUpperCase()),
                         _showTopStatusInfos('Observations',
-                            '${widget.statusvehicule.attributes.observationStatus}'),
+                            widget.statusvehicule.attributes.observationStatus),
                       ]),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  '$infoFlash',
-                  style: TextStyle(
+                  infoFlash,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 11,
                       fontWeight: FontWeight.normal),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,

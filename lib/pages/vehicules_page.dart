@@ -75,17 +75,14 @@ class RecordingsPageState extends State<VehiculesPage> {
                           child: SafeArea(
                               top: false,
                               bottom: false,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListView.separated(
-                                    itemCount: state.vehicules.length,
-                                    itemBuilder: (context, i) => VehiculeItem(
-                                          vehicule: state.vehicules[i],
-                                        ),
-                                    separatorBuilder:
-                                        (BuildContext context, int index) =>
-                                            const Divider()),
-                              )),
+                              child: ListView.separated(
+                                  itemCount: state.vehicules.length,
+                                  itemBuilder: (context, i) => VehiculeItem(
+                                        vehicule: state.vehicules[i],
+                                      ),
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider())),
                         )
                       ])
                     : Center(

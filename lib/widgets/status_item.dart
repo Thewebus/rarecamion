@@ -1,11 +1,14 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:date_format/date_format.dart';
 import '../models/status_vehicule.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:image/image.dart' as img;
 
 import '../pages/status_detail_page.dart';
 
@@ -48,6 +51,12 @@ class StatusItemState extends State<StatusItem> {
 
     final XFile photo = await _picker.pickImage(source: ImageSource.camera);
 
+    final img.Image capturedImage =
+        img.decodeImage(await File(photo.path).readAsBytes());
+    final img.Image orientedImage = img.bakeOrientation(capturedImage);
+    final File photoOK =
+        await File(photo.path).writeAsBytes(img.encodeJpg(orientedImage));
+
     final request = http.MultipartRequest(
         'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
 
@@ -58,7 +67,7 @@ class StatusItemState extends State<StatusItem> {
     request.fields['field'] = "image";
     request.fields['refId'] = widget.statusVehicule.id.toString();
 
-    final im = await http.MultipartFile.fromPath('files', photo.path,
+    final im = await http.MultipartFile.fromPath('files', photoOK.path,
         contentType: MediaType('image', 'jpeg'));
 
     request.files.add(im);
@@ -134,10 +143,9 @@ class StatusItemState extends State<StatusItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('${widget.statusVehicule.attributes.libelleStatus}',
+                    Text(widget.statusVehicule.attributes.libelleStatus,
                         style: TextStyle(fontSize: 16, color: Colors.white)),
-                    Text(
-                        '${dtformat(widget.statusVehicule.attributes.updatedAt)}',
+                    Text(dtformat(widget.statusVehicule.attributes.updatedAt),
                         style: TextStyle(
                             fontSize: 10.0, color: Color(0xFF78FF09))),
                   ]),

@@ -27,7 +27,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     });
   }
 
-  String infoFlash = 'Recherche des status ...';
+  String infoFlash = 'Chargement des status (patientez svp) ...';
 
   final List<StatusVehicule> _allStatus = [];
 
@@ -40,25 +40,26 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     String vehiculeRelatedID = widget.vehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
+        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID&sort[0]=updatedAt:desc';
 
     //print(url);
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
     Map<String, dynamic> statusDatasRAW =
-        new Map<String, dynamic>.from(json.decode(response.body));
+        Map<String, dynamic>.from(json.decode(response.body));
 
     final statusDatas = statusDatasRAW['data'];
 
     final List<StatusVehicule> allStatus = [];
 
-    print(statusDatas);
-
     if (response.statusCode != 200) {
-      print('FAILED TO LOAD VEHICULES');
+      print('ERREUR DE CONNEXION AU SERVEUR !');
+      setState(() {
+        infoFlash = 'ERREUR DE CONNEXION AU SERVEUR';
+      });
     } else {
-      if (statusDatas.toString() != null) {
+      if (statusDatas.toString().length > 5) {
         setState(() {
           infoFlash = 'LISTE DES STATUS';
         });
@@ -100,12 +101,12 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     return Scaffold(
         appBar: AppBar(title: Text(widget.vehicule.attributes.dechargement)),
         body: Container(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: SingleChildScrollView(
                 child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
@@ -114,42 +115,41 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                         color: Colors.grey.withOpacity(0.5), //color of shadow
                         spreadRadius: 1, //spread radius
                         blurRadius: 1, // blur radius
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset:
+                            const Offset(0, 1), // changes position of shadow
                       ),
                       //you can set more BoxShadow() here
                     ],
                   ),
                   child: Column(children: [
-                    _showVDetails('Fournisseur',
-                        '${widget.vehicule.attributes.fournisseur}'),
                     _showVDetails(
-                        'Matricule', '${widget.vehicule.attributes.matricule}'),
+                        'Fournisseur', widget.vehicule.attributes.fournisseur),
                     _showVDetails(
-                        'Produit', '${widget.vehicule.attributes.etatProduit}'),
+                        'Matricule', widget.vehicule.attributes.matricule),
                     _showVDetails(
-                        'Usine', '${widget.vehicule.attributes.usineVehicule}'),
-                    _showVDetails('Type produit',
-                        '${widget.vehicule.attributes.typeProduit}'),
+                        'Produit', widget.vehicule.attributes.etatProduit),
+                    _showVDetails(
+                        'Usine', widget.vehicule.attributes.usineVehicule),
+                    _showVDetails(
+                        'Type produit', widget.vehicule.attributes.typeProduit),
                   ]),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  '$infoFlash',
-                  style: TextStyle(
+                  infoFlash,
+                  style: const TextStyle(
                       color: Color.fromARGB(255, 8, 8, 8),
                       fontSize: 11,
                       fontWeight: FontWeight.normal),
                 ),
-                SizedBox(height: 10),
-                Container(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, i) {
-                      return StatusItem(statusVehicule: _allStatus[i]);
-                    },
-                    itemCount: _allStatus.length,
-                  ),
+                const SizedBox(height: 10),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, i) {
+                    return StatusItem(statusVehicule: _allStatus[i]);
+                  },
+                  itemCount: _allStatus.length,
                 ),
               ],
             ))));
