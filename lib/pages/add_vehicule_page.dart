@@ -79,7 +79,6 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       });
                     },
 
-                    // ignore: todo
                     ///TODO: Fetch datas from STRAPI API ...
                     ////*
                     ///https://stackoverflow.com/questions/68651197/flutter-fill-dropdownmenuitem-from-list

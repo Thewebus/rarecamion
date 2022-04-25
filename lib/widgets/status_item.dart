@@ -22,7 +22,7 @@ class StatusItem extends StatefulWidget {
 
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
-  String _msg = 'Appui long pour photo ...';
+  String _msg = 'PHOTOS: double-cliquer | VIDEOS: maintenir';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
@@ -91,7 +91,7 @@ class StatusItemState extends State<StatusItem> {
 
     final ImagePicker _picker = ImagePicker();
 
-    final XFile photo = await _picker.pickImage(source: ImageSource.camera);
+    final XFile video = await _picker.pickVideo(source: ImageSource.camera);
 
     final request = http.MultipartRequest(
         'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
@@ -103,8 +103,8 @@ class StatusItemState extends State<StatusItem> {
     request.fields['field'] = "image";
     request.fields['refId'] = widget.statusVehicule.id.toString();
 
-    final im = await http.MultipartFile.fromPath('files', photo.path,
-        contentType: MediaType('image', 'jpeg'));
+    final im = await http.MultipartFile.fromPath('files', video.path,
+        contentType: MediaType('video', 'mp4'));
 
     request.files.add(im);
 

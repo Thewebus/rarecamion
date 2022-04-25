@@ -90,9 +90,15 @@ class VehiculeItemState extends State<VehiculeItem> {
                 style: TextStyle(fontSize: 12.0)),
             _lastStatus.length > 3
                 ? Text('$_lastStatus',
-                    style: TextStyle(fontSize: 10.0, color: Colors.green))
-                : Text('AJOUTER STATUS',
-                    style: TextStyle(fontSize: 8.0, color: Colors.red))
+                    style: TextStyle(
+                        fontSize: 10.0,
+                        color: Colors.green,
+                        fontStyle: FontStyle.italic))
+                : Text('AUCUN STATUS',
+                    style: TextStyle(
+                        fontSize: 10.0,
+                        color: Colors.red,
+                        fontStyle: FontStyle.italic))
           ],
         ),
         trailing: StoreConnector<AppState, AppState>(
