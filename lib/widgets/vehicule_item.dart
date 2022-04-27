@@ -41,7 +41,7 @@ class VehiculeItemState extends State<VehiculeItem> {
       'Accept': 'application/json'
     };
 
-    String _lastStatus = '';
+    String _return = '';
 
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=${widget.vehicule.id}&sort[0]=updatedAt:desc';
@@ -60,11 +60,11 @@ class VehiculeItemState extends State<VehiculeItem> {
     } else {
       if (statusDatas.toString().length > 5) {
         final StatusVehicule status = StatusVehicule.fromJson(statusDatas[0]);
-        _lastStatus = status.attributes.libelleStatus;
+        _return = status.attributes.libelleStatus;
       }
     }
 
-    return _lastStatus;
+    return _return;
   }
 
   @override
@@ -89,16 +89,10 @@ class VehiculeItemState extends State<VehiculeItem> {
                 '${widget.vehicule.attributes.dechargement} - ${widget.vehicule.attributes.fournisseur} - ',
                 style: TextStyle(fontSize: 12.0)),
             _lastStatus.length > 3
-                ? Text('$_lastStatus',
-                    style: TextStyle(
-                        fontSize: 10.0,
-                        color: Colors.green,
-                        fontStyle: FontStyle.italic))
+                ? Text(_lastStatus,
+                    style: TextStyle(fontSize: 10.0, color: Colors.green))
                 : Text('AUCUN STATUS',
-                    style: TextStyle(
-                        fontSize: 10.0,
-                        color: Colors.red,
-                        fontStyle: FontStyle.italic))
+                    style: TextStyle(fontSize: 10.0, color: Colors.red))
           ],
         ),
         trailing: StoreConnector<AppState, AppState>(

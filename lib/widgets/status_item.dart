@@ -49,11 +49,14 @@ class StatusItemState extends State<StatusItem> {
 
     final ImagePicker _picker = ImagePicker();
 
-    final XFile photo = await _picker.pickImage(source: ImageSource.camera);
+    final XFile photo = await _picker.pickImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 5);
 
     final img.Image capturedImage =
         img.decodeImage(await File(photo.path).readAsBytes());
+
     final img.Image orientedImage = img.bakeOrientation(capturedImage);
+
     final File photoOK =
         await File(photo.path).writeAsBytes(img.encodeJpg(orientedImage));
 

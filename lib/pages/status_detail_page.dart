@@ -24,14 +24,14 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     _fetchImages().then((value) {
       //print(value);
       setState(() {
-        _allImages.addAll(value);
+        _allmedias.addAll(value);
       });
     });
   }
 
   String infoFlash = '';
 
-  final List<String> _allImages = [];
+  final List<String> _allmedias = [];
 
   Future<List<String>> _fetchImages() async {
     Map<String, String> headers = {
@@ -64,16 +64,16 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     } else {
       if (datums != null) {
         setState(() {
-          infoFlash = 'Affichage des photos ...';
+          infoFlash = 'Affichage des photos et videos ...';
         });
-
+        print(datums);
         datums.forEach((datum) {
           si.Datum d = datum;
           imagesURL.add(d.attributes.url);
         });
       } else {
         setState(() {
-          infoFlash = 'Aucune photo disponible pour ce status ...';
+          infoFlash = 'Aucun media pour ce status ...';
         });
       }
     }
@@ -154,9 +154,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(imageURL: _allImages[i]);
+                      return ImageItem(imageURL: _allmedias[i]);
                     },
-                    itemCount: _allImages.length,
+                    itemCount: _allmedias.length,
                   ),
                 ),
               ],
