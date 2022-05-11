@@ -64,6 +64,8 @@ class VehiculeItemState extends State<VehiculeItem> {
       }
     }
 
+    print('VALEUR DU STATUS ---------  $_return');
+
     return _return;
   }
 

@@ -37,7 +37,7 @@ class StatusItemState extends State<StatusItem> {
           : Text(_msg,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 9,
+                  fontSize: 11,
                   fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.italic)),
     ]);
@@ -50,7 +50,7 @@ class StatusItemState extends State<StatusItem> {
     final ImagePicker _picker = ImagePicker();
 
     final XFile photo = await _picker.pickImage(
-        source: ImageSource.camera, maxWidth: 1000, imageQuality: 5);
+        source: ImageSource.camera, maxWidth: 600, imageQuality: 5);
 
     final img.Image capturedImage =
         img.decodeImage(await File(photo.path).readAsBytes());
@@ -94,7 +94,10 @@ class StatusItemState extends State<StatusItem> {
 
     final ImagePicker _picker = ImagePicker();
 
-    final XFile video = await _picker.pickVideo(source: ImageSource.camera);
+    final XFile video = await _picker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: Duration(minutes: 2),
+        preferredCameraDevice: CameraDevice.rear);
 
     final request = http.MultipartRequest(
         'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
@@ -147,10 +150,10 @@ class StatusItemState extends State<StatusItem> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(widget.statusVehicule.attributes.libelleStatus,
-                        style: TextStyle(fontSize: 16, color: Colors.white)),
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                     Text(dtformat(widget.statusVehicule.attributes.updatedAt),
                         style: TextStyle(
-                            fontSize: 10.0, color: Color(0xFF78FF09))),
+                            fontSize: 12.0, color: Color(0xFF78FF09))),
                   ]),
               Row(
                 children: [
