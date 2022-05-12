@@ -77,8 +77,6 @@ class AdminHomePageState extends State<AdminHomePage> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            //print('_redirectToUsersPage');
-
                                             _redirectToUsersListPage();
                                           },
                                           child: Card(
