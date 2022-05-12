@@ -119,29 +119,29 @@ class LoginPageState extends State<LoginPage> {
         Uri.parse('http://rarecamion.com:1337/api/auth/local'),
         body: {"identifier": _email, "password": _password});
 
-    final rBody = json.decode(response.body);
-
-    Map<String, dynamic> userStrapiJson = new Map<String, dynamic>.from(rBody);
-    final userJson = userStrapiJson['user'];
-
-    final User usr = User.fromJson(userJson);
-
     if (response.statusCode == 200) {
+      final rBody = json.decode(response.body);
+
+      print('Hello $rBody');
+
+      Map<String, dynamic> userStrapiJson =
+          new Map<String, dynamic>.from(rBody);
+
+      final userJson = userStrapiJson['user'];
+
+      final User usr = User.fromJson(userJson);
+
       _storeUserData(rBody);
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
 
       if (usr.status == 'administration') {
-        print('ADMINISTRATOR LOGIN');
         _redirectAdmin();
       } else {
-        print('NORMAL LOGIN');
         _redirectUser();
       }
     } else {
-      //print(responseData);
       setState(() => _isSubmitting = false);
-      //final String errorMsg = responseData['message'];
       final String errorMsg = 'Identifiants incorrects !';
       _showErrorSnack(errorMsg);
     }

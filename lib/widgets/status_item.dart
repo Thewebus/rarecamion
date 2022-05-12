@@ -22,7 +22,8 @@ class StatusItem extends StatefulWidget {
 
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
-  String _msg = 'PHOTOS: double-cliquer | VIDEOS: maintenir';
+  //String _msg = 'PHOTOS: double-cliquer | VIDEOS: maintenir';
+  String _msg = 'PHOTOS: double-cliquer';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
@@ -50,7 +51,12 @@ class StatusItemState extends State<StatusItem> {
     final ImagePicker _picker = ImagePicker();
 
     final XFile photo = await _picker.pickImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 4);
+
+    /*
+final XFile photo = await _picker.pickImage(
         source: ImageSource.camera, maxWidth: 600, imageQuality: 5);
+        */
 
     final img.Image capturedImage =
         img.decodeImage(await File(photo.path).readAsBytes());
@@ -130,7 +136,7 @@ class StatusItemState extends State<StatusItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: _takeVideoStatusVehicule,
+      //onLongPress: _takeVideoStatusVehicule,
       onDoubleTap: () {
         _takePhotoStatusVehicule();
       },
