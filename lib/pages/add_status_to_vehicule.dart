@@ -132,12 +132,10 @@ class AddStatusPageState extends State<AddStatusPage> {
           }
         }));
 
-    final responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
       _redirectUser();
-      print(responseData);
     } else {
       setState(() => _isSubmitting = false);
       //final String errorMsg = responseData['message'];

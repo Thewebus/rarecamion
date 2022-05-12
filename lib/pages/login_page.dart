@@ -122,8 +122,6 @@ class LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       final rBody = json.decode(response.body);
 
-      print('Hello $rBody');
-
       Map<String, dynamic> userStrapiJson =
           new Map<String, dynamic>.from(rBody);
 
