@@ -136,7 +136,7 @@ final XFile photo = await _picker.pickImage(
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      //onLongPress: _takeVideoStatusVehicule,
+      onLongPress: _takeVideoStatusVehicule,
       onDoubleTap: () {
         _takePhotoStatusVehicule();
       },
