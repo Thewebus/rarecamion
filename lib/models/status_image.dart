@@ -4,11 +4,6 @@
 
 import 'dart:convert';
 
-StatusImage statusImageFromJson(String str) =>
-    StatusImage.fromJson(json.decode(str));
-
-String statusImageToJson(StatusImage data) => json.encode(data.toJson());
-
 class StatusImage {
   StatusImage({
     this.data,
@@ -18,14 +13,19 @@ class StatusImage {
   Data data;
   Meta meta;
 
+  factory StatusImage.fromRawJson(String str) =>
+      StatusImage.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory StatusImage.fromJson(Map<String, dynamic> json) => StatusImage(
-        data: Data.fromJson(json["data"]),
-        meta: Meta.fromJson(json["meta"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-        "meta": meta.toJson(),
+        "data": data == null ? null : data.toJson(),
+        "meta": meta == null ? null : meta.toJson(),
       };
 }
 
@@ -38,14 +38,20 @@ class Data {
   int id;
   DataAttributes attributes;
 
+  factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        id: json["id"],
-        attributes: DataAttributes.fromJson(json["attributes"]),
+        id: json["id"] == null ? null : json["id"],
+        attributes: json["attributes"] == null
+            ? null
+            : DataAttributes.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
+        "id": id == null ? null : id,
+        "attributes": attributes == null ? null : attributes.toJson(),
       };
 }
 
@@ -68,24 +74,41 @@ class DataAttributes {
   String statusEdition;
   Image image;
 
+  factory DataAttributes.fromRawJson(String str) =>
+      DataAttributes.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory DataAttributes.fromJson(Map<String, dynamic> json) => DataAttributes(
-        libelleStatus: json["libelleStatus"],
-        observationStatus: json["observationStatus"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        publishedAt: DateTime.parse(json["publishedAt"]),
-        statusEdition: json["statusEdition"],
-        image: Image.fromJson(json["Image"]),
+        libelleStatus:
+            json["libelleStatus"] == null ? null : json["libelleStatus"],
+        observationStatus: json["observationStatus"] == null
+            ? null
+            : json["observationStatus"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        publishedAt: json["publishedAt"] == null
+            ? null
+            : DateTime.parse(json["publishedAt"]),
+        statusEdition:
+            json["statusEdition"] == null ? null : json["statusEdition"],
+        image: json["Image"] == null ? null : Image.fromJson(json["Image"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "libelleStatus": libelleStatus,
-        "observationStatus": observationStatus,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "publishedAt": publishedAt.toIso8601String(),
-        "statusEdition": statusEdition,
-        "Image": image.toJson(),
+        "libelleStatus": libelleStatus == null ? null : libelleStatus,
+        "observationStatus":
+            observationStatus == null ? null : observationStatus,
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "publishedAt":
+            publishedAt == null ? null : publishedAt.toIso8601String(),
+        "statusEdition": statusEdition == null ? null : statusEdition,
+        "Image": image == null ? null : image.toJson(),
       };
 }
 
@@ -96,6 +119,10 @@ class Image {
 
   List<Datum> data;
 
+  factory Image.fromRawJson(String str) => Image.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Image.fromJson(Map<String, dynamic> json) => Image(
         data: json["data"] == null
             ? null
@@ -103,7 +130,9 @@ class Image {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data.map((x) => x.toJson())),
       };
 }
 
@@ -116,14 +145,20 @@ class Datum {
   int id;
   DatumAttributes attributes;
 
+  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        attributes: DatumAttributes.fromJson(json["attributes"]),
+        id: json["id"] == null ? null : json["id"],
+        attributes: json["attributes"] == null
+            ? null
+            : DatumAttributes.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
+        "id": id == null ? null : id,
+        "attributes": attributes == null ? null : attributes.toJson(),
       };
 }
 
@@ -164,76 +199,88 @@ class DatumAttributes {
   DateTime createdAt;
   DateTime updatedAt;
 
+  factory DatumAttributes.fromRawJson(String str) =>
+      DatumAttributes.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory DatumAttributes.fromJson(Map<String, dynamic> json) =>
       DatumAttributes(
-        name: json["name"],
+        name: json["name"] == null ? null : json["name"],
         alternativeText: json["alternativeText"],
         caption: json["caption"],
-        width: json["width"],
-        height: json["height"],
-        formats: Formats.fromJson(json["formats"]),
-        hash: json["hash"],
-        ext: json["ext"],
-        mime: json["mime"],
-        size: json["size"].toDouble(),
-        url: json["url"],
+        width: json["width"] == null ? null : json["width"],
+        height: json["height"] == null ? null : json["height"],
+        formats:
+            json["formats"] == null ? null : Formats.fromJson(json["formats"]),
+        hash: json["hash"] == null ? null : json["hash"],
+        ext: json["ext"] == null ? null : json["ext"],
+        mime: json["mime"] == null ? null : json["mime"],
+        size: json["size"] == null ? null : json["size"].toDouble(),
+        url: json["url"] == null ? null : json["url"],
         previewUrl: json["previewUrl"],
-        provider: json["provider"],
+        provider: json["provider"] == null ? null : json["provider"],
         providerMetadata: json["provider_metadata"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
+        "name": name == null ? null : name,
         "alternativeText": alternativeText,
         "caption": caption,
-        "width": width,
-        "height": height,
-        "formats": formats.toJson(),
-        "hash": hash,
-        "ext": ext,
-        "mime": mime,
-        "size": size,
-        "url": url,
+        "width": width == null ? null : width,
+        "height": height == null ? null : height,
+        "formats": formats == null ? null : formats.toJson(),
+        "hash": hash == null ? null : hash,
+        "ext": ext == null ? null : ext,
+        "mime": mime == null ? null : mime,
+        "size": size == null ? null : size,
+        "url": url == null ? null : url,
         "previewUrl": previewUrl,
-        "provider": provider,
+        "provider": provider == null ? null : provider,
         "provider_metadata": providerMetadata,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
       };
 }
 
 class Formats {
   Formats({
     this.thumbnail,
-    this.large,
     this.medium,
     this.small,
   });
 
-  Large thumbnail;
-  Large large;
-  Large medium;
-  Large small;
+  Medium thumbnail;
+  Medium medium;
+  Medium small;
+
+  factory Formats.fromRawJson(String str) => Formats.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory Formats.fromJson(Map<String, dynamic> json) => Formats(
-        thumbnail: Large.fromJson(json["thumbnail"]),
-        large: Large.fromJson(json["large"]),
-        medium: Large.fromJson(json["medium"]),
-        small: Large.fromJson(json["small"]),
+        thumbnail: json["thumbnail"] == null
+            ? null
+            : Medium.fromJson(json["thumbnail"]),
+        medium: json["medium"] == null ? null : Medium.fromJson(json["medium"]),
+        small: json["small"] == null ? null : Medium.fromJson(json["small"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "thumbnail": thumbnail.toJson(),
-        "large": large.toJson(),
-        "medium": medium.toJson(),
-        "small": small.toJson(),
+        "thumbnail": thumbnail == null ? null : thumbnail.toJson(),
+        "medium": medium == null ? null : medium.toJson(),
+        "small": small == null ? null : small.toJson(),
       };
 }
 
-class Large {
-  Large({
+class Medium {
+  Medium({
     this.name,
     this.hash,
     this.ext,
@@ -255,33 +302,41 @@ class Large {
   double size;
   String url;
 
-  factory Large.fromJson(Map<String, dynamic> json) => Large(
-        name: json["name"],
-        hash: json["hash"],
-        ext: json["ext"],
-        mime: json["mime"],
+  factory Medium.fromRawJson(String str) => Medium.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Medium.fromJson(Map<String, dynamic> json) => Medium(
+        name: json["name"] == null ? null : json["name"],
+        hash: json["hash"] == null ? null : json["hash"],
+        ext: json["ext"] == null ? null : json["ext"],
+        mime: json["mime"] == null ? null : json["mime"],
         path: json["path"],
-        width: json["width"],
-        height: json["height"],
-        size: json["size"].toDouble(),
-        url: json["url"],
+        width: json["width"] == null ? null : json["width"],
+        height: json["height"] == null ? null : json["height"],
+        size: json["size"] == null ? null : json["size"].toDouble(),
+        url: json["url"] == null ? null : json["url"],
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name,
-        "hash": hash,
-        "ext": ext,
-        "mime": mime,
+        "name": name == null ? null : name,
+        "hash": hash == null ? null : hash,
+        "ext": ext == null ? null : ext,
+        "mime": mime == null ? null : mime,
         "path": path,
-        "width": width,
-        "height": height,
-        "size": size,
-        "url": url,
+        "width": width == null ? null : width,
+        "height": height == null ? null : height,
+        "size": size == null ? null : size,
+        "url": url == null ? null : url,
       };
 }
 
 class Meta {
   Meta();
+
+  factory Meta.fromRawJson(String str) => Meta.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta();
 
