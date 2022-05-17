@@ -48,13 +48,6 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
     //print(response.body);
 
-    Map<String, dynamic> dataRAW =
-        Map<String, dynamic>.from(json.decode(response.body));
-
-    si.StatusImage jsonStrapi = si.StatusImage.fromJson(dataRAW);
-
-    dynamic datums = jsonStrapi.data.attributes.image.data;
-
     final List<String> imagesURL = [];
 
     if (response.statusCode != 200) {
@@ -62,6 +55,15 @@ class StatusDetailPageState extends State<StatusDetailPage> {
         print('Failed to load STATUS !');
       }
     } else {
+      Map<String, dynamic> dataRAW =
+          Map<String, dynamic>.from(json.decode(response.body));
+
+      print(dataRAW);
+
+      si.StatusImage jsonStrapi = si.StatusImage.fromJson(dataRAW);
+
+      dynamic datums = jsonStrapi.data.attributes.image.data;
+
       if (datums != null) {
         setState(() {
           infoFlash = 'Affichage des photos et videos ...';

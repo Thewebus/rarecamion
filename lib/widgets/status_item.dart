@@ -51,7 +51,7 @@ class StatusItemState extends State<StatusItem> {
     final ImagePicker _picker = ImagePicker();
 
     final XFile photo = await _picker.pickImage(
-        source: ImageSource.camera, maxWidth: 1000, imageQuality: 4);
+        source: ImageSource.camera, maxWidth: 2500, imageQuality: 4);
 
     /*
 final XFile photo = await _picker.pickImage(
