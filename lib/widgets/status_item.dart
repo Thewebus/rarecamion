@@ -51,12 +51,7 @@ class StatusItemState extends State<StatusItem> {
     final ImagePicker _picker = ImagePicker();
 
     final XFile photo = await _picker.pickImage(
-        source: ImageSource.camera, maxWidth: 2500, imageQuality: 4);
-
-    /*
-final XFile photo = await _picker.pickImage(
-        source: ImageSource.camera, maxWidth: 600, imageQuality: 5);
-        */
+        source: ImageSource.camera, maxWidth: 1500, imageQuality: 5);
 
     final img.Image capturedImage =
         img.decodeImage(await File(photo.path).readAsBytes());
@@ -163,6 +158,7 @@ final XFile photo = await _picker.pickImage(
                   ]),
               Row(
                 children: [
+                  Row(),
                   _showFormActions(),
                 ],
               )

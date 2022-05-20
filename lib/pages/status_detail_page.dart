@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -22,18 +20,17 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     super.initState();
 
     _fetchImages().then((value) {
-      //print(value);
       setState(() {
-        _allmedias.addAll(value);
+        _allPhotos.addAll(value);
       });
     });
   }
 
   String infoFlash = '';
 
-  final List<String> _allmedias = [];
+  final List<si.Datum> _allPhotos = [];
 
-  Future<List<String>> _fetchImages() async {
+  Future<List<si.Datum>> _fetchImages() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -48,7 +45,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
     //print(response.body);
 
-    final List<String> imagesURL = [];
+    final List<si.Datum> photos = [];
 
     if (response.statusCode != 200) {
       if (kDebugMode) {
@@ -65,7 +62,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
         });
         photos.forEach((datum) {
           si.Datum d = datum;
-          imagesURL.add(d.attributes.url);
+          photos.add(d);
           print(d.attributes.url);
         });
       } else {
@@ -75,7 +72,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
       }
     }
 
-    return imagesURL;
+    return photos;
   }
 
   Widget _showTopStatusInfos(String libelle, String value) {
@@ -151,9 +148,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(imageURL: _allmedias[i]);
+                      return ImageItem(photos: _allPhotos[i]);
                     },
-                    itemCount: _allmedias.length,
+                    itemCount: _allPhotos.length,
                   ),
                 ),
               ],
