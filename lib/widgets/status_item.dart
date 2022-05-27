@@ -131,7 +131,8 @@ class StatusItemState extends State<StatusItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: _takeVideoStatusVehicule,
+      //onLongPress: _takeVideoStatusVehicule,
+      onLongPress: null,
       onDoubleTap: () {
         _takePhotoStatusVehicule();
       },

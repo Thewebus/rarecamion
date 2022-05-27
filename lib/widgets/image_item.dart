@@ -1,61 +1,56 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:rarecamion/models/status_image.dart' as si;
+import 'package:http/http.dart' as http;
 
 class ImageItem extends StatefulWidget {
-  final si.Datum photos;
-  const ImageItem({Key key, this.photos}) : super(key: key);
+  final si.Datum image;
+  final Function() onTap;
+  const ImageItem({Key key, this.image, this.onTap}) : super(key: key);
 
   @override
   ImageItemState createState() => ImageItemState();
 }
 
 class ImageItemState extends State<ImageItem> {
-  /* Future<List<String>> _deletePhotoStatusVehicule() async {
+  void _deletePhotoStatusVehicule(int imageRCID) async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
+    String infoFlash = '';
+    String url = 'http://rarecamion.com:1337/api/upload/files/$imageRCID';
 
-    String photoID = widget.statusvehicule.id.toString();
-
-    String url =
-        'http://rarecamion.com:1337/api/status-vehicules/$photoID?populate[0]=Image';
-
-    http.Response response = await http.get(Uri.parse(url), headers: headers);
-
-    //print(response.body);
-
-    final List<String> imagesURL = [];
+    http.Response response =
+        await http.delete(Uri.parse(url), headers: headers);
 
     if (response.statusCode != 200) {
-      if (kDebugMode) {
-        print('Failed to load STATUS !');
-      }
+      setState(() {
+        infoFlash = 'Impossible de supprimer la photo !';
+        _showSnack(infoFlash);
+      });
     } else {
-      si.StatusImage jsonStrapi = si.StatusImage.fromRawJson(response.body);
-
-      List<si.Datum> photos = jsonStrapi.data.attributes.image.data;
-
-      if (photos != null) {
-        setState(() {
-          infoFlash = 'Affichage des photos et videos ...';
-        });
-        photos.forEach((datum) {
-          si.Datum d = datum;
-          imagesURL.add(d.attributes.url);
-          print(d.attributes.url);
-        });
-      } else {
-        setState(() {
-          infoFlash = 'Aucun media pour ce status ...';
-        });
-      }
+      setState(() {
+        infoFlash = 'Suppression effectuée avec succès !';
+        _showSnack(infoFlash);
+      });
     }
+  }
 
-    return imagesURL;
-  } */
+  void _showSnack(String message) {
+    final snackbar = SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.green),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(milliseconds: 1500));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   Widget _showImage(si.Datum photo) {
     return Image.network(
       'http://rarecamion.com:1337' + photo.attributes.url,
@@ -64,7 +59,10 @@ class ImageItemState extends State<ImageItem> {
           ImageChunkEvent loadingProgress) {
         if (loadingProgress == null) return child;
         return Center(
-          child: CircularProgressIndicator(
+          child: LinearProgressIndicator(
+            minHeight: 10,
+            backgroundColor: Colors.white,
+            color: Colors.blue,
             value: loadingProgress.expectedTotalBytes != null
                 ? loadingProgress.cumulativeBytesLoaded /
                     loadingProgress.expectedTotalBytes
@@ -77,51 +75,52 @@ class ImageItemState extends State<ImageItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () {
-        print('');
-      },
-      onDoubleTap: () {
-        print('');
-      },
-      child: Card(
-        color: Colors.blue.shade800,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              _showImage(widget.photos),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Text('');
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            'SUPPRIMER',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
+    return Card(
+      color: Colors.blue.shade800,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            _showImage(widget.image),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      if (await confirm(
+                        context,
+                        title: const Text('Confirmez '),
+                        content: const Text('Voulez-vous supprimer la photo ?'),
+                        textOK: const Text('Oui, supprimer !'),
+                        textCancel: const Text('Non'),
+                      )) {
+                        return _deletePhotoStatusVehicule(widget.image.id);
+                      } else
+                        return print('pressedCancel');
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'SUPPRIMER',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

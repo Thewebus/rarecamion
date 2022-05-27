@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>rarecamion</string>
+	<string>Rarecamion</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,12 +24,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>RARE MAINLAND RUBBER souhaite que vous validiez l'autorisation pour utiliser la camera</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>RARE MAINLAND RUBBER souhaite que vous validiez l'autorisation pour utiliser le micro</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ARE MAINLAND RUBBER souhaite que vous validiez l'autorisation pour pouvoir enregistrer la photo prise.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -49,5 +43,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>

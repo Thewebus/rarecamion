@@ -21,14 +21,16 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
     _fetchImages().then((value) {
       setState(() {
-        _allPhotos.addAll(value);
+        _allImages.addAll(value);
       });
     });
   }
 
   String infoFlash = '';
 
-  final List<si.Datum> _allPhotos = [];
+  final List<si.Datum> _allImages = [];
+
+  int _imgcounter = 0;
 
   Future<List<si.Datum>> _fetchImages() async {
     Map<String, String> headers = {
@@ -45,7 +47,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
     //print(response.body);
 
-    final List<si.Datum> photos = [];
+    final List<si.Datum> imagesListList = [];
 
     if (response.statusCode != 200) {
       if (kDebugMode) {
@@ -54,15 +56,16 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     } else {
       si.StatusImage jsonStrapi = si.StatusImage.fromRawJson(response.body);
 
-      List<si.Datum> photos = jsonStrapi.data.attributes.image.data;
+      List<si.Datum> imagesList = jsonStrapi.data.attributes.image.data;
 
-      if (photos != null) {
+      if (imagesList != null) {
+        _imgcounter = imagesList.length;
         setState(() {
-          infoFlash = 'Affichage des photos et videos ...';
+          infoFlash = 'Affichage des images et videos ...';
         });
-        photos.forEach((datum) {
+        imagesList.forEach((datum) {
           si.Datum d = datum;
-          photos.add(d);
+          imagesListList.add(d);
           print(d.attributes.url);
         });
       } else {
@@ -72,7 +75,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
       }
     }
 
-    return photos;
+    return imagesListList;
   }
 
   Widget _showTopStatusInfos(String libelle, String value) {
@@ -148,9 +151,12 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(photos: _allPhotos[i]);
+                      return ImageItem(
+                        image: _allImages[i],
+                        onTap: null,
+                      );
                     },
-                    itemCount: _allPhotos.length,
+                    itemCount: _allImages.length,
                   ),
                 ),
               ],
