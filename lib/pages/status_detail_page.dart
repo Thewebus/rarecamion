@@ -151,10 +151,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(
-                        image: _allImages[i],
-                        onTap: null,
-                      );
+                      return ImageItem(image: _allImages[i]);
                     },
                     itemCount: _allImages.length,
                   ),

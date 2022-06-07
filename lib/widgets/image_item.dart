@@ -7,8 +7,7 @@ import 'package:http/http.dart' as http;
 
 class ImageItem extends StatefulWidget {
   final si.Datum image;
-  final Function() onTap;
-  const ImageItem({Key key, this.image, this.onTap}) : super(key: key);
+  const ImageItem({Key key, this.image}) : super(key: key);
 
   @override
   ImageItemState createState() => ImageItemState();
@@ -49,6 +48,9 @@ class ImageItemState extends State<ImageItem> {
         duration: Duration(milliseconds: 1500));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/vehicules');
+    });
   }
 
   Widget _showImage(si.Datum photo) {

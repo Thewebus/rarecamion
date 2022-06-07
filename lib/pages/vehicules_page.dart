@@ -64,7 +64,7 @@ class RecordingsPageState extends State<VehiculesPage> {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   stops: [0.1, 0.2],
-                  colors: const [Colors.lightBlueAccent, Colors.white])),
+                  colors: const [Colors.white, Colors.white])),
           //padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,

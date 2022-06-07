@@ -44,8 +44,6 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID&sort[0]=updatedAt:desc';
 
-    //print(url);
-
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
     Map<String, dynamic> statusDatasRAW =
