@@ -33,7 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.4
   http: ^0.13.4
   shared_preferences: ^2.0.13
-  flutter_launcher_icons: ^0.9.3
+
   flutter_redux: ^0.10.0
   redux_thunk: ^0.4.0
   deep_pick: ^0.10.0
@@ -44,16 +44,19 @@ dependencies:
   image: ^3.1.3
   image_picker_ios: ^0.8.5+4
   confirm_dialog: ^1.0.1
+  flutter_launcher_icons: ^0.9.3
   #flutter_native_image: ^0.0.6+1
 
 dev_dependencies:
-  #flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+
 flutter_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
-  image_path: "assets/logorarecamionwhite.png"
+  image_path_android: "assets/logorarecamionwhite.png"
+  image_path_ios: "assets/logorarecamionwhite.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

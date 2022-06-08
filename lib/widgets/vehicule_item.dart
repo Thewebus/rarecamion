@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:confirm_dialog/confirm_dialog.dart';
+
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
@@ -69,6 +71,45 @@ class VehiculeItemState extends State<VehiculeItem> {
     return _return;
   }
 
+  void _deleteVehicule(int vehiculeID) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    String infoFlash = '';
+    String url = 'http://rarecamion.com:1337/api/vehicules/$vehiculeID';
+
+    http.Response response =
+        await http.delete(Uri.parse(url), headers: headers);
+
+    if (response.statusCode != 200) {
+      setState(() {
+        infoFlash = 'Impossible de supprimer le vehicule !';
+        _showSnack(infoFlash);
+      });
+    } else {
+      setState(() {
+        infoFlash = 'Suppression du véhicule effectuée avec succès !';
+        _showSnack(infoFlash);
+      });
+    }
+  }
+
+  void _showSnack(String message) {
+    final snackbar = SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.green),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(milliseconds: 1500));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/vehicules');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -110,8 +151,18 @@ class VehiculeItemState extends State<VehiculeItem> {
                           })))
                   : Text('');
             }),
-        onLongPress: () {
-          print('Long Press !');
+        onLongPress: () async {
+          if (await confirm(
+            context,
+            title: const Text('Confirmez '),
+            content: const Text(
+                'Voulez-vous vraiment supprimer ce vehicule et tous ses status ?'),
+            textOK: const Text('Oui, supprimer !'),
+            textCancel: const Text('Non'),
+          )) {
+            return _deleteVehicule(widget.vehicule.id);
+          } else
+            return print('pressedCancel');
         });
   }
 }

@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:date_format/date_format.dart';
 import '../models/status_vehicule.dart';
@@ -51,7 +52,7 @@ class StatusItemState extends State<StatusItem> {
     final ImagePicker _picker = ImagePicker();
 
     final XFile photo = await _picker.pickImage(
-        source: ImageSource.camera, maxWidth: 1500, imageQuality: 5);
+        source: ImageSource.camera, maxWidth: 1500, imageQuality: 4);
 
     final img.Image capturedImage =
         img.decodeImage(await File(photo.path).readAsBytes());
@@ -128,11 +129,61 @@ class StatusItemState extends State<StatusItem> {
     });
   }
 
+  void _showSnack(String message) {
+    final snackbar = SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.green),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(milliseconds: 1500));
+    //_scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    Future.delayed(Duration(milliseconds: 500), () {
+      Navigator.pushReplacementNamed(context, '/vehicules');
+    });
+  }
+
+  void _deleteStatusVehicule(int statusID) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    String infoFlash = '';
+    String url = 'http://rarecamion.com:1337/api/status-vehicules/$statusID';
+
+    http.Response response =
+        await http.delete(Uri.parse(url), headers: headers);
+
+    if (response.statusCode != 200) {
+      setState(() {
+        infoFlash = 'Impossible de supprimer !';
+        _showSnack(infoFlash);
+      });
+    } else {
+      setState(() {
+        infoFlash = 'Suppression effectuée avec succès !';
+        _showSnack(infoFlash);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       //onLongPress: _takeVideoStatusVehicule,
-      onLongPress: null,
+      onLongPress: () async {
+        if (await confirm(
+          context,
+          title: const Text('Confirmez '),
+          content: const Text('Voulez-vous vraiment supprimer ce status ?'),
+          textOK: const Text('Oui, supprimer !'),
+          textCancel: const Text('Non'),
+        )) {
+          return _deleteStatusVehicule(widget.statusVehicule.id);
+        } else
+          return print('pressedCancel');
+      },
       onDoubleTap: () {
         _takePhotoStatusVehicule();
       },
