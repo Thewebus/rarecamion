@@ -105,6 +105,7 @@ class VehiculeItemState extends State<VehiculeItem> {
         duration: Duration(milliseconds: 1500));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
     Future.delayed(Duration(milliseconds: 500), () {
       Navigator.pushReplacementNamed(context, '/vehicules');
     });

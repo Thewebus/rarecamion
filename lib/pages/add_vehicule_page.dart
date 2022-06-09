@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/engines/app_state.dart';
+import 'package:rarecamion/models/fournisseur.dart';
 import 'package:rarecamion/redux/actions.dart';
 import 'dart:convert';
 
@@ -14,8 +15,21 @@ class AddVehiculePage extends StatefulWidget {
 }
 
 class AddVehiculePageState extends State<AddVehiculePage> {
+  @override
+  initState() {
+    super.initState();
+
+    _getFournisseurs().then((value) {
+      setState(() {
+        allFournisseurs.addAll(value);
+      });
+    });
+  }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+
+  final List<Fournisseur> allFournisseurs = [];
 
   // ignore: unused_field
   bool _isSubmitting, _obscuredText = true;
@@ -363,6 +377,46 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                       }))
                 ]);
           }));
+
+  Future<List<Fournisseur>> _getFournisseurs() async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+
+    String url = 'http://rarecamion.com:1337/api/fournisseurs';
+
+    http.Response response = await http.get(Uri.parse(url), headers: headers);
+
+    //print(response.body);
+
+    final List<Fournisseur> fournisseurs = [];
+
+    if (response.statusCode != 200) {
+      print('Failed to load Fournisseurs !');
+    } else {
+      Fournisseur fournisseursRAW = Fournisseur.fromRawJson(response.body);
+
+      final allFournisseurs = fournisseursRAW.attributes;
+
+      print(fournisseursRAW.attributes);
+    }
+/*
+      
+      
+      allFournisseurs.forEach((fournisseur) {
+          si.Datum d = datum;
+          imagesListList.add(d);
+          //print(d.attributes.url);
+        });
+      
+    }
+      
+
+    */
+
+    return fournisseurs;
+  }
 
   @override
   Widget build(BuildContext context) {

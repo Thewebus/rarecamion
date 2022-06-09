@@ -4,12 +4,6 @@
 
 import 'dart:convert';
 
-List<Fournisseur> fournisseurFromJson(String str) => List<Fournisseur>.from(
-    json.decode(str).map((x) => Fournisseur.fromJson(x)));
-
-String fournisseurToJson(List<Fournisseur> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class Fournisseur {
   Fournisseur({
     this.id,
@@ -19,14 +13,21 @@ class Fournisseur {
   int id;
   Attributes attributes;
 
+  factory Fournisseur.fromRawJson(String str) =>
+      Fournisseur.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Fournisseur.fromJson(Map<String, dynamic> json) => Fournisseur(
-        id: json["id"],
-        attributes: Attributes.fromJson(json["attributes"]),
+        id: json["id"] == null ? null : json["id"],
+        attributes: json["attributes"] == null
+            ? null
+            : Attributes.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
+        "id": id == null ? null : id,
+        "attributes": attributes == null ? null : attributes.toJson(),
       };
 }
 
@@ -45,22 +46,37 @@ class Attributes {
   DateTime updatedAt;
   DateTime publishedAt;
 
+  factory Attributes.fromRawJson(String str) =>
+      Attributes.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
-        nomFournisseur: json["nomFournisseur"],
-        detailsFournisseur:
-            detailsFournisseurValues.map[json["detailsFournisseur"]],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        publishedAt: DateTime.parse(json["publishedAt"]),
+        nomFournisseur:
+            json["nomFournisseur"] == null ? null : json["nomFournisseur"],
+        detailsFournisseur: json["detailsFournisseur"] == null
+            ? null
+            : detailsFournisseurValues.map[json["detailsFournisseur"]],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        publishedAt: json["publishedAt"] == null
+            ? null
+            : DateTime.parse(json["publishedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "nomFournisseur": nomFournisseur,
-        "detailsFournisseur":
-            detailsFournisseurValues.reverse[detailsFournisseur],
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "publishedAt": publishedAt.toIso8601String(),
+        "nomFournisseur": nomFournisseur == null ? null : nomFournisseur,
+        "detailsFournisseur": detailsFournisseur == null
+            ? null
+            : detailsFournisseurValues.reverse[detailsFournisseur],
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "publishedAt":
+            publishedAt == null ? null : publishedAt.toIso8601String(),
       };
 }
 
