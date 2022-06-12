@@ -137,11 +137,9 @@ class StatusItemState extends State<StatusItem> {
           textAlign: TextAlign.center,
         ),
         duration: Duration(milliseconds: 1500));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
+
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/vehicules');
-    });
+    Navigator.of(context).pop(true);
   }
 
   void _deleteStatusVehicule(int statusID) async {
@@ -156,16 +154,12 @@ class StatusItemState extends State<StatusItem> {
         await http.delete(Uri.parse(url), headers: headers);
 
     if (response.statusCode != 200) {
-      setState(() {
-        infoFlash = 'Impossible de supprimer !';
-        _showSnack(infoFlash);
-      });
+      infoFlash = 'Impossible de supprimer !';
     } else {
-      setState(() {
-        infoFlash = 'Suppression effectuée avec succès !';
-        _showSnack(infoFlash);
-      });
+      infoFlash = 'Suppression effectuée avec succès !';
     }
+    _showSnack(infoFlash);
+    setState(() {});
   }
 
   @override

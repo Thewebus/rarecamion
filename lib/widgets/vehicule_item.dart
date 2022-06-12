@@ -28,7 +28,6 @@ class VehiculeItemState extends State<VehiculeItem> {
     super.initState();
 
     _fetchStatus().then((value) {
-      print(value);
       setState(() {
         _lastStatus = value;
       });

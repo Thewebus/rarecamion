@@ -65,6 +65,7 @@ ThunkAction<AppState> getVehiculesAction = (Store<AppState> store) async {
   } else {
     Map<String, dynamic> vehiculesStrapiJson =
         new Map<String, dynamic>.from(responseData);
+
     final vehiculesJson = vehiculesStrapiJson['data'];
 
     final List<Vehicule> vehicules = [];

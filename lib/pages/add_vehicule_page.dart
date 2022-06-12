@@ -21,15 +21,23 @@ class AddVehiculePageState extends State<AddVehiculePage> {
 
     _getFournisseurs().then((value) {
       setState(() {
-        allFournisseurs.addAll(value);
+        populatedFournisseurs.addAll(value);
+        populatedFournisseurs.forEach((f) {
+          fournisseursNamed.add(f.attributes.nomFournisseur);
+        });
+        _dropFournisseur = fournisseursNamed[0];
       });
+
+      print(populatedFournisseurs.length);
     });
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  final List<Fournisseur> allFournisseurs = [];
+  final List<Fournisseur> populatedFournisseurs = [];
+
+  final List<String> fournisseursNamed = [];
 
   // ignore: unused_field
   bool _isSubmitting, _obscuredText = true;
@@ -37,7 +45,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
   String _matricule;
   String _typeproduit = 'HEVEA';
   String _dropDechargement = 'CAMION';
-  String _dropFournisseur = 'ETS PAC';
+  String _dropFournisseur = '';
   String _dropEtatProduit = 'BON';
   String _dropUsine = 'IRA';
 
@@ -97,33 +105,8 @@ class AddVehiculePageState extends State<AddVehiculePage> {
                     ////*
                     ///https://stackoverflow.com/questions/68651197/flutter-fill-dropdownmenuitem-from-list
                     ///*/
-                    items: <String>[
-                      'ETS PAC',
-                      'PALMEVA',
-                      'CCNC',
-                      'LANSCOOPAD',
-                      'SCOOPS PHNI',
-                      'ANITCHE',
-                      'SOCOPA SCOOPS',
-                      'SOCAJPI',
-                      'SOCOFPA COULIBALY',
-                      'JMK',
-                      'UPA',
-                      'JZA',
-                      'SOCA GRAP',
-                      'SOCOFPA DIARRA',
-                      'ABU ELUM',
-                      'SOCOPHEA',
-                      'COPANEK',
-                      'SOCOPHEPAAM',
-                      'HE RURONG',
-                      'PENQUEL SCOOPS',
-                      'CAPID ZANGRE',
-                      'AIMA',
-                      'BECOM',
-                      'SCOOPS IPA',
-                      'SCOOPS ELIM'
-                    ].map<DropdownMenuItem<String>>((String value) {
+                    items: fournisseursNamed
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value, style: TextStyle(fontSize: 12)),
@@ -384,37 +367,28 @@ class AddVehiculePageState extends State<AddVehiculePage> {
       'Accept': 'application/json'
     };
 
-    String url = 'http://rarecamion.com:1337/api/fournisseurs';
+    String url =
+        'http://rarecamion.com:1337/api/fournisseurs?pagination[limit]=50';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
-
-    //print(response.body);
 
     final List<Fournisseur> fournisseurs = [];
 
     if (response.statusCode != 200) {
       print('Failed to load Fournisseurs !');
     } else {
-      Fournisseur fournisseursRAW = Fournisseur.fromRawJson(response.body);
+      final responseData = json.decode(response.body);
 
-      final allFournisseurs = fournisseursRAW.attributes;
+      Map<String, dynamic> fournisseursStrapiJson =
+          new Map<String, dynamic>.from(responseData);
 
-      print(fournisseursRAW.attributes);
+      final fournisseursJson = fournisseursStrapiJson['data'];
+
+      fournisseursJson.forEach((fournisseur) {
+        final Fournisseur f = Fournisseur.fromJson(fournisseur);
+        fournisseurs.add(f);
+      });
     }
-/*
-      
-      
-      allFournisseurs.forEach((fournisseur) {
-          si.Datum d = datum;
-          imagesListList.add(d);
-          //print(d.attributes.url);
-        });
-      
-    }
-      
-
-    */
-
     return fournisseurs;
   }
 

@@ -26,16 +26,12 @@ class ImageItemState extends State<ImageItem> {
         await http.delete(Uri.parse(url), headers: headers);
 
     if (response.statusCode != 200) {
-      setState(() {
-        infoFlash = 'Impossible de supprimer la photo !';
-        _showSnack(infoFlash);
-      });
+      infoFlash = 'Impossible de supprimer la photo !';
     } else {
-      setState(() {
-        infoFlash = 'Suppression effectuée avec succès !';
-        _showSnack(infoFlash);
-      });
+      infoFlash = 'Suppression effectuée avec succès !';
     }
+    _showSnack(infoFlash);
+    setState(() {});
   }
 
   void _showSnack(String message) {
@@ -46,11 +42,9 @@ class ImageItemState extends State<ImageItem> {
           textAlign: TextAlign.center,
         ),
         duration: Duration(milliseconds: 1500));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
+
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/vehicules');
-    });
+    Navigator.of(context).pop();
   }
 
   Widget _showImage(si.Datum photo) {
@@ -78,14 +72,14 @@ class ImageItemState extends State<ImageItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blue.shade800,
+      color: Colors.black,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             _showImage(widget.image),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -101,7 +95,7 @@ class ImageItemState extends State<ImageItem> {
                       )) {
                         return _deletePhotoStatusVehicule(widget.image.id);
                       } else
-                        return print('pressedCancel');
+                        return (print('pressedCancel'));
                     },
                     child: Row(
                       children: [

@@ -101,19 +101,18 @@ class AddStatusPageState extends State<AddStatusPage> {
                     final form = _formKey.currentState;
                     if (form.validate()) {
                       form.save();
-                      _addVehiculeProcess(_idVehiculeRelated);
+                      _addStatusProcess(_idVehiculeRelated);
                     }
                   },
                   child: Text('Entrez le status actuel du Véhicule'),
                 ),
           TextButton(
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/vehicules'),
+              onPressed: () => Navigator.of(context).pop(),
               child: Text('Aller à vos enregistrements'))
         ]));
   }
 
-  void _addVehiculeProcess(int _idVehiculeRelated) async {
+  void _addStatusProcess(int _idVehiculeRelated) async {
     setState(() => _isSubmitting = true);
 
     Map<String, String> headers = {
@@ -135,12 +134,10 @@ class AddStatusPageState extends State<AddStatusPage> {
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
-      _redirectUser();
+      Navigator.of(context).pop();
     } else {
       setState(() => _isSubmitting = false);
-      //final String errorMsg = responseData['message'];
 
-      //Map<String, dynamic> errorMsg = responseData['message'];
       final String errorMsg = 'Impossible d\'enregistrer le status !';
       _showErrorSnack(errorMsg);
     }
@@ -151,7 +148,6 @@ class AddStatusPageState extends State<AddStatusPage> {
         content: Text('Status enregistré avec succès !',
             style: TextStyle(color: Colors.green)),
         duration: Duration(milliseconds: 3000));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
   }
@@ -160,15 +156,7 @@ class AddStatusPageState extends State<AddStatusPage> {
     final snackbar = SnackBar(
         content: Text(errorMsg, style: TextStyle(color: Colors.red)),
         duration: Duration(milliseconds: 3000));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    //throw Exception('Erreur : $errorMsg');
-  }
-
-  void _redirectUser() {
-    Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/vehicules');
-    });
   }
 
   final _appBar = PreferredSize(
