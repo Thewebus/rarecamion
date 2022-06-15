@@ -135,23 +135,10 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                   ]),
                 ),
                 const SizedBox(height: 10),
-
-                ///TODO: Add confirmation process with SWITCH button  ...
-                ////*
-                ///https://medium.com/@maadhavsharma/a-short-tutorial-on-how-to-develop-a-switch-button-in-flutter-a123e46b69d1
-                ///*/
-                /*
-                Switch(value: isSwitched, onChanged: (value){
-            setState(() {
-              isSwitched=value;
-              print(isSwitched);
-            });
-          },)
-          */
                 Text(
                   infoFlash,
                   style: const TextStyle(
-                      color: Color.fromARGB(255, 8, 8, 8),
+                      color: Colors.black,
                       fontSize: 11,
                       fontWeight: FontWeight.normal),
                 ),

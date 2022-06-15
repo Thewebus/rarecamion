@@ -83,13 +83,13 @@ class LoginPageState extends State<LoginPage> {
                           .bodyText2
                           .copyWith(color: Colors.white)),
                   onPressed: _submit),
-          TextButton(
-              child: Text(
-                'Pas de compte ? Inscrivez-vous !',
-                style: TextStyle(fontSize: 12),
-              ),
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, '/register'))
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            'Pas de compte ? Contactez la Direction !',
+            style: TextStyle(fontSize: 12),
+          )
         ]));
   }
 
@@ -114,6 +114,8 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _loginUser() async {
+    bool _errorValue = false;
+
     setState(() => _isSubmitting = true);
     http.Response response = await http.post(
         Uri.parse('http://rarecamion.com:1337/api/auth/local'),
@@ -129,18 +131,29 @@ class LoginPageState extends State<LoginPage> {
 
       final User usr = User.fromJson(userJson);
 
-      _storeUserData(rBody);
-      setState(() => _isSubmitting = false);
-      _showSuccessSnack();
+      if (usr.confirmed != true) _errorValue = true;
+      if (usr.blocked == true) _errorValue = true;
 
-      if (usr.status == 'administration') {
-        _redirectAdmin();
+      if (_errorValue == true) {
+        setState(() => _isSubmitting = false);
+        final String errorMsg =
+            'Contactez la Direction, pour vos autorisations !';
+        _showErrorSnack(errorMsg);
       } else {
-        _redirectUser();
+        _storeUserData(rBody);
+        setState(() => _isSubmitting = false);
+        _showSuccessSnack();
+
+        if (usr.status == 'administration') {
+          _redirectAdmin();
+        } else {
+          _redirectUser();
+        }
       }
     } else {
       setState(() => _isSubmitting = false);
-      final String errorMsg = 'Identifiants incorrects !';
+      final String errorMsg =
+          'Identifiants incorrects : ${response.statusCode}';
       _showErrorSnack(errorMsg);
     }
   }
@@ -159,7 +172,7 @@ class LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Colors.green),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(milliseconds: 500));
+        duration: Duration(seconds: 2));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
@@ -172,7 +185,7 @@ class LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
         ),
-        duration: Duration(milliseconds: 1000));
+        duration: Duration(seconds: 3));
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 

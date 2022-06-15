@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
+import 'package:rarecamion/models/fournisseur.dart';
+import 'package:http/http.dart' as http;
+
+class FournisseursItem extends StatefulWidget {
+  final Fournisseur fournisseur;
+  const FournisseursItem({Key key, this.fournisseur}) : super(key: key);
+
+  @override
+  State<FournisseursItem> createState() => _FournisseursItemState();
+}
+
+class _FournisseursItemState extends State<FournisseursItem> {
+  @override
+  initState() {
+    super.initState();
+  }
+
+  bool _toggleValue = true;
+
+  void _deleteFournisseur(int _fID) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    String infoFlash = '';
+    String url = 'http://rarecamion.com:1337/api/fournisseurs/$_fID';
+
+    http.Response response =
+        await http.delete(Uri.parse(url), headers: headers);
+
+    if (response.statusCode != 200) {
+      infoFlash = 'Impossible de supprimer le fournisseur !';
+    } else {
+      infoFlash = 'Suppression effectuée avec succès !';
+    }
+    _showSnack(infoFlash);
+    setState(() {});
+  }
+
+  void _showSnack(String message) {
+    final snackbar = SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.green),
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(milliseconds: 1500));
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    // Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        onTap: () => () {},
+        tileColor: Colors.blueAccent,
+        title: Row(
+          children: [
+            Icon(
+              Icons.account_box,
+              color: Colors.blue,
+              size: 20,
+            ),
+            Text('${widget.fournisseur.attributes.nomFournisseur}',
+                style: TextStyle(fontSize: 16.0)),
+          ],
+        ),
+        subtitle: Text('${widget.fournisseur.attributes.detailsFournisseur}',
+            style: TextStyle(fontSize: 12.0)),
+        trailing: IconButton(
+            iconSize: 30,
+            icon: Icon(Icons.delete),
+            color: Colors.red,
+            onPressed: () async {
+              if (await confirm(
+                context,
+                title: const Text('Confirmez '),
+                content: Text(
+                    'Voulez-vous vraiment SUPPRIMER ${widget.fournisseur.attributes.nomFournisseur} ?'),
+                textOK: const Text('Oui'),
+                textCancel: const Text('Non'),
+              )) {
+                return _deleteFournisseur(widget.fournisseur.id);
+              } else
+                return (print('pressedCancel'));
+            }));
+  }
+}

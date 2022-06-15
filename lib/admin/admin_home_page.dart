@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rarecamion/admin/fournisseurs_page.dart';
+import 'package:rarecamion/admin/records_page.dart';
+import 'package:rarecamion/admin/usersList_page.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
@@ -12,15 +15,12 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class AdminHomePageState extends State<AdminHomePage> {
+  int _currentIndex = 0;
+  List _screens = [UsersList(), FournisseursPage(), RecordingsPage()];
+
   void initState() {
     super.initState();
     widget.onInit();
-  }
-
-  void _redirectToUsersListPage() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      Navigator.pushReplacementNamed(context, '/adminUsersList');
-    });
   }
 
   final _appBar = PreferredSize(
@@ -34,7 +34,9 @@ class AdminHomePageState extends State<AdminHomePage> {
                     state.user != null ? Icon(Icons.account_box) : Text(''),*/
                 title: SizedBox(
                     child: state.user != null
-                        ? Text(state.user.username)
+                        ? Text(
+                            state.user.username,
+                          )
                         : Text('')),
                 actions: [
                   Padding(
@@ -54,111 +56,60 @@ class AdminHomePageState extends State<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // bool _isLoggedIn = true;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _appBar,
-      body: Container(
+      body: SingleChildScrollView(child: _screens[_currentIndex]),
+      bottomNavigationBar: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (_, state) {
+            return state.user != null
+                ? NavigationBar(
+                    destinations: const [
+                      NavigationDestination(
+                          icon: Icon(Icons.account_circle), label: 'Agents'),
+                      NavigationDestination(
+                          icon: Icon(Icons.handshake), label: 'Fournisseurs'),
+                      NavigationDestination(
+                          icon: Icon(Icons.search), label: 'Recherche'),
+                    ],
+                    onDestinationSelected: (int index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                    selectedIndex: _currentIndex,
+                  )
+                : DeconnexionWidget();
+          }),
+    );
+  }
+}
 
-          //padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: StoreConnector<AppState, AppState>(
-              converter: (store) => store.state,
-              builder: (_, state) {
-                return state.user != null
-                    ? Row(children: [
-                        Expanded(
-                          child: SafeArea(
-                              top: false,
-                              bottom: false,
-                              child: Center(
-                                child: SingleChildScrollView(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            _redirectToUsersListPage();
-                                          },
-                                          child: Card(
-                                            color: Color.fromARGB(
-                                                255, 240, 40, 15),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text('UTILISATEURS',
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    255,
-                                                                    255,
-                                                                    255))),
-                                                  ]),
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('onTap');
-                                          },
-                                          child: Card(
-                                            color: Color.fromARGB(
-                                                255, 216, 216, 216),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text('ENREGISTREMENTS',
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    255,
-                                                                    255,
-                                                                    255))),
-                                                  ]),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )),
-                        ),
-                      ])
-                    : Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              'Vous êtes deconnecté(e) avec succès',
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                            SizedBox(height: 10),
-                            ElevatedButton(
-                                onPressed: () => Navigator.pushReplacementNamed(
-                                    context, '/login'),
-                                child: Text('Aller à l\'accueil'))
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                        ),
-                      );
-              })),
+class DeconnexionWidget extends StatelessWidget {
+  const DeconnexionWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            'Vous êtes deconnecté(e) avec succès',
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/login'),
+              child: Text('Aller à l\'accueil'))
+        ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+      ),
     );
   }
 }

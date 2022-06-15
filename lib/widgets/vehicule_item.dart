@@ -18,8 +18,6 @@ class VehiculeItem extends StatefulWidget {
   VehiculeItemState createState() => VehiculeItemState();
 
   final StatusVehicule statusVehicule = null;
-  //VehiculeItem({this.vehicule});
-
 }
 
 class VehiculeItemState extends State<VehiculeItem> {
@@ -134,7 +132,7 @@ class VehiculeItemState extends State<VehiculeItem> {
             _lastStatus.length > 3
                 ? Text(_lastStatus,
                     style: TextStyle(fontSize: 10.0, color: Colors.green))
-                : Text('AUCUN STATUS',
+                : Text('N/A',
                     style: TextStyle(fontSize: 10.0, color: Colors.red))
           ],
         ),

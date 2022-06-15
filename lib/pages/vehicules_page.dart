@@ -85,24 +85,7 @@ class RecordingsPageState extends State<VehiculesPage> {
                                           const Divider())),
                         )
                       ])
-                    : Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              'Vous êtes deconnecté(e) avec succès',
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                            SizedBox(height: 10),
-                            ElevatedButton(
-                                onPressed: () => Navigator.pushReplacementNamed(
-                                    context, '/login'),
-                                child: Text('Aller à l\'accueil'))
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                        ),
-                      );
+                    : DeconnexionWidget();
               })),
       floatingActionButton: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
@@ -116,6 +99,34 @@ class RecordingsPageState extends State<VehiculesPage> {
                   )
                 : Text('');
           }),
+    );
+  }
+}
+
+class DeconnexionWidget extends StatelessWidget {
+  const DeconnexionWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Text(
+            'Vous êtes deconnecté(e) avec succès',
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/login'),
+              child: Text('Aller à l\'accueil'))
+        ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+      ),
     );
   }
 }

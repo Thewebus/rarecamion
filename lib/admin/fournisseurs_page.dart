@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:rarecamion/widgets/user_item.dart';
+import 'package:rarecamion/widgets/fournisseur_item.dart';
 
-class UsersList extends StatefulWidget {
-  UsersList();
+class FournisseursPage extends StatefulWidget {
+  FournisseursPage({Key key}) : super(key: key);
 
   @override
-  UsersListState createState() => UsersListState();
+  State<FournisseursPage> createState() => _FournisseursPageState();
 }
 
-class UsersListState extends State<UsersList> {
-  void initState() {
-    super.initState();
-  }
-
+class _FournisseursPageState extends State<FournisseursPage> {
   @override
   Widget build(BuildContext context) {
     // bool _isLoggedIn = true;
@@ -40,16 +36,18 @@ class UsersListState extends State<UsersList> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   children: [
-                                    Text('AGENTS',
+                                    Text('FOURNISSEURS',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline1),
                                     SizedBox(height: 5),
                                     ListView.separated(
                                         shrinkWrap: true,
-                                        itemCount: state.usersList.length,
-                                        itemBuilder: (context, i) => UserItem(
-                                              user: state.usersList[i],
+                                        itemCount: state.fournisseurs.length,
+                                        itemBuilder: (context, i) =>
+                                            FournisseursItem(
+                                              fournisseur:
+                                                  state.fournisseurs[i],
                                             ),
                                         separatorBuilder:
                                             (BuildContext context, int index) =>

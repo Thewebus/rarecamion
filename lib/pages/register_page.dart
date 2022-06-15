@@ -120,6 +120,8 @@ class RegisterPageState extends State<RegisterPage> {
         body: {"username": _username, "email": _email, "password": _password});
 
     final responseData = json.decode(response.body);
+
+    print(responseData);
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
       storeUserData(responseData);

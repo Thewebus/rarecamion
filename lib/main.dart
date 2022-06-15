@@ -47,12 +47,10 @@ class MyApp extends StatelessWidget {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context)
                       .dispatch(getUsersListAction);
-                }),
-            '/adminUsersList': (BuildContext context) => UsersList(onInit: () {
-                  StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context)
-                      .dispatch(getUsersListAction);
+                      .dispatch(getFournisseursAction);
                 }),
+            '/adminUsersList': (BuildContext context) => UsersList(),
           },
           theme: ThemeData(
             primaryColor: Colors.blue,
