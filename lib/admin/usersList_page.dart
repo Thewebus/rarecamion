@@ -45,15 +45,19 @@ class UsersListState extends State<UsersList> {
                                             .textTheme
                                             .headline1),
                                     SizedBox(height: 5),
-                                    ListView.separated(
-                                        shrinkWrap: true,
-                                        itemCount: state.usersList.length,
-                                        itemBuilder: (context, i) => UserItem(
-                                              user: state.usersList[i],
-                                            ),
-                                        separatorBuilder:
-                                            (BuildContext context, int index) =>
-                                                const Divider()),
+                                    Container(
+                                      height: 365,
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemCount: state.usersList.length,
+                                          itemBuilder: (context, i) => UserItem(
+                                                user: state.usersList[i],
+                                              ),
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                      int index) =>
+                                                  const Divider()),
+                                    ),
                                   ],
                                 ),
                               )),

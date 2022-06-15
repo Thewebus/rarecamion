@@ -41,17 +41,21 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                             .textTheme
                                             .headline1),
                                     SizedBox(height: 5),
-                                    ListView.separated(
-                                        shrinkWrap: true,
-                                        itemCount: state.fournisseurs.length,
-                                        itemBuilder: (context, i) =>
-                                            FournisseursItem(
-                                              fournisseur:
-                                                  state.fournisseurs[i],
-                                            ),
-                                        separatorBuilder:
-                                            (BuildContext context, int index) =>
-                                                const Divider()),
+                                    Container(
+                                      height: 365,
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemCount: state.fournisseurs.length,
+                                          itemBuilder: (context, i) =>
+                                              FournisseursItem(
+                                                fournisseur:
+                                                    state.fournisseurs[i],
+                                              ),
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                      int index) =>
+                                                  const Divider()),
+                                    ),
                                   ],
                                 ),
                               )),
@@ -76,6 +80,13 @@ class _FournisseursPageState extends State<FournisseursPage> {
                         ),
                       );
               })),
+      floatingActionButton: FloatingActionButton(
+        mini: true,
+        backgroundColor: Colors.red,
+        onPressed: null,
+        tooltip: 'Ajouter nouveau véhicule ...',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

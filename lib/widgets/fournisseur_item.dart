@@ -60,18 +60,17 @@ class _FournisseursItemState extends State<FournisseursItem> {
         title: Row(
           children: [
             Icon(
-              Icons.account_box,
+              Icons.handshake_outlined,
               color: Colors.blue,
               size: 20,
             ),
             Text('${widget.fournisseur.attributes.nomFournisseur}',
-                style: TextStyle(fontSize: 16.0)),
+                style: TextStyle(fontSize: 18.0)),
           ],
         ),
-        subtitle: Text('${widget.fournisseur.attributes.detailsFournisseur}',
-            style: TextStyle(fontSize: 12.0)),
+        subtitle: Text(''),
         trailing: IconButton(
-            iconSize: 30,
+            iconSize: 25,
             icon: Icon(Icons.delete),
             color: Colors.red,
             onPressed: () async {

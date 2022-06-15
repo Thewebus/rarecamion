@@ -59,7 +59,10 @@ class AdminHomePageState extends State<AdminHomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _appBar,
-      body: SingleChildScrollView(child: _screens[_currentIndex]),
+      body: Container(
+          // width: 400,
+          padding: const EdgeInsets.all(1),
+          child: _screens[_currentIndex]),
       bottomNavigationBar: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (_, state) {
