@@ -76,13 +76,14 @@ class RecordingsPageState extends State<VehiculesPage> {
                               top: false,
                               bottom: false,
                               child: ListView.separated(
-                                  itemCount: state.vehicules.length,
-                                  itemBuilder: (context, i) => VehiculeItem(
-                                        vehicule: state.vehicules[i],
-                                      ),
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                          const Divider())),
+                                itemCount: state.vehicules.length,
+                                itemBuilder: (context, i) => VehiculeItem(
+                                  vehicule: state.vehicules[i],
+                                ),
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const Divider(),
+                              )),
                         )
                       ])
                     : DeconnexionWidget();

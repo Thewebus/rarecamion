@@ -126,7 +126,8 @@ ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
     'Accept': 'application/json'
   };
 
-  String url = 'http://rarecamion.com:1337/api/fournisseurs';
+  String url =
+      'http://rarecamion.com:1337/api/fournisseurs?pagination[limit]=100';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 

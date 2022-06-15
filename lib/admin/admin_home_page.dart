@@ -29,6 +29,7 @@ class AdminHomePageState extends State<AdminHomePage> {
           converter: (store) => store.state,
           builder: (context, state) {
             return AppBar(
+                automaticallyImplyLeading: false,
                 centerTitle: true,
                 /*leading:
                     state.user != null ? Icon(Icons.account_box) : Text(''),*/

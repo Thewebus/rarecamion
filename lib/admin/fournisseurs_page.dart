@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:rarecamion/widgets/fournisseur_item.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -22,6 +21,30 @@ class _FournisseursPageState extends State<FournisseursPage> {
   bool _isSubmitting, _obscuredText = true;
 
   //
+  Future<bool> _deleteFournisseur(int _fID) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    String infoFlash = '';
+    bool _return = false;
+    String url = 'http://rarecamion.com:1337/api/fournisseurs/$_fID';
+
+    http.Response response =
+        await http.delete(Uri.parse(url), headers: headers);
+
+    if (response.statusCode != 200) {
+      infoFlash = 'Impossible de supprimer le fournisseur !';
+      _showErrorSnackText(infoFlash);
+    } else {
+      infoFlash = 'Suppression effectuée avec succès !';
+      _showSuccessSnackText(infoFlash);
+      _return = true;
+    }
+
+    return _return;
+  }
+
   //
   void _addFournisseurProcess() async {
     setState(() => _isSubmitting = true);
@@ -38,19 +61,14 @@ class _FournisseursPageState extends State<FournisseursPage> {
           "data": {"nomFournisseur": _nomFournisseur}
         }));
 
-    //final responseData = json.decode(response.body);
-
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
-      // _redirectUser();
     } else {
       setState(() => _isSubmitting = false);
-      //final String errorMsg = responseData['message'];
-
-      //Map<String, dynamic> errorMsg = responseData['message'];
       _showErrorSnack();
     }
+    _redirectUser();
   }
 
   //
@@ -59,7 +77,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
         content: Text(
             'Le Fournisseur mat: $_nomFournisseur a été enregistré avec succès !',
             style: TextStyle(color: Colors.green)),
-        duration: Duration(milliseconds: 2000));
+        duration: Duration(seconds: 3));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
@@ -69,12 +87,30 @@ class _FournisseursPageState extends State<FournisseursPage> {
     final snackbar = SnackBar(
         content: Text('Impossible d\'enregistrer le Fournisseur !',
             style: TextStyle(color: Colors.red)),
-        duration: Duration(milliseconds: 3000));
+        duration: Duration(seconds: 5));
     //_scaffoldKey.currentState.showSnackBar(snackbar);
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     //throw Exception('Erreur : $errorMsg');
   }
 
+  void _showSuccessSnackText(String _text) {
+    final snackbar = SnackBar(
+        content: Text('$_text', style: TextStyle(color: Colors.green)),
+        duration: Duration(seconds: 3));
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  void _showErrorSnackText(String _text) {
+    final snackbar = SnackBar(
+        content: Text('$_text', style: TextStyle(color: Colors.red)),
+        duration: Duration(seconds: 5));
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  void _redirectUser() {
+    setState(() => null);
+    Navigator.pushReplacementNamed(context, '/adminHome');
+  }
   //
 
   Widget _showFournisseurInput() {
@@ -106,7 +142,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                       _addFournisseurProcess();
                     }
                   },
-                  child: Text('ENREGISTRER'),
+                  child: Text('ENREGISTRER FOURNISSEUR'),
                 ),
         ]));
   }
@@ -132,6 +168,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
         ),
         buttons: [
           DialogButton(
+            color: Colors.redAccent,
             onPressed: () => Navigator.pop(context),
             child: Text(
               "ANNULER",
@@ -175,17 +212,69 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                     Container(
                                       height: 365,
                                       child: ListView.separated(
-                                          shrinkWrap: true,
-                                          itemCount: state.fournisseurs.length,
-                                          itemBuilder: (context, i) =>
-                                              FournisseursItem(
-                                                fournisseur:
-                                                    state.fournisseurs[i],
+                                        shrinkWrap: true,
+                                        itemCount: state.fournisseurs.length,
+                                        itemBuilder: (context, i) {
+                                          return Dismissible(
+                                            key: UniqueKey(),
+
+                                            // only allows the user swipe from right to left
+                                            direction:
+                                                DismissDirection.endToStart,
+
+                                            // Remove this product from the list
+                                            // In production enviroment, you may want to send some request to delete it on server side
+                                            onDismissed: (_) async {
+                                              setState(() {
+                                                if (_deleteFournisseur(state
+                                                        .fournisseurs[i].id) !=
+                                                    false)
+                                                  state.fournisseurs
+                                                      .removeAt(i);
+                                              });
+                                              return null;
+                                            },
+                                            child: ListTile(
+                                                onTap: () => () {},
+                                                tileColor: Colors.blueAccent,
+                                                title: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.handshake_outlined,
+                                                      color: Colors.blue,
+                                                      size: 30,
+                                                    ),
+                                                    Text(
+                                                        '${state.fournisseurs[i].attributes.nomFournisseur}',
+                                                        style: TextStyle(
+                                                            fontSize: 14.0)),
+                                                  ],
+                                                ),
+                                                subtitle: Text(
+                                                    'Supprimer: glisser vers la gauche'),
+                                                trailing: IconButton(
+                                                  onPressed: () => () {},
+                                                  iconSize: 25,
+                                                  icon: Icon(Icons.arrow_back),
+                                                  color: Colors.red,
+                                                )),
+                                            background: Container(
+                                              color: Colors.red,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
+                                              alignment: Alignment.centerRight,
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
                                               ),
-                                          separatorBuilder:
-                                              (BuildContext context,
-                                                      int index) =>
-                                                  const Divider()),
+                                            ),
+                                          );
+                                        },
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -212,8 +301,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                       );
               })),
       floatingActionButton: FloatingActionButton(
-        mini: true,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black,
         onPressed: () => _onAlertWithCustomContentPressed(context),
         tooltip: 'Ajouter nouveau Fournisseur ...',
         child: Icon(Icons.add),

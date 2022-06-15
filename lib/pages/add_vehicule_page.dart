@@ -368,7 +368,7 @@ class AddVehiculePageState extends State<AddVehiculePage> {
     };
 
     String url =
-        'http://rarecamion.com:1337/api/fournisseurs?pagination[limit]=50';
+        'http://rarecamion.com:1337/api/fournisseurs?pagination[limit]=100';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 

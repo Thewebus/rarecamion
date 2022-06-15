@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 
 class FournisseursItem extends StatefulWidget {
   final Fournisseur fournisseur;
-  const FournisseursItem({Key key, this.fournisseur}) : super(key: key);
+  final int fIndex;
+  const FournisseursItem({Key key, this.fournisseur, this.fIndex})
+      : super(key: key);
 
   @override
   State<FournisseursItem> createState() => _FournisseursItemState();
@@ -16,8 +18,6 @@ class _FournisseursItemState extends State<FournisseursItem> {
   initState() {
     super.initState();
   }
-
-  bool _toggleValue = true;
 
   void _deleteFournisseur(int _fID) async {
     Map<String, String> headers = {
@@ -36,7 +36,7 @@ class _FournisseursItemState extends State<FournisseursItem> {
       infoFlash = 'Suppression effectuée avec succès !';
     }
     _showSnack(infoFlash);
-    setState(() {});
+    // setState(() => null);
   }
 
   void _showSnack(String message) {
@@ -62,10 +62,10 @@ class _FournisseursItemState extends State<FournisseursItem> {
             Icon(
               Icons.handshake_outlined,
               color: Colors.blue,
-              size: 20,
+              size: 30,
             ),
             Text('${widget.fournisseur.attributes.nomFournisseur}',
-                style: TextStyle(fontSize: 18.0)),
+                style: TextStyle(fontSize: 14.0)),
           ],
         ),
         subtitle: Text(''),
