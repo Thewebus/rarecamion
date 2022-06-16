@@ -147,7 +147,6 @@ class _FournisseursPageState extends State<FournisseursPage> {
         ]));
   }
 
-  //
   // Alert custom content
   _onAlertWithCustomContentPressed(context) {
     Alert(
@@ -208,7 +207,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline1),
-                                    SizedBox(height: 5),
+                                    SizedBox(height: 10),
                                     Container(
                                       height: 365,
                                       child: ListView.separated(

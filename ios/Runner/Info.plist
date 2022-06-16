@@ -49,5 +49,7 @@
 		<string>Cette applicaton pourrait utiliser votre galerie photo</string>
 		<key>NSCameraUsageDescription</key>
 		<string>Cette applicaton pourrait utiliser votre appareil photo</string>
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 	</dict>
 </plist>

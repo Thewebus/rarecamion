@@ -49,6 +49,8 @@ class MyApp extends StatelessWidget {
                       .dispatch(getUsersListAction);
                   StoreProvider.of<AppState>(context)
                       .dispatch(getFournisseursAction);
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(getVehiculesAction);
                 }),
             '/adminUsersList': (BuildContext context) => UsersList(),
           },
