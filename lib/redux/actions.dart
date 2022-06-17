@@ -38,7 +38,7 @@ class LogoutUserAction {
   LogoutUserAction(this._user);
 }
 
-/// VEHICULES
+/// VEHICULES BY AGENTS
 /* Getting VEHICULES Actions by User */
 ThunkAction<AppState> getVehiculesAction = (Store<AppState> store) async {
 //Getting the USER here ...
@@ -79,7 +79,7 @@ ThunkAction<AppState> getVehiculesAction = (Store<AppState> store) async {
 
 class GetVehiculesAction {
   final List<Vehicule> _vehicules;
-  List<Vehicule> get recordings => this._vehicules;
+  List<Vehicule> get vehicules => this._vehicules;
   GetVehiculesAction(this._vehicules);
 }
 
@@ -194,4 +194,42 @@ class GetUsersListAction {
   final List<User> _usersList;
   List<User> get usersList => this._usersList;
   GetUsersListAction(this._usersList);
+}
+
+/// VEHICULES ALL (BY ADMINS)
+/* Getting VEHICULES Actions by Admins */
+ThunkAction<AppState> getVehiculesAllAction = (Store<AppState> store) async {
+//Getting the VEHICULES here ...
+  Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
+  String url =
+      'http://rarecamion.com:1337/api/vehicules?populate=*&sort[0]=updatedAt:desc';
+
+  http.Response response = await http.get(Uri.parse(url), headers: headers);
+
+  final responseData = json.decode(response.body);
+
+  if (response.statusCode != 200) {
+    print(responseData);
+  } else {
+    Map<String, dynamic> vehiculesStrapiJson =
+        new Map<String, dynamic>.from(responseData);
+
+    final vehiculesJson = vehiculesStrapiJson['data'];
+
+    final List<Vehicule> vehicules = [];
+    vehiculesJson.forEach((vehiculeJson) {
+      final Vehicule vehicule = Vehicule.fromJson(vehiculeJson);
+      vehicules.add(vehicule);
+    });
+    store.dispatch(GetVehiculesAllAction(vehicules));
+  }
+};
+
+class GetVehiculesAllAction {
+  final List<Vehicule> _vehiculesAll;
+  List<Vehicule> get vehiculesall => this._vehiculesAll;
+  GetVehiculesAllAction(this._vehiculesAll);
 }

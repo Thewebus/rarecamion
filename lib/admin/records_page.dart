@@ -25,10 +25,17 @@ class _RecordingsPageState extends State<RecordingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: [0.1, 0.2],
+                  colors: const [Colors.lightBlueAccent, Colors.white])),
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
               builder: (_, state) {
-                return state.vehicules == null
+                print(state.vehiculesAll);
+                return state.vehiculesAll == null
                     ? Center(
                         child: Text('Vérifiez votre connexion !'),
                       )
@@ -38,9 +45,9 @@ class _RecordingsPageState extends State<RecordingsPage> {
                               top: false,
                               bottom: false,
                               child: ListView.separated(
-                                itemCount: state.vehicules.length,
+                                itemCount: state.vehiculesAll.length,
                                 itemBuilder: (context, i) => VehiculeItem(
-                                  vehicule: state.vehicules[i],
+                                  vehicule: state.vehiculesAll[i],
                                 ),
                                 separatorBuilder:
                                     (BuildContext context, int index) =>
