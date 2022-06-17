@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/engines/app_state.dart';
+import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/widgets/vehicule_item.dart';
 import 'package:search_page/search_page.dart';
 
@@ -12,6 +13,9 @@ class RecordingsPage extends StatefulWidget {
 }
 
 class _RecordingsPageState extends State<RecordingsPage> {
+  //
+  static List<Vehicule> vehiculesAll = [];
+  //
   //
   static List<Person> people = [
     Person('Mike', 'Barron', 64),
@@ -34,7 +38,9 @@ class _RecordingsPageState extends State<RecordingsPage> {
           child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
               builder: (_, state) {
-                print(state.vehiculesAll);
+                vehiculesAll.addAll(state.vehiculesAll);
+                print(vehiculesAll);
+
                 return state.vehiculesAll == null
                     ? Center(
                         child: Text('Vérifiez votre connexion !'),
@@ -44,41 +50,57 @@ class _RecordingsPageState extends State<RecordingsPage> {
                           child: SafeArea(
                               top: false,
                               bottom: false,
-                              child: ListView.separated(
-                                itemCount: state.vehiculesAll.length,
-                                itemBuilder: (context, i) => VehiculeItem(
-                                  vehicule: state.vehiculesAll[i],
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    Text('VEHICULES RECENTS',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline1),
+                                    SizedBox(height: 20),
+                                    Container(
+                                      height: 430,
+                                      child: ListView.separated(
+                                        itemCount: state.vehiculesAll.length,
+                                        itemBuilder: (context, i) =>
+                                            VehiculeItem(
+                                          vehicule: state.vehiculesAll[i],
+                                        ),
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const Divider(),
                               )),
                         )
                       ]);
               })),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Taper votre recherche ...',
+        tooltip: 'Tapez votre recherche ...',
         onPressed: () => showSearch(
           context: context,
-          delegate: SearchPage<Person>(
+          delegate: SearchPage<Vehicule>(
             onQueryUpdate: (s) => print(s),
-            items: people,
-            searchLabel: 'Search people',
+            items: vehiculesAll,
+            searchLabel: 'Recherche ...',
             suggestion: Center(
               child: Text('Rechercher par fournisseur, lieu ou date.'),
             ),
             failure: Center(
               child: Text('No person found :('),
             ),
-            filter: (person) => [
-              person.name,
-              person.surname,
-              person.age.toString(),
+            filter: (vehicule) => [
+              vehicule.attributes.matricule,
+              vehicule.attributes.fournisseur,
+              vehicule.attributes.updatedAt.toString(),
             ],
-            builder: (person) => ListTile(
-              title: Text(person.name),
-              subtitle: Text(person.surname),
-              trailing: Text('${person.age} yo'),
+            builder: (vehicule) => ListTile(
+              title: Text(vehicule.attributes.matricule),
+              subtitle: Text(vehicule.attributes.fournisseur),
+              trailing: Text(''),
             ),
           ),
         ),

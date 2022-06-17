@@ -33,9 +33,7 @@ class StatusItemState extends State<StatusItem> {
   Widget _showFormActions() {
     return Column(children: [
       _isSubmitting == true
-          ? CircularProgressIndicator(
-              strokeWidth: 2,
-            )
+          ? LinearProgressIndicator()
           : Text(_msg,
               style: TextStyle(
                   color: Colors.white,
