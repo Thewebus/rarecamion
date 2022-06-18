@@ -50,6 +50,7 @@ class _RecordingsPageState extends State<RecordingsPage> {
                       ]);
               })),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         tooltip: 'Taper votre recherche ...',
         onPressed: () => showSearch(
           context: context,
