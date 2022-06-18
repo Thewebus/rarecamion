@@ -207,9 +207,9 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline1),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: 20),
                                     Container(
-                                      height: 365,
+                                      height: 430,
                                       child: ListView.separated(
                                         shrinkWrap: true,
                                         itemCount: state.fournisseurs.length,

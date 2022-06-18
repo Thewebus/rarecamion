@@ -8,6 +8,8 @@ import 'package:rarecamion/models/status_vehicule.dart';
 class AppState {
   final User user;
   final List<Vehicule> vehicules;
+  final List<Vehicule> vehiculesAll;
+
   final List<StatusVehicule> vehiculeAllStatus;
   final List<Fournisseur> fournisseurs;
   final List<User> usersList;
@@ -15,6 +17,7 @@ class AppState {
   AppState(
       {@required this.user,
       @required this.vehicules,
+      @required this.vehiculesAll,
       @required this.vehiculeAllStatus,
       @required this.fournisseurs,
       @required this.usersList});
@@ -23,6 +26,7 @@ class AppState {
     return AppState(
         user: null,
         vehicules: [],
+        vehiculesAll: [],
         vehiculeAllStatus: [],
         fournisseurs: [],
         usersList: []);

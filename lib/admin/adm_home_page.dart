@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rarecamion/admin/fournisseurs_page.dart';
-import 'package:rarecamion/admin/records_page.dart';
-import 'package:rarecamion/admin/usersList_page.dart';
+import 'package:rarecamion/admin/adm_fournisseurs_page.dart';
+import 'package:rarecamion/admin/adm_vehicules_page.dart';
+import 'package:rarecamion/admin/adm_agents_page.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/redux/actions.dart';
