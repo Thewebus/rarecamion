@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:rarecamion/admin/items/adm_vehicule_item.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
-import 'package:rarecamion/widgets/vehicule_item.dart';
 import 'package:search_page/search_page.dart';
 
 class RecordingsPage extends StatefulWidget {

@@ -24,7 +24,7 @@ class StatusItem extends StatefulWidget {
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
   //String _msg = 'PHOTOS: double-cliquer | VIDEOS: maintenir';
-  String _msg = 'PHOTOS: double-cliquer';
+  String _msg = 'PRENDRE UNE PHOTO: double-cliquer !';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
@@ -79,11 +79,10 @@ class StatusItemState extends State<StatusItem> {
       setState(() => _msg = 'Patientez svp ...');
       setState(() => _isSubmitting = false);
       if (response.statusCode == 200) {
-        setState(() => _msg = 'Succès !');
-        print("Uploaded!");
+        setState(() => _msg = 'Photo envoyée ! Toucher pour ouvrir.');
       } else {
-        setState(() => _msg = 'Erreur ... réessayer svp !');
-        print("Not Uploaded!");
+        setState(
+            () => _msg = 'ERREUR ! Vérifiez votre connexion et ré essayer.');
       }
     });
   }

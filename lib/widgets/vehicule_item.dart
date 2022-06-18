@@ -121,19 +121,15 @@ class VehiculeItemState extends State<VehiculeItem> {
             Icon(Icons.car_repair),
             Text('Mat. ', style: TextStyle(fontSize: 11.0)),
             Text('${widget.vehicule.attributes.matricule}',
-                style: TextStyle(fontSize: 16.0)),
+                style: TextStyle(fontSize: 18.0)),
           ],
         ),
         subtitle: Row(
           children: [
-            Text(
-                '${widget.vehicule.attributes.dechargement} - ${widget.vehicule.attributes.fournisseur} - ',
-                style: TextStyle(fontSize: 12.0)),
-            _lastStatus.length > 3
-                ? Text(_lastStatus,
-                    style: TextStyle(fontSize: 10.0, color: Colors.green))
-                : Text('N/A',
-                    style: TextStyle(fontSize: 10.0, color: Colors.red))
+            Text('${widget.vehicule.attributes.fournisseur}',
+                style: TextStyle(fontSize: 12.0, color: Colors.blueAccent)),
+            Text(' @${widget.vehicule.attributes.dechargement}',
+                style: TextStyle(fontSize: 11.0)),
           ],
         ),
         trailing: StoreConnector<AppState, AppState>(

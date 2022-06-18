@@ -72,7 +72,7 @@ class ImageItemState extends State<ImageItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.black,
+      color: Colors.blue.shade800,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
