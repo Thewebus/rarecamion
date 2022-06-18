@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rarecamion/admin/adm_fournisseurs_page.dart';
-import 'package:rarecamion/admin/adm_vehicules_page.dart';
+import 'package:rarecamion/admin/adm_dashboard_page.dart';
 import 'package:rarecamion/admin/adm_agents_page.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -16,7 +16,7 @@ class AdminHomePage extends StatefulWidget {
 
 class AdminHomePageState extends State<AdminHomePage> {
   int _currentIndex = 0;
-  List _screens = [UsersList(), FournisseursPage(), RecordingsPage()];
+  List _screens = [RecordingsPage(), UsersList(), FournisseursPage()];
 
   void initState() {
     super.initState();
@@ -71,11 +71,12 @@ class AdminHomePageState extends State<AdminHomePage> {
                 ? NavigationBar(
                     destinations: const [
                       NavigationDestination(
+                          icon: Icon(Icons.dashboard),
+                          label: 'Tableau de bord'),
+                      NavigationDestination(
                           icon: Icon(Icons.account_circle), label: 'Agents'),
                       NavigationDestination(
                           icon: Icon(Icons.handshake), label: 'Fournisseurs'),
-                      NavigationDestination(
-                          icon: Icon(Icons.search), label: 'Recherche'),
                     ],
                     onDestinationSelected: (int index) {
                       setState(() {

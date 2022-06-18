@@ -16,15 +16,6 @@ class _RecordingsPageState extends State<RecordingsPage> {
   //
   static List<Vehicule> vehiculesAll = [];
   //
-  //
-  static List<Person> people = [
-    Person('Mike', 'Barron', 64),
-    Person('Todd', 'Black', 30),
-    Person('Ahmad', 'Edwards', 55),
-    Person('Anthony', 'Johnson', 67),
-    Person('Annette', 'Brooks', 39),
-  ];
-  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +30,7 @@ class _RecordingsPageState extends State<RecordingsPage> {
               converter: (store) => store.state,
               builder: (_, state) {
                 vehiculesAll.addAll(state.vehiculesAll);
-                print(vehiculesAll);
+                // print(vehiculesAll);
 
                 return state.vehiculesAll == null
                     ? Center(
@@ -54,13 +45,13 @@ class _RecordingsPageState extends State<RecordingsPage> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   children: [
-                                    Text('VEHICULES RECENTS',
+                                    Text('TABLEAU DE BORD',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 430,
+                                      height: 370,
                                       child: ListView.separated(
                                         itemCount: state.vehiculesAll.length,
                                         itemBuilder: (context, i) =>
@@ -90,7 +81,7 @@ class _RecordingsPageState extends State<RecordingsPage> {
               child: Text('Rechercher par fournisseur, lieu ou date.'),
             ),
             failure: Center(
-              child: Text('No person found :('),
+              child: Text('Rien trouvé :( !'),
             ),
             filter: (vehicule) => [
               vehicule.attributes.matricule,
@@ -108,11 +99,4 @@ class _RecordingsPageState extends State<RecordingsPage> {
       ),
     );
   }
-}
-
-class Person {
-  final String name, surname;
-  final num age;
-
-  Person(this.name, this.surname, this.age);
 }

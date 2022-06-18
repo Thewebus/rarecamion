@@ -209,7 +209,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 430,
+                                      height: 375,
                                       child: ListView.separated(
                                         shrinkWrap: true,
                                         itemCount: state.fournisseurs.length,
@@ -250,7 +250,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                                   ],
                                                 ),
                                                 subtitle: Text(
-                                                    'Supprimer: glisser vers la gauche'),
+                                                    'Supprimer: glisser à gauche ...'),
                                                 trailing: IconButton(
                                                   onPressed: () => () {},
                                                   iconSize: 25,
@@ -302,7 +302,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () => _onAlertWithCustomContentPressed(context),
-        tooltip: 'Ajouter nouveau Fournisseur ...',
+        tooltip: 'Ajouter Fournisseur ...',
         child: Icon(Icons.add),
       ),
     );
