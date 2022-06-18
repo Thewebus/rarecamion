@@ -45,7 +45,6 @@ class _FournisseursPageState extends State<FournisseursPage> {
     return _return;
   }
 
-  //
   void _addFournisseurProcess() async {
     setState(() => _isSubmitting = true);
 
@@ -63,34 +62,12 @@ class _FournisseursPageState extends State<FournisseursPage> {
 
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
-      _showSuccessSnack();
+      _showSuccessSnackText(' Fournisseur enregistré avec succès !');
     } else {
       setState(() => _isSubmitting = false);
-      _showErrorSnack();
+      _showErrorSnackText('Impossible d\'enregistrer le Fournisseur !');
     }
     _redirectUser();
-  }
-
-  //
-  void _showSuccessSnack() {
-    final snackbar = SnackBar(
-        content: Text(
-            'Le Fournisseur mat: $_nomFournisseur a été enregistré avec succès !',
-            style: TextStyle(color: Colors.green)),
-        duration: Duration(seconds: 3));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    _formKey.currentState.reset();
-  }
-
-  void _showErrorSnack() {
-    final snackbar = SnackBar(
-        content: Text('Impossible d\'enregistrer le Fournisseur !',
-            style: TextStyle(color: Colors.red)),
-        duration: Duration(seconds: 5));
-    //_scaffoldKey.currentState.showSnackBar(snackbar);
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    //throw Exception('Erreur : $errorMsg');
   }
 
   void _showSuccessSnackText(String _text) {
@@ -111,7 +88,6 @@ class _FournisseursPageState extends State<FournisseursPage> {
     setState(() => null);
     Navigator.pushReplacementNamed(context, '/adminHome');
   }
-  //
 
   Widget _showFournisseurInput() {
     return Padding(
