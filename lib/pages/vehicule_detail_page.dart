@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/vehicule.dart';
+import 'package:rarecamion/pages/add_status_to_vehicule.dart';
 import '../models/status_vehicule.dart';
 import 'package:rarecamion/widgets/status_item.dart';
 
@@ -151,6 +152,15 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                   },
                   itemCount: _allStatus.length,
                 ),
+                const SizedBox(height: 10),
+                ElevatedButton.icon(
+                  onPressed: () => Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return AddStatusPage(vehicule: widget.vehicule);
+                  })),
+                  icon: Icon(Icons.add_box_outlined, size: 25),
+                  label: Text("AJOUTER STATUS"),
+                )
               ],
             ))));
   }

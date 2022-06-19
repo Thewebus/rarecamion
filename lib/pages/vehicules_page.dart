@@ -75,24 +75,43 @@ class RecordingsPageState extends State<VehiculesPage> {
                           child: SafeArea(
                               top: false,
                               bottom: false,
-                              child: ListView.separated(
-                                itemCount: state.vehicules.length,
-                                itemBuilder: (context, i) => VehiculeItem(
-                                  vehicule: state.vehicules[i],
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 375,
+                                      child: ListView.separated(
+                                        itemCount: state.vehicules.length,
+                                        itemBuilder: (context, i) =>
+                                            VehiculeItem(
+                                          vehicule: state.vehicules[i],
+                                        ),
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        const Divider(),
                               )),
                         )
                       ])
                     : DeconnexionWidget();
               })),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blueAccent,
+        child: Container(
+          height: 50,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (_, state) {
             return state.user != null
                 ? FloatingActionButton(
+                    hoverColor: Colors.white,
                     backgroundColor: Colors.blue[800],
                     onPressed: _redirectUserToAddVehicule,
                     tooltip: 'Ajouter nouveau véhicule ...',

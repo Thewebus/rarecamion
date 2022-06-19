@@ -51,8 +51,8 @@ class AddStatusPageState extends State<AddStatusPage> {
         Padding(
           padding: EdgeInsets.only(top: 10),
           child: Text(
-            'Sélectionnez le status:',
-            style: Theme.of(context).textTheme.bodyText2,
+            'SÉLECTIONNEZ :',
+            style: TextStyle(fontSize: 12),
           ),
         ),
         Padding(
@@ -104,11 +104,11 @@ class AddStatusPageState extends State<AddStatusPage> {
                       _addStatusProcess(_idVehiculeRelated);
                     }
                   },
-                  child: Text('Entrez le status actuel du Véhicule'),
+                  child: Text('ENREGISTRER LE STATUS'),
                 ),
           TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Aller à vos enregistrements'))
+              child: Text('Fermer'))
         ]));
   }
 
@@ -134,20 +134,19 @@ class AddStatusPageState extends State<AddStatusPage> {
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
       _showSuccessSnack();
-      Navigator.of(context).pop();
+      Navigator.pushReplacementNamed(context, '/vehicules');
     } else {
       setState(() => _isSubmitting = false);
 
-      final String errorMsg = 'Impossible d\'enregistrer le status !';
+      final String errorMsg = 'ECHEC, VERIFIEZ VOTRE CONNEXION !';
       _showErrorSnack(errorMsg);
     }
   }
 
   void _showSuccessSnack() {
     final snackbar = SnackBar(
-        content: Text('Status enregistré avec succès !',
-            style: TextStyle(color: Colors.green)),
-        duration: Duration(milliseconds: 3000));
+        content: Text('SUCCÈS !', style: TextStyle(color: Colors.green)),
+        duration: Duration(milliseconds: 1500));
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
     _formKey.currentState.reset();
   }
@@ -155,7 +154,7 @@ class AddStatusPageState extends State<AddStatusPage> {
   void _showErrorSnack(String errorMsg) {
     final snackbar = SnackBar(
         content: Text(errorMsg, style: TextStyle(color: Colors.red)),
-        duration: Duration(milliseconds: 3000));
+        duration: Duration(milliseconds: 1500));
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
