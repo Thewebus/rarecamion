@@ -185,7 +185,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 375,
+                                      height: 400,
                                       child: ListView.separated(
                                         shrinkWrap: true,
                                         itemCount: state.fournisseurs.length,
