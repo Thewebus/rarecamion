@@ -51,7 +51,7 @@ class _RecordingsPageState extends State<RecordingsPage> {
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 370,
+                                      height: 390,
                                       child: ListView.separated(
                                         itemCount: state.vehiculesAll.length,
                                         itemBuilder: (context, i) =>

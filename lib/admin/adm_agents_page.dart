@@ -46,7 +46,7 @@ class UsersListState extends State<UsersList> {
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 375,
+                                      height: 390,
                                       child: ListView.separated(
                                           shrinkWrap: true,
                                           itemCount: state.usersList.length,
