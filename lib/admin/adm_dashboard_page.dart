@@ -4,7 +4,6 @@ import 'package:rarecamion/admin/items/adm_vehicule_item.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:search_page/search_page.dart';
-import 'package:rarecamion/global_params.dart' as globals;
 
 class RecordingsPage extends StatefulWidget {
   RecordingsPage({Key key}) : super(key: key);
@@ -19,10 +18,9 @@ class _RecordingsPageState extends State<RecordingsPage> {
 
   double _getHeightContext() {
     double _height = MediaQuery.of(context).size.height;
-    return (_height - (_height / 2.3));
+    return (_height - (_height / 2.2));
   }
 
-  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(

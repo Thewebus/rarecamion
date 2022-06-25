@@ -155,7 +155,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
 
   double _getHeightContext() {
     double _height = MediaQuery.of(context).size.height;
-    return (_height - (_height / 2.3));
+    return (_height - (_height / 2.2));
   }
 
   @override
