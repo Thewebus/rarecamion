@@ -50,17 +50,20 @@ class _RecordingsPageState extends State<RecordingsPage> {
                                             .textTheme
                                             .headline1),
                                     SizedBox(height: 20),
-                                    Container(
-                                      height: 400,
-                                      child: ListView.separated(
-                                        itemCount: state.vehiculesAll.length,
-                                        itemBuilder: (context, i) =>
-                                            VehiculeItem(
-                                          vehicule: state.vehiculesAll[i],
+                                    Center(
+                                      child: Container(
+                                        height: 420,
+                                        child: ListView.separated(
+                                          itemCount: state.vehiculesAll.length,
+                                          itemBuilder: (context, i) =>
+                                              VehiculeItem(
+                                            vehicule: state.vehiculesAll[i],
+                                          ),
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                      int index) =>
+                                                  const Divider(),
                                         ),
-                                        separatorBuilder:
-                                            (BuildContext context, int index) =>
-                                                const Divider(),
                                       ),
                                     ),
                                   ],

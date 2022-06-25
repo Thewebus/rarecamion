@@ -13,8 +13,6 @@ class VehiculeItem extends StatefulWidget {
   const VehiculeItem({Key key, this.vehicule}) : super(key: key);
   @override
   VehiculeItemState createState() => VehiculeItemState();
-
-  final StatusVehicule statusVehicule = null;
 }
 
 class VehiculeItemState extends State<VehiculeItem> {
@@ -24,25 +22,24 @@ class VehiculeItemState extends State<VehiculeItem> {
 
     _fetchStatus().then((value) {
       setState(() {
-        _lastStatus = value;
+        statusV = value;
       });
+      print(statusV.attributes.libelleStatus);
     });
   }
 
-  String _lastStatus = '';
+  StatusVehicule statusV = null;
 
-  Future<String> _fetchStatus() async {
+  Future<StatusVehicule> _fetchStatus() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
 
-    String _return = '';
+    StatusVehicule statusV = null;
 
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=${widget.vehicule.id}&sort[0]=updatedAt:desc';
-
-    //print(url);
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -55,18 +52,22 @@ class VehiculeItemState extends State<VehiculeItem> {
       print('ERREUR DE CONNEXION AU SERVEUR !');
     } else {
       if (statusDatas.toString().length > 5) {
-        final StatusVehicule status = StatusVehicule.fromJson(statusDatas[0]);
-        _return = status.attributes.libelleStatus;
+        statusV = StatusVehicule.fromJson(statusDatas[0]);
       }
     }
 
-    //print('VALEUR DU STATUS ---------  $_return');
-
-    return _return;
+    return statusV;
   }
 
   @override
   Widget build(BuildContext context) {
+    String _matricule = widget.vehicule.attributes.matricule;
+    String _dechargement = widget.vehicule.attributes.dechargement;
+    String _fournisseur = widget.vehicule.attributes.fournisseur;
+
+    String _lastStatus =
+        statusV != null ? statusV.attributes.libelleStatus : 'N/A';
+
     return ListTile(
       onTap: () =>
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -76,18 +77,18 @@ class VehiculeItemState extends State<VehiculeItem> {
       title: Row(
         children: [
           Icon(Icons.car_repair),
-          Text('Mat. ', style: TextStyle(fontSize: 11.0)),
-          Text('${widget.vehicule.attributes.matricule}',
-              style: TextStyle(fontSize: 16.0)),
+          Text('$_fournisseur', style: TextStyle(fontSize: 16.0)),
         ],
       ),
       subtitle: Row(
         children: [
-          Text(
-              '${widget.vehicule.attributes.dechargement} - ${widget.vehicule.attributes.fournisseur} - ',
-              style: TextStyle(fontSize: 12.0)),
+          //    Text('Mat. ', style: TextStyle(fontSize: 11.0)),
+          Text('$_dechargement - ', style: TextStyle(fontSize: 12.0)),
+
+          Text('$_matricule - '.toUpperCase(),
+              style: TextStyle(fontSize: 13.0, color: Colors.blue)),
           _lastStatus.length > 3
-              ? Text(_lastStatus,
+              ? Text('$_lastStatus',
                   style: TextStyle(fontSize: 10.0, color: Colors.green))
               : Text('N/A', style: TextStyle(fontSize: 10.0, color: Colors.red))
         ],

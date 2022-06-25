@@ -21,48 +21,62 @@ class StatusVehicule {
   Attributes attributes;
 
   factory StatusVehicule.fromJson(Map<String, dynamic> json) => StatusVehicule(
-        id: json["id"],
-        attributes: Attributes.fromJson(json["attributes"]),
+        id: json["id"] == null ? null : json["id"],
+        attributes: json["attributes"] == null
+            ? null
+            : Attributes.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
+        "id": id == null ? null : id,
+        "attributes": attributes == null ? null : attributes.toJson(),
       };
 }
 
 class Attributes {
   Attributes({
+    this.updatedAt,
     this.libelleStatus,
     this.observationStatus,
     this.createdAt,
-    this.updatedAt,
     this.publishedAt,
     this.statusEdition,
   });
 
+  DateTime updatedAt;
   String libelleStatus;
   String observationStatus;
   DateTime createdAt;
-  DateTime updatedAt;
   DateTime publishedAt;
   String statusEdition;
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
-        libelleStatus: json["libelleStatus"],
-        observationStatus: json["observationStatus"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        publishedAt: DateTime.parse(json["publishedAt"]),
-        statusEdition: json["statusEdition"],
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        libelleStatus:
+            json["libelleStatus"] == null ? null : json["libelleStatus"],
+        observationStatus: json["observationStatus"] == null
+            ? null
+            : json["observationStatus"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        publishedAt: json["publishedAt"] == null
+            ? null
+            : DateTime.parse(json["publishedAt"]),
+        statusEdition:
+            json["statusEdition"] == null ? null : json["statusEdition"],
       );
 
   Map<String, dynamic> toJson() => {
-        "libelleStatus": libelleStatus,
-        "observationStatus": observationStatus,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "publishedAt": publishedAt.toIso8601String(),
-        "statusEdition": statusEdition,
+        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "libelleStatus": libelleStatus == null ? null : libelleStatus,
+        "observationStatus":
+            observationStatus == null ? null : observationStatus,
+        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+        "publishedAt":
+            publishedAt == null ? null : publishedAt.toIso8601String(),
+        "statusEdition": statusEdition == null ? null : statusEdition,
       };
 }
