@@ -15,6 +15,11 @@ class UsersListState extends State<UsersList> {
     super.initState();
   }
 
+  double _getHeightContext() {
+    double _height = MediaQuery.of(context).size.height;
+    return (_height - (_height / 2.3));
+  }
+
   @override
   Widget build(BuildContext context) {
     // bool _isLoggedIn = true;
@@ -46,7 +51,7 @@ class UsersListState extends State<UsersList> {
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 400,
+                                      height: _getHeightContext(),
                                       child: ListView.separated(
                                           shrinkWrap: true,
                                           itemCount: state.usersList.length,

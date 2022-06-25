@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,11 +21,14 @@ class VehiculeItemState extends State<VehiculeItem> {
   initState() {
     super.initState();
 
+    // const _timeRefresh = const Duration(seconds: 3);
+    // new Timer.periodic(_timeRefresh, (Timer t) => setState(() {}));
+    // print('Increment ...');
+
     _fetchStatus().then((value) {
       setState(() {
         statusV = value;
       });
-      print(statusV.attributes.libelleStatus);
     });
   }
 
@@ -73,7 +77,6 @@ class VehiculeItemState extends State<VehiculeItem> {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return VehiculeDetailsPage(vehicule: widget.vehicule);
       })),
-      tileColor: Colors.blueAccent,
       title: Row(
         children: [
           Icon(Icons.car_repair),

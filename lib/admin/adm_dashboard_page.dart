@@ -4,6 +4,7 @@ import 'package:rarecamion/admin/items/adm_vehicule_item.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:search_page/search_page.dart';
+import 'package:rarecamion/global_params.dart' as globals;
 
 class RecordingsPage extends StatefulWidget {
   RecordingsPage({Key key}) : super(key: key);
@@ -15,6 +16,12 @@ class RecordingsPage extends StatefulWidget {
 class _RecordingsPageState extends State<RecordingsPage> {
   //
   static List<Vehicule> vehiculesAll = [];
+
+  double _getHeightContext() {
+    double _height = MediaQuery.of(context).size.height;
+    return (_height - (_height / 2.3));
+  }
+
   //
   @override
   Widget build(BuildContext context) {
@@ -52,7 +59,7 @@ class _RecordingsPageState extends State<RecordingsPage> {
                                     SizedBox(height: 20),
                                     Center(
                                       child: Container(
-                                        height: 420,
+                                        height: _getHeightContext(),
                                         child: ListView.separated(
                                           itemCount: state.vehiculesAll.length,
                                           itemBuilder: (context, i) =>

@@ -153,6 +153,11 @@ class _FournisseursPageState extends State<FournisseursPage> {
         ]).show();
   }
 
+  double _getHeightContext() {
+    double _height = MediaQuery.of(context).size.height;
+    return (_height - (_height / 2.3));
+  }
+
   @override
   Widget build(BuildContext context) {
     // bool _isLoggedIn = true;
@@ -185,7 +190,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
                                             .headline1),
                                     SizedBox(height: 20),
                                     Container(
-                                      height: 400,
+                                      height: _getHeightContext(),
                                       child: ListView.separated(
                                         shrinkWrap: true,
                                         itemCount: state.fournisseurs.length,
