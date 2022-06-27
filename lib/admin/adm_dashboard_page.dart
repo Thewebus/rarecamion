@@ -18,6 +18,9 @@ class _RecordingsPageState extends State<RecordingsPage> {
 
   double _getHeightContext() {
     double _height = MediaQuery.of(context).size.height;
+    double _width = MediaQuery.of(context).size.width;
+    print(_width);
+
     return (_height - (_height / 2.2));
   }
 
