@@ -214,6 +214,14 @@ ThunkAction<AppState> getVehiculesAllAction = (Store<AppState> store) async {
   if (response.statusCode != 200) {
     print(responseData);
   } else {
+//Starting the adventure ...
+
+    //final VehiculeAll vehiculeAllDatas = responseData;
+
+    //print(vehiculeAllDatas.data);
+
+//End unit Tests ...
+
     Map<String, dynamic> vehiculesStrapiJson =
         new Map<String, dynamic>.from(responseData);
 
