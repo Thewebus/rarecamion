@@ -26,7 +26,7 @@ class VehiculeItemState extends State<VehiculeItem> {
 
     this._agent;
 
-    PhotoProduit _user = widget.vehicule.attributes.user;
+    PhotoProduit _user = widget.vehicule.attributes.user.data;
 
     DataAttributes _userFinal = DataAttributes.fromJson(_user.data);
 
@@ -120,17 +120,16 @@ class VehiculeItemState extends State<VehiculeItem> {
           Icon(Icons.car_repair),
           Text('$_fournisseur',
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          Text('Agent: $_dechargement - ', style: TextStyle(fontSize: 12.0)),
+          Text(' Agent: $_agent', style: TextStyle(fontSize: 12.0)),
         ],
       ),
       subtitle: Row(
         children: [
-          //    Text('Mat. ', style: TextStyle(fontSize: 11.0)),
-          Text('$_dechargement - ', style: TextStyle(fontSize: 12.0)),
-          Text('$_matricule - '.toUpperCase(),
-              style: TextStyle(fontSize: 13.0, color: Colors.blue)),
-          Text('$_libelleStatus',
-              style: TextStyle(fontSize: 10.0, color: Colors.green)),
+          Text('$_matricule'.toUpperCase(),
+              style: TextStyle(fontSize: 16.0, color: Colors.blue)),
+          Text(' $_dechargement', style: TextStyle(fontSize: 12.0)),
+          Text(' $_libelleStatus',
+              style: TextStyle(fontSize: 11.0, color: Colors.green)),
         ],
       ),
       trailing: StoreConnector<AppState, AppState>(
