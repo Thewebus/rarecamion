@@ -44,10 +44,7 @@ class VehiculeAllAttributes {
     this.usineVehicule,
     this.statusEdition,
     this.fournisseur,
-    this.photoVehicule,
-    this.photoProduit,
     this.user,
-    this.statusVehicules,
   });
 
   String matricule;
@@ -60,10 +57,7 @@ class VehiculeAllAttributes {
   String usineVehicule;
   String statusEdition;
   String fournisseur;
-  PhotoProduit photoVehicule;
-  PhotoProduit photoProduit;
-  PhotoProduit user;
-  PhotoProduit statusVehicules;
+  UserByAdm user;
 
   factory VehiculeAllAttributes.fromJson(Map<String, dynamic> json) =>
       VehiculeAllAttributes(
@@ -86,16 +80,7 @@ class VehiculeAllAttributes {
         statusEdition:
             json["statusEdition"] == null ? null : json["statusEdition"],
         fournisseur: json["fournisseur"] == null ? null : json["fournisseur"],
-        photoVehicule: json["photoVehicule"] == null
-            ? null
-            : PhotoProduit.fromJson(json["photoVehicule"]),
-        photoProduit: json["photoProduit"] == null
-            ? null
-            : PhotoProduit.fromJson(json["photoProduit"]),
-        user: json["user"] == null ? null : PhotoProduit.fromJson(json["user"]),
-        statusVehicules: json["status_vehicules"] == null
-            ? null
-            : PhotoProduit.fromJson(json["status_vehicules"]),
+        user: json["user"] == null ? null : UserByAdm.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -110,103 +95,28 @@ class VehiculeAllAttributes {
         "usineVehicule": usineVehicule == null ? null : usineVehicule,
         "statusEdition": statusEdition == null ? null : statusEdition,
         "fournisseur": fournisseur == null ? null : fournisseur,
-        "photoVehicule": photoVehicule == null ? null : photoVehicule.toJson(),
-        "photoProduit": photoProduit == null ? null : photoProduit.toJson(),
         "user": user == null ? null : user.toJson(),
-        "status_vehicules":
-            statusVehicules == null ? null : statusVehicules.toJson(),
       };
 }
 
-class PhotoProduit {
-  PhotoProduit({
+class UserByAdm {
+  UserByAdm({
     this.data,
   });
 
-  dynamic data;
+  Data data;
 
-  factory PhotoProduit.fromJson(Map<String, dynamic> json) => PhotoProduit(
-        data: json["data"],
+  factory UserByAdm.fromJson(Map<String, dynamic> json) => UserByAdm(
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data,
+        "data": data == null ? null : data.toJson(),
       };
 }
 
-class Datum {
-  Datum({
-    this.id,
-    this.attributes,
-  });
-
-  int id;
-  DatumAttributes attributes;
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"] == null ? null : json["id"],
-        attributes: json["attributes"] == null
-            ? null
-            : DatumAttributes.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "attributes": attributes == null ? null : attributes.toJson(),
-      };
-}
-
-class DatumAttributes {
-  DatumAttributes({
-    this.libelleStatus,
-    this.observationStatus,
-    this.createdAt,
-    this.updatedAt,
-    this.publishedAt,
-    this.statusEdition,
-  });
-
-  String libelleStatus;
-  String observationStatus;
-  DateTime createdAt;
-  DateTime updatedAt;
-  DateTime publishedAt;
-  String statusEdition;
-
-  factory DatumAttributes.fromJson(Map<String, dynamic> json) =>
-      DatumAttributes(
-        libelleStatus:
-            json["libelleStatus"] == null ? null : json["libelleStatus"],
-        observationStatus: json["observationStatus"] == null
-            ? null
-            : json["observationStatus"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
-        publishedAt: json["publishedAt"] == null
-            ? null
-            : DateTime.parse(json["publishedAt"]),
-        statusEdition:
-            json["statusEdition"] == null ? null : json["statusEdition"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "libelleStatus": libelleStatus == null ? null : libelleStatus,
-        "observationStatus":
-            observationStatus == null ? null : observationStatus,
-        "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
-        "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
-        "publishedAt":
-            publishedAt == null ? null : publishedAt.toIso8601String(),
-        "statusEdition": statusEdition == null ? null : statusEdition,
-      };
-}
-
-class DataClass {
-  DataClass({
+class Data {
+  Data({
     this.id,
     this.attributes,
   });
@@ -214,7 +124,7 @@ class DataClass {
   int id;
   DataAttributes attributes;
 
-  factory DataClass.fromJson(Map<String, dynamic> json) => DataClass(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["id"] == null ? null : json["id"],
         attributes: json["attributes"] == null
             ? null

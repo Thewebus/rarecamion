@@ -6,9 +6,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/admin/items/adm_vehicule_detail_page.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
-import 'package:dio/dio.dart';
-import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehiculeAll.dart';
+//import 'package:dio/dio.dart';
 
 class VehiculeItem extends StatefulWidget {
   final VehiculeAll vehicule;
@@ -23,14 +22,6 @@ class VehiculeItemState extends State<VehiculeItem> {
   @override
   initState() {
     super.initState();
-
-    this._agent;
-
-    PhotoProduit _user = widget.vehicule.attributes.user.data;
-
-    DataAttributes _userFinal = DataAttributes.fromJson(_user.data);
-
-    print(_userFinal.username);
 
     this._vehiculeItem = widget.vehicule;
     this._vehiculeId = widget.vehicule.id.toInt();
@@ -66,7 +57,6 @@ class VehiculeItemState extends State<VehiculeItem> {
     });
   }
 
-  User _agent;
   VehiculeAll _vehiculeItem;
   Timer _timer;
   StatusVehicule statusV = null;
@@ -85,18 +75,21 @@ class VehiculeItemState extends State<VehiculeItem> {
     String url =
         'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$_id&sort[0]=updatedAt:desc';
 
-    http.Response response = await http.get(Uri.parse(url), headers: headers);
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> statusDatasRAW =
-          Map<String, dynamic>.from(json.decode(response.body));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> statusDatasRAW =
+            Map<String, dynamic>.from(json.decode(response.body));
 
-      final statusDatas = statusDatasRAW['data'];
-      if (statusDatas.toString().length > 5) {
-        statusV = StatusVehicule.fromJson(statusDatas[0]);
+        final statusDatas = statusDatasRAW['data'];
+        if (statusDatas.toString().length > 5) {
+          statusV = StatusVehicule.fromJson(statusDatas[0]);
+        }
       }
-    } else {
-      throw "ERREUR DE CONNEXION AU SERVEUR !";
+    } catch (e) {
+      debugPrint("$e");
+      throw "ERREUR CODE : $e !";
     }
 
     return statusV;
@@ -120,7 +113,7 @@ class VehiculeItemState extends State<VehiculeItem> {
           Icon(Icons.car_repair),
           Text('$_fournisseur',
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
-          Text(' Agent: $_agent', style: TextStyle(fontSize: 12.0)),
+          // Text(' $_agentName', style: TextStyle(fontSize: 9.0)),
         ],
       ),
       subtitle: Row(

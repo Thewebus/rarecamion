@@ -20,6 +20,8 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
   initState() {
     super.initState();
 
+    this._agentName = widget.vehicule.attributes.user.data.attributes.username;
+
     this._fournisseur = widget.vehicule.attributes.fournisseur;
     this._matricule = widget.vehicule.attributes.matricule;
     this._etatProduit = widget.vehicule.attributes.etatProduit;
@@ -33,6 +35,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     });
   }
 
+  String _agentName;
   String _fournisseur, _matricule, _etatProduit, _usineVehicule, _typeProduit;
 
   final List<StatusVehicule> _allStatus = [];
@@ -133,6 +136,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                     _showVDetails('Produit', this._etatProduit),
                     _showVDetails('Usine', this._usineVehicule),
                     _showVDetails('Type produit', this._typeProduit),
+                    _showVDetails('Agent enregistreur', this._agentName),
                   ]),
                 ),
                 const SizedBox(height: 10),

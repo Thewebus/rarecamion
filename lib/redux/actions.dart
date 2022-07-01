@@ -215,13 +215,6 @@ ThunkAction<AppState> getVehiculesAllAction = (Store<AppState> store) async {
     throw "Echec de connexion à la base de données !: Erreur = ${response.statusCode}";
   } else {
     final responseData = json.decode(response.body);
-//Starting the adventure ...
-
-    //final VehiculeAll vehiculeAllDatas = responseData;
-
-    //print(vehiculeAllDatas.data);
-
-//End unit Tests ...
 
     Map<String, dynamic> vehiculesStrapiJson =
         new Map<String, dynamic>.from(responseData);
