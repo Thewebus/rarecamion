@@ -6,11 +6,12 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/admin/items/adm_vehicule_detail_page.dart';
 import 'package:rarecamion/engines/app_state.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
-import 'package:rarecamion/models/vehicule.dart';
 import 'package:dio/dio.dart';
+import 'package:rarecamion/models/user.dart';
+import 'package:rarecamion/models/vehiculeAll.dart';
 
 class VehiculeItem extends StatefulWidget {
-  final Vehicule vehicule;
+  final VehiculeAll vehicule;
 
   const VehiculeItem({Key key, this.vehicule}) : super(key: key);
   @override
@@ -23,7 +24,37 @@ class VehiculeItemState extends State<VehiculeItem> {
   initState() {
     super.initState();
 
-    _vehiculeId = widget.vehicule.id.toInt();
+    this._agent;
+
+    PhotoProduit _user = widget.vehicule.attributes.user;
+
+    DataAttributes _userFinal = DataAttributes.fromJson(_user.data);
+
+    print(_userFinal.username);
+
+    this._vehiculeItem = widget.vehicule;
+    this._vehiculeId = widget.vehicule.id.toInt();
+    this._matricule = widget.vehicule.attributes.matricule;
+    this._dechargement = widget.vehicule.attributes.dechargement;
+    this._fournisseur = widget.vehicule.attributes.fournisseur;
+
+    this._timer = new Timer.periodic(const Duration(seconds: 10), (Timer t) {
+      // print(t.tick);
+
+      Future.delayed(Duration(seconds: 5), () {
+        _getAllStatusByVehiculeId(_vehiculeId).then((value) {
+          if (this.mounted) {
+            setState(() {
+              if (value != null) {
+                statusV = value;
+                _libelleStatus = statusV.attributes.libelleStatus;
+                // print('Fournisseur: $_fournisseur, Mat.:  $_matricule !');
+              }
+            });
+          }
+        });
+      });
+    });
 
     _getAllStatusByVehiculeId(_vehiculeId).then((value) {
       setState(() {
@@ -35,26 +66,15 @@ class VehiculeItemState extends State<VehiculeItem> {
     });
   }
 
-//
+  User _agent;
+  VehiculeAll _vehiculeItem;
+  Timer _timer;
   StatusVehicule statusV = null;
   String _libelleStatus = 'N/A';
   int _vehiculeId;
-  //
-
-  /*
-      const _timeRefresh = const Duration(seconds: 3);
-
-    new Timer.periodic(
-        _timeRefresh,
-        (Timer t) => setState(() {
-              
-            }));
-   // print('Counter = ...$_counter');
-*/
+  String _matricule, _dechargement, _fournisseur;
 
   Future<StatusVehicule> _getAllStatusByVehiculeId(int _id) async {
-    //
-
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -83,49 +103,30 @@ class VehiculeItemState extends State<VehiculeItem> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String _matricule = widget.vehicule.attributes.matricule;
-    String _dechargement = widget.vehicule.attributes.dechargement;
-    String _fournisseur = widget.vehicule.attributes.fournisseur;
-
-    _vehiculeId = widget.vehicule.id.toInt();
-
-    const _timeRefresh = const Duration(seconds: 60);
-
-    new Timer.periodic(_timeRefresh, (Timer t) {
-      // print(t.tick);
-
-      _getAllStatusByVehiculeId(_vehiculeId).then((value) {
-        if (this.mounted) {
-          setState(() {
-            if (value != null) {
-              statusV = value;
-              _libelleStatus = statusV.attributes.libelleStatus;
-              print(
-                  'Vehicule checké ... Fournisseur: ${widget.vehicule.attributes.dechargement}, Mat.:  ${widget.vehicule.attributes.matricule} !');
-            }
-          });
-        }
-      });
-    });
-
     return ListTile(
       onTap: () =>
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return VehiculeDetailsPage(vehicule: widget.vehicule);
+        return VehiculeDetailsPage(vehicule: this._vehiculeItem);
       })),
       title: Row(
         children: [
           Icon(Icons.car_repair),
           Text('$_fournisseur',
               style: TextStyle(fontSize: 18.0, color: Colors.black)),
+          Text('Agent: $_dechargement - ', style: TextStyle(fontSize: 12.0)),
         ],
       ),
       subtitle: Row(
         children: [
           //    Text('Mat. ', style: TextStyle(fontSize: 11.0)),
           Text('$_dechargement - ', style: TextStyle(fontSize: 12.0)),
-
           Text('$_matricule - '.toUpperCase(),
               style: TextStyle(fontSize: 13.0, color: Colors.blue)),
           Text('$_libelleStatus',

@@ -3,12 +3,13 @@ import 'package:rarecamion/models/fournisseur.dart';
 import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
+import 'package:rarecamion/models/vehiculeAll.dart';
 
 @immutable
 class AppState {
   final User user;
   final List<Vehicule> vehicules;
-  final List<Vehicule> vehiculesAll;
+  final List<VehiculeAll> vehiculesAll;
 
   final List<StatusVehicule> vehiculeAllStatus;
   final List<Fournisseur> fournisseurs;

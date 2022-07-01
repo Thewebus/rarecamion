@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:rarecamion/admin/items/adm_vehicule_item.dart';
 import 'package:rarecamion/engines/app_state.dart';
-import 'package:rarecamion/models/vehicule.dart';
+import 'package:rarecamion/models/vehiculeAll.dart';
 import 'package:search_page/search_page.dart';
 
 class RecordingsPage extends StatefulWidget {
@@ -14,13 +14,10 @@ class RecordingsPage extends StatefulWidget {
 
 class _RecordingsPageState extends State<RecordingsPage> {
   //
-  static List<Vehicule> vehiculesAll = [];
+  static List<VehiculeAll> vehiculesAll = [];
 
   double _getHeightContext() {
     double _height = MediaQuery.of(context).size.height;
-    double _width = MediaQuery.of(context).size.width;
-    print(_width);
-
     return (_height - (_height / 2.2));
   }
 
@@ -38,7 +35,6 @@ class _RecordingsPageState extends State<RecordingsPage> {
               converter: (store) => store.state,
               builder: (_, state) {
                 vehiculesAll.addAll(state.vehiculesAll);
-                // print(vehiculesAll);
 
                 return state.vehiculesAll == null
                     ? Center(
@@ -84,7 +80,7 @@ class _RecordingsPageState extends State<RecordingsPage> {
         tooltip: 'Tapez votre recherche ...',
         onPressed: () => showSearch(
           context: context,
-          delegate: SearchPage<Vehicule>(
+          delegate: SearchPage<VehiculeAll>(
             onQueryUpdate: (s) => print(s),
             items: vehiculesAll,
             searchLabel: 'Recherche ...',

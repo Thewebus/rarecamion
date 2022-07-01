@@ -5,6 +5,7 @@ import 'package:rarecamion/models/fournisseur.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
 import 'package:rarecamion/models/user.dart';
+import 'package:rarecamion/models/vehiculeAll.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -204,16 +205,16 @@ ThunkAction<AppState> getVehiculesAllAction = (Store<AppState> store) async {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   };
+
   String url =
       'http://rarecamion.com:1337/api/vehicules?populate=*&sort[0]=updatedAt:desc&pagination[limit]=5000';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
-  final responseData = json.decode(response.body);
-
   if (response.statusCode != 200) {
-    print(responseData);
+    throw "Echec de connexion à la base de données !: Erreur = ${response.statusCode}";
   } else {
+    final responseData = json.decode(response.body);
 //Starting the adventure ...
 
     //final VehiculeAll vehiculeAllDatas = responseData;
@@ -228,16 +229,25 @@ ThunkAction<AppState> getVehiculesAllAction = (Store<AppState> store) async {
     final vehiculesJson = vehiculesStrapiJson['data'];
 
     final List<Vehicule> vehicules = [];
+
     vehiculesJson.forEach((vehiculeJson) {
       final Vehicule vehicule = Vehicule.fromJson(vehiculeJson);
       vehicules.add(vehicule);
     });
-    store.dispatch(GetVehiculesAllAction(vehicules));
+
+    final List<VehiculeAll> vehiculesAll = [];
+
+    vehiculesJson.forEach((vehiculeJson) {
+      final VehiculeAll vehiculeall = VehiculeAll.fromJson(vehiculeJson);
+      vehiculesAll.add(vehiculeall);
+    });
+
+    store.dispatch(GetVehiculesAllAction(vehiculesAll));
   }
 };
 
 class GetVehiculesAllAction {
-  final List<Vehicule> _vehiculesAll;
-  List<Vehicule> get vehiculesall => this._vehiculesAll;
+  final List<VehiculeAll> _vehiculesAll;
+  List<VehiculeAll> get vehiculesall => this._vehiculesAll;
   GetVehiculesAllAction(this._vehiculesAll);
 }

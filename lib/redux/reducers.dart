@@ -3,6 +3,7 @@ import 'package:rarecamion/models/user.dart';
 import 'package:rarecamion/models/vehicule.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
 import 'package:rarecamion/models/fournisseur.dart';
+import 'package:rarecamion/models/vehiculeAll.dart';
 import 'package:rarecamion/redux/actions.dart';
 
 AppState appReducer(AppState state, dynamic action) {
@@ -32,8 +33,8 @@ List<Vehicule> vehiculesReducer(List<Vehicule> vehicules, dynamic action) {
   return vehicules;
 }
 
-List<Vehicule> vehiculesAllReducer(
-    List<Vehicule> vehiculesAll, dynamic action) {
+List<VehiculeAll> vehiculesAllReducer(
+    List<VehiculeAll> vehiculesAll, dynamic action) {
   if (action is GetVehiculesAllAction) {
     return action.vehiculesall;
   }

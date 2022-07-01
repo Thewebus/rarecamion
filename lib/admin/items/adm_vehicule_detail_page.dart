@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/admin/items/adm_status_item.dart';
 import 'package:rarecamion/models/status_vehicule.dart';
-import 'package:rarecamion/models/vehicule.dart';
+import 'package:rarecamion/models/vehiculeAll.dart';
 
 class VehiculeDetailsPage extends StatefulWidget {
-  final Vehicule vehicule;
+  final VehiculeAll vehicule;
 
   const VehiculeDetailsPage({Key key, this.vehicule}) : super(key: key);
 
@@ -20,6 +20,12 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
   initState() {
     super.initState();
 
+    this._fournisseur = widget.vehicule.attributes.fournisseur;
+    this._matricule = widget.vehicule.attributes.matricule;
+    this._etatProduit = widget.vehicule.attributes.etatProduit;
+    this._usineVehicule = widget.vehicule.attributes.usineVehicule;
+    this._typeProduit = widget.vehicule.attributes.typeProduit;
+
     _fetchStatus().then((value) {
       setState(() {
         _allStatus.addAll(value);
@@ -27,7 +33,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     });
   }
 
-  // bool isSwitched = false;
+  String _fournisseur, _matricule, _etatProduit, _usineVehicule, _typeProduit;
 
   final List<StatusVehicule> _allStatus = [];
 
@@ -122,16 +128,11 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                     ],
                   ),
                   child: Column(children: [
-                    _showVDetails(
-                        'Fournisseur', widget.vehicule.attributes.fournisseur),
-                    _showVDetails(
-                        'Matricule', widget.vehicule.attributes.matricule),
-                    _showVDetails(
-                        'Produit', widget.vehicule.attributes.etatProduit),
-                    _showVDetails(
-                        'Usine', widget.vehicule.attributes.usineVehicule),
-                    _showVDetails(
-                        'Type produit', widget.vehicule.attributes.typeProduit),
+                    _showVDetails('Fournisseur', this._fournisseur),
+                    _showVDetails('Matricule', this._matricule),
+                    _showVDetails('Produit', this._etatProduit),
+                    _showVDetails('Usine', this._usineVehicule),
+                    _showVDetails('Type produit', this._typeProduit),
                   ]),
                 ),
                 const SizedBox(height: 10),
