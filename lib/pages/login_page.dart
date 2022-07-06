@@ -23,7 +23,7 @@ class LoginPageState extends State<LoginPage> {
           width: 150.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/logorarecamion.png'),
+              image: AssetImage('assets/logoRCManager_withtypo_white.png'),
               fit: BoxFit.fill,
             ),
             shape: BoxShape.circle,
