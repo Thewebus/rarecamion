@@ -19,11 +19,11 @@ class LoginPageState extends State<LoginPage> {
     return Padding(
         padding: EdgeInsets.only(top: 0.0),
         child: Container(
-          height: 150.0,
-          width: 150.0,
+          height: 200.0,
+          width: 200.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/logoRCManager_withtypo_white.png'),
+              image: AssetImage('assets/logoRCManager.png'),
               fit: BoxFit.fill,
             ),
             shape: BoxShape.circle,
@@ -194,9 +194,10 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text('RARE CAMION'),
+          title: Text('RARECAMION MANAGER'),
         ),
         body: Container(
+            constraints: BoxConstraints.expand(),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
@@ -204,10 +205,9 @@ class LoginPageState extends State<LoginPage> {
                     stops: [0.1, 0.2],
                     colors: const [Colors.lightBlueAccent, Colors.white])),
             padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: Center(
-                child: SingleChildScrollView(
-              child: Form(
-                  key: _formKey,
+            child: Form(
+                key: _formKey,
+                child: Center(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
@@ -218,7 +218,7 @@ class LoginPageState extends State<LoginPage> {
                         _showEmailInput(),
                         _showPasswordInput(),
                         _showFormActions(),
-                      ])),
-            ))));
+                      ]),
+                ))));
   }
 }

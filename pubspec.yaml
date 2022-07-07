@@ -55,13 +55,13 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: "assets/logoRCManager_withtypo_white.png"
+  image: "assets/logoRCManager.png"
 
 flutter_icons:
   android: true
   ios: true
-  image_path_android: "assets/logoRCManager_withtypo_white.png"
-  image_path_ios: "assets/logoRCManager_withtypo_white.png"
+  image_path_android: "assets/logoRCManager.png"
+  image_path_ios: "assets/logoRCManager_white.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
