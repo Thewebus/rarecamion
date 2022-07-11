@@ -170,6 +170,8 @@ class RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  void _sendEmail() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
