@@ -86,10 +86,19 @@ class LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 5,
           ),
+          /*
           Text(
             'Pas de compte ? Contactez la Direction !',
             style: TextStyle(fontSize: 12),
-          )
+          ),
+          */
+          TextButton(
+              child: Text(
+                'Pas de compte ? Inscrivez-vous !',
+                style: TextStyle(fontSize: 12),
+              ),
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/register'))
         ]));
   }
 
@@ -194,7 +203,7 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text('RARECAMION MANAGER'),
+          title: Text('RCManager 1.0'),
         ),
         body: Container(
             constraints: BoxConstraints.expand(),
