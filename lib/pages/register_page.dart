@@ -44,7 +44,7 @@ class RegisterPageState extends State<RegisterPage> {
             validator: (val) => val.length < 4 ? 'Nom trop court' : null,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Nom & Prénom(s)',
+                labelText: 'Prénom(s) & Nom',
                 hintText: 'Entrez vos prénoms suivis de votre nom',
                 icon: Icon(Icons.face, color: Colors.grey))));
   }
