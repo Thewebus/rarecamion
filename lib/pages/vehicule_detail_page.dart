@@ -32,6 +32,8 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
 
   final List<StatusVehicule> _allStatus = [];
 
+  String infoGuideDisplayed = '';
+
   String infoFlash = 'Chargement des status (patientez svp) ...';
 
   Future<List<StatusVehicule>> _fetchStatus() async {
@@ -63,6 +65,8 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
       if (statusDatas.toString().length > 5) {
         setState(() {
           infoFlash = 'LISTE DES STATUS';
+          infoGuideDisplayed =
+              'OUVRIR: 1 clic - Capture PHOTO: 2 clics - Capture VIDEO: Maintenir 2s ';
         });
 
         statusDatas.forEach((statusData) {
@@ -138,6 +142,13 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
                 const SizedBox(height: 10),
                 Text(
                   infoFlash,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal),
+                ),
+                Text(
+                  infoGuideDisplayed,
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 11,

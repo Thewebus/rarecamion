@@ -23,24 +23,10 @@ class StatusItem extends StatefulWidget {
 
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
-  //String _msg = 'PHOTOS: double-cliquer | VIDEOS: maintenir';
   String _msg = 'PRENDRE UNE PHOTO: double-cliquer !';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
-  }
-
-  Widget _showFormActions() {
-    return Column(children: [
-      _isSubmitting == true
-          ? LinearProgressIndicator()
-          : Text(_msg,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.italic)),
-    ]);
   }
 
   void _takePhotoStatusVehicule() async {
@@ -162,19 +148,7 @@ class StatusItemState extends State<StatusItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      //onLongPress: _takeVideoStatusVehicule,
-      onLongPress: () async {
-        if (await confirm(
-          context,
-          title: const Text('Confirmez '),
-          content: const Text('Voulez-vous vraiment supprimer ce status ?'),
-          textOK: const Text('Oui, supprimer !'),
-          textCancel: const Text('Non'),
-        )) {
-          return _deleteStatusVehicule(widget.statusVehicule.id);
-        } else
-          return print('pressedCancel');
-      },
+      onLongPress: _takeVideoStatusVehicule,
       onDoubleTap: () {
         _takePhotoStatusVehicule();
       },
@@ -186,7 +160,7 @@ class StatusItemState extends State<StatusItem> {
       child: Card(
         color: Colors.blue.shade800,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
           child: Column(
             children: [
               Row(
@@ -195,16 +169,33 @@ class StatusItemState extends State<StatusItem> {
                   children: [
                     Text(widget.statusVehicule.attributes.libelleStatus,
                         style: TextStyle(fontSize: 18, color: Colors.white)),
-                    Text(dtformat(widget.statusVehicule.attributes.updatedAt),
-                        style: TextStyle(
-                            fontSize: 12.0, color: Color(0xFF78FF09))),
+                    IconButton(
+                      onPressed: () async {
+                        if (await confirm(
+                          context,
+                          title: const Text('Confirmez '),
+                          content: const Text(
+                              'Voulez-vous vraiment supprimer ce status ?'),
+                          textOK: const Text('Oui, supprimer !'),
+                          textCancel: const Text('Non'),
+                        )) {
+                          return _deleteStatusVehicule(
+                              widget.statusVehicule.id);
+                        } else
+                          return print('pressedCancel');
+                      },
+                      iconSize: 25,
+                      icon: Icon(Icons.delete),
+                      color: Colors.white,
+                    )
                   ]),
               Row(
                 children: [
-                  Row(),
-                  _showFormActions(),
+                  Text(dtformat(widget.statusVehicule.attributes.updatedAt),
+                      style:
+                          TextStyle(fontSize: 10.0, color: Color(0xFF78FF09))),
                 ],
-              )
+              ),
             ],
           ),
         ),
