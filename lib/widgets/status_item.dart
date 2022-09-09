@@ -23,15 +23,30 @@ class StatusItem extends StatefulWidget {
 
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
-  String _msg = 'PRENDRE UNE PHOTO: double-cliquer !';
+  String _msg = '';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
   }
 
+  Widget _showFormActions() {
+    return Column(children: [
+      _isSubmitting == true
+          ? CircularProgressIndicator(
+              color: Colors.white,
+            )
+          : Text(_msg,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.italic)),
+    ]);
+  }
+
   void _takePhotoStatusVehicule() async {
     setState(() => _isSubmitting = true);
-    setState(() => _msg = 'Chargement en cours ...');
+    setState(() => _msg = 'Envoi de la photo en cours ...');
 
     final ImagePicker _picker = ImagePicker();
 
@@ -62,14 +77,14 @@ class StatusItemState extends State<StatusItem> {
     request.files.add(im);
 
     request.send().then((response) {
-      setState(() => _msg = 'Patientez svp ...');
+      setState(() => _msg = 'Attente du serveur ...');
       setState(() => _isSubmitting = false);
       if (response.statusCode == 200) {
-        setState(() => _msg = 'Photo envoyée ! Toucher pour ouvrir.');
+        setState(() => _msg = 'Envoi PHOTO réussi! Cliquez pour voir.');
       } else {
-        setState(
-            () => _msg = 'ERREUR ! Vérifiez votre connexion et ré essayer.');
+        setState(() => _msg = 'ERREUR! Vérifiez votre connectivité!');
       }
+      print(_msg);
     });
   }
 
@@ -91,24 +106,23 @@ class StatusItemState extends State<StatusItem> {
     request.headers['Accept'] = "multipart/mixed'";
 
     request.fields['ref'] = "api::status-vehicule.status-vehicule";
-    request.fields['field'] = "image";
+    request.fields['field'] = "video";
     request.fields['refId'] = widget.statusVehicule.id.toString();
 
-    final im = await http.MultipartFile.fromPath('files', video.path,
+    final vid = await http.MultipartFile.fromPath('files', video.path,
         contentType: MediaType('video', 'mp4'));
 
-    request.files.add(im);
+    request.files.add(vid);
 
     request.send().then((response) {
       setState(() => _msg = 'Patientez svp ...');
       setState(() => _isSubmitting = false);
       if (response.statusCode == 200) {
-        setState(() => _msg = 'Succès !');
-        print("Uploaded!");
+        setState(() => _msg = 'Envoi VIDEO réussi! Cliquez pour voir.');
       } else {
-        setState(() => _msg = 'Erreur ... réessayer svp !');
-        print("Not Uploaded!");
+        setState(() => _msg = 'ERREUR! Vérifiez votre connectivité!');
       }
+      print(_msg);
     });
   }
 
@@ -160,7 +174,7 @@ class StatusItemState extends State<StatusItem> {
       child: Card(
         color: Colors.blue.shade800,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: Column(
             children: [
               Row(
@@ -184,16 +198,18 @@ class StatusItemState extends State<StatusItem> {
                         } else
                           return print('pressedCancel');
                       },
-                      iconSize: 25,
+                      iconSize: 30,
                       icon: Icon(Icons.delete),
                       color: Colors.white,
-                    )
+                    ),
                   ]),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(dtformat(widget.statusVehicule.attributes.updatedAt),
                       style:
                           TextStyle(fontSize: 10.0, color: Color(0xFF78FF09))),
+                  _showFormActions(),
                 ],
               ),
             ],

@@ -19,20 +19,23 @@ class StatusDetailPageState extends State<StatusDetailPage> {
   initState() {
     super.initState();
 
-    _fetchImages().then((value) {
+    _checkImagesAndVideos().then((value) {
       setState(() {
-        _allImages.addAll(value);
+        _allmedias.addAll(value);
       });
+      //print(_allmedias);
     });
   }
 
   String infoFlash = '';
 
-  final List<si.Datum> _allImages = [];
+  int _isEmpty = 0;
 
-  int _imgcounter = 0;
+  final List<si.Datum> _allmedias = [];
 
-  Future<List<si.Datum>> _fetchImages() async {
+  //int _imgcounter = 0;
+
+  Future<List<si.Datum>> _checkImagesAndVideos() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
@@ -41,13 +44,13 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     String statusRelatedID = widget.statusvehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules/$statusRelatedID?populate[0]=Image';
+        'http://rarecamion.com:1337/api/status-vehicules/$statusRelatedID?populate[0]=Image,Video';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
     //print(response.body);
 
-    final List<si.Datum> imagesListList = [];
+    final List<si.Datum> mediaList = [];
 
     if (response.statusCode != 200) {
       if (kDebugMode) {
@@ -58,16 +61,39 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
       List<si.Datum> imagesList = jsonStrapi.data.attributes.image.data;
 
+      List<si.Datum> videosList = jsonStrapi.data.attributes.video.data;
+
+      //print(imagesList);
+
       if (imagesList != null) {
-        _imgcounter = imagesList.length;
+        _isEmpty = 1;
+      }
+
+      if (videosList != null) {
+        _isEmpty = 2;
+      }
+
+      if (_isEmpty != 0) {
+        //_imgcounter = imagesList.length;
         setState(() {
           infoFlash = 'Affichage des images et videos ...';
         });
-        imagesList.forEach((datum) {
-          si.Datum d = datum;
-          imagesListList.add(d);
-          print(d.attributes.url);
-        });
+
+        if (_isEmpty == 1) {
+          imagesList.forEach((datum) {
+            si.Datum d = datum;
+            mediaList.add(d);
+            print(d.attributes.url);
+          });
+        }
+
+        if (_isEmpty == 2) {
+          videosList.forEach((datum) {
+            si.Datum d = datum;
+            mediaList.add(d);
+            print(d.attributes.url);
+          });
+        }
       } else {
         setState(() {
           infoFlash = 'Aucun media pour ce status ...';
@@ -75,7 +101,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
       }
     }
 
-    return imagesListList;
+    return mediaList;
   }
 
   Widget _showTopStatusInfos(String libelle, String value) {
@@ -151,9 +177,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(image: _allImages[i]);
+                      return ImageItem(image: _allmedias[i]);
                     },
-                    itemCount: _allImages.length,
+                    itemCount: _allmedias.length,
                   ),
                 ),
               ],

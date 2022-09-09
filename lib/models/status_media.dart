@@ -1,52 +1,28 @@
 // To parse this JSON data, do
 //
-//     final statusImage = statusImageFromJson(jsonString);
+//     final statusMedia = statusMediaFromJson(jsonString);
 
 import 'dart:convert';
 
-class StatusImage {
-  StatusImage({
-    this.data,
-    this.meta,
-  });
-
-  Data data;
-  Meta meta;
-
-  factory StatusImage.fromRawJson(String str) =>
-      StatusImage.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory StatusImage.fromJson(Map<String, dynamic> json) => StatusImage(
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
-        meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data == null ? null : data.toJson(),
-        "meta": meta == null ? null : meta.toJson(),
-      };
-}
-
-class Data {
-  Data({
+class StatusMedia {
+  StatusMedia({
     this.id,
     this.attributes,
   });
 
   int id;
-  DataAttributes attributes;
+  StatusMediaAttributes attributes;
 
-  factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+  factory StatusMedia.fromRawJson(String str) =>
+      StatusMedia.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory StatusMedia.fromJson(Map<String, dynamic> json) => StatusMedia(
         id: json["id"] == null ? null : json["id"],
         attributes: json["attributes"] == null
             ? null
-            : DataAttributes.fromJson(json["attributes"]),
+            : StatusMediaAttributes.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,8 +31,8 @@ class Data {
       };
 }
 
-class DataAttributes {
-  DataAttributes({
+class StatusMediaAttributes {
+  StatusMediaAttributes({
     this.libelleStatus,
     this.observationStatus,
     this.createdAt,
@@ -76,12 +52,13 @@ class DataAttributes {
   Image image;
   Image video;
 
-  factory DataAttributes.fromRawJson(String str) =>
-      DataAttributes.fromJson(json.decode(str));
+  factory StatusMediaAttributes.fromRawJson(String str) =>
+      StatusMediaAttributes.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory DataAttributes.fromJson(Map<String, dynamic> json) => DataAttributes(
+  factory StatusMediaAttributes.fromJson(Map<String, dynamic> json) =>
+      StatusMediaAttributes(
         libelleStatus:
             json["libelleStatus"] == null ? null : json["libelleStatus"],
         observationStatus: json["observationStatus"] == null
@@ -337,16 +314,4 @@ class Large {
         "size": size == null ? null : size,
         "url": url == null ? null : url,
       };
-}
-
-class Meta {
-  Meta();
-
-  factory Meta.fromRawJson(String str) => Meta.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Meta.fromJson(Map<String, dynamic> json) => Meta();
-
-  Map<String, dynamic> toJson() => {};
 }

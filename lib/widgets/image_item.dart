@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:rarecamion/widgets/videoplayer_item.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:rarecamion/models/status_image.dart' as si;
 import 'package:http/http.dart' as http;
@@ -14,6 +15,9 @@ class ImageItem extends StatefulWidget {
 }
 
 class ImageItemState extends State<ImageItem> {
+  //
+  //
+
   void _deletePhotoStatusVehicule(int imageRCID) async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -71,54 +75,125 @@ class ImageItemState extends State<ImageItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.blue.shade800,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            _showImage(widget.image),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
+    return widget.image.attributes.ext.toString() != '.MOV'
+        ? Card(
+            color: Colors.blue.shade800,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      if (await confirm(
-                        context,
-                        title: const Text('Confirmez '),
-                        content: const Text('Voulez-vous supprimer la photo ?'),
-                        textOK: const Text('Oui, supprimer !'),
-                        textCancel: const Text('Non'),
-                      )) {
-                        return _deletePhotoStatusVehicule(widget.image.id);
-                      } else
-                        return (print('pressedCancel'));
-                    },
+                  _showImage(widget.image),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          'SUPPRIMER',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        Icon(
-                          Icons.delete,
-                          color: Colors.white,
+                        GestureDetector(
+                          onTap: () async {
+                            if (await confirm(
+                              context,
+                              title: const Text('Confirmez '),
+                              content: const Text('Voulez-vous supprimer ?'),
+                              textOK: const Text('Oui, supprimer !'),
+                              textCancel: const Text('Non'),
+                            )) {
+                              return _deletePhotoStatusVehicule(
+                                  widget.image.id);
+                            } else
+                              return (print('pressedCancel'));
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'SUPPRIMER',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          )
+        : Card(
+            color: Colors.green,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return VideoPlayerScreen(media: widget.image);
+                            })),
+                            child: Text(
+                              'CLIQUER POUR VOIR LA VIDEO',
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 10),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            if (await confirm(
+                              context,
+                              title: const Text('Confirmez '),
+                              content: const Text('Voulez-vous supprimer ?'),
+                              textOK: const Text('Oui, supprimer !'),
+                              textCancel: const Text('Non'),
+                            )) {
+                              return _deletePhotoStatusVehicule(
+                                  widget.image.id);
+                            } else
+                              return (print('pressedCancel'));
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'SUPPRIMER',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
   }
 }
