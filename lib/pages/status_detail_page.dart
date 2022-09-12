@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/status_image.dart' as si;
+import 'package:rarecamion/widgets/media_item.dart';
 import '../models/status_vehicule.dart';
-import '../widgets/image_item.dart';
 
 class StatusDetailPage extends StatefulWidget {
   final StatusVehicule statusvehicule;
@@ -23,13 +23,11 @@ class StatusDetailPageState extends State<StatusDetailPage> {
       setState(() {
         _allmedias.addAll(value);
       });
-      //print(_allmedias);
+      print(_allmedias);
     });
   }
 
   String infoFlash = '';
-
-  int _isEmpty = 0;
 
   final List<si.Datum> _allmedias = [];
 
@@ -40,6 +38,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
+
+    bool _containsPics = false;
+    bool _containsMovs = false;
 
     String statusRelatedID = widget.statusvehicule.id.toString();
 
@@ -53,6 +54,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     final List<si.Datum> mediaList = [];
 
     if (response.statusCode != 200) {
+      setState(() {
+        infoFlash = "Impossible de charger les status ... ré-essayez svp !";
+      });
       if (kDebugMode) {
         print('Failed to load STATUS !');
       }
@@ -66,37 +70,38 @@ class StatusDetailPageState extends State<StatusDetailPage> {
       //print(imagesList);
 
       if (imagesList != null) {
-        _isEmpty = 1;
+        imagesList.forEach((datum) {
+          si.Datum d = datum;
+          mediaList.add(d);
+          //print(d.attributes.url);
+        });
+        _containsPics = true;
       }
 
       if (videosList != null) {
-        _isEmpty = 2;
+        videosList.forEach((datum) {
+          si.Datum d = datum;
+          mediaList.add(d);
+          //print(d.attributes.url);
+        });
+        _containsMovs = true;
       }
 
-      if (_isEmpty != 0) {
-        //_imgcounter = imagesList.length;
+      if (_containsPics && _containsMovs) {
         setState(() {
-          infoFlash = 'Affichage des images et videos ...';
+          infoFlash = 'Affichage des images et videos !';
         });
-
-        if (_isEmpty == 1) {
-          imagesList.forEach((datum) {
-            si.Datum d = datum;
-            mediaList.add(d);
-            print(d.attributes.url);
-          });
-        }
-
-        if (_isEmpty == 2) {
-          videosList.forEach((datum) {
-            si.Datum d = datum;
-            mediaList.add(d);
-            print(d.attributes.url);
-          });
-        }
-      } else {
+      } else if (_containsPics == true && _containsMovs == false) {
         setState(() {
-          infoFlash = 'Aucun media pour ce status ...';
+          infoFlash = 'Affichage des photos (aucune vidéo trouvée) !';
+        });
+      } else if (_containsPics == false && _containsMovs == true) {
+        setState(() {
+          infoFlash = 'Affichage des vidéos (aucune photo trouvée) !';
+        });
+      } else if (_containsPics == false && _containsMovs == false) {
+        setState(() {
+          infoFlash = 'Aucun media trouvé pour ce status !';
         });
       }
     }
@@ -177,7 +182,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(image: _allmedias[i]);
+                      return MediaItem(mediaItem: _allmedias[i]);
                     },
                     itemCount: _allmedias.length,
                   ),
