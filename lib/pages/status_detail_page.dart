@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rarecamion/models/status_image.dart' as si;
+import 'package:rarecamion/models/status_vehicule.dart';
 import 'package:rarecamion/widgets/media_item.dart';
-import '../models/status_vehicule.dart';
 
 class StatusDetailPage extends StatefulWidget {
   final StatusVehicule statusvehicule;

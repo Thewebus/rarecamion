@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:rarecamion/admin/items/adm_image_item.dart';
+import 'package:rarecamion/admin/items/media_item.dart';
 import 'package:rarecamion/models/status_image.dart' as si;
 import 'package:rarecamion/models/status_vehicule.dart';
 
@@ -19,37 +19,44 @@ class StatusDetailPageState extends State<StatusDetailPage> {
   initState() {
     super.initState();
 
-    _fetchImages().then((value) {
+    _checkImagesAndVideos().then((value) {
       setState(() {
-        _allImages.addAll(value);
+        _allmedias.addAll(value);
       });
+      print(_allmedias);
     });
   }
 
   String infoFlash = '';
 
-  final List<si.Datum> _allImages = [];
+  final List<si.Datum> _allmedias = [];
 
-  int _imgcounter = 0;
+  //int _imgcounter = 0;
 
-  Future<List<si.Datum>> _fetchImages() async {
+  Future<List<si.Datum>> _checkImagesAndVideos() async {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
 
+    bool _containsPics = false;
+    bool _containsMovs = false;
+
     String statusRelatedID = widget.statusvehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules/$statusRelatedID?populate[0]=Image';
+        'http://rarecamion.com:1337/api/status-vehicules/$statusRelatedID?populate[0]=Image,Video';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 
     //print(response.body);
 
-    final List<si.Datum> imagesListList = [];
+    final List<si.Datum> mediaList = [];
 
     if (response.statusCode != 200) {
+      setState(() {
+        infoFlash = "Impossible de charger les status ... ré-essayez svp !";
+      });
       if (kDebugMode) {
         print('Failed to load STATUS !');
       }
@@ -58,24 +65,48 @@ class StatusDetailPageState extends State<StatusDetailPage> {
 
       List<si.Datum> imagesList = jsonStrapi.data.attributes.image.data;
 
+      List<si.Datum> videosList = jsonStrapi.data.attributes.video.data;
+
+      //print(imagesList);
+
       if (imagesList != null) {
-        _imgcounter = imagesList.length;
-        setState(() {
-          infoFlash = 'Affichage des medias liés à ce status ...';
-        });
         imagesList.forEach((datum) {
           si.Datum d = datum;
-          imagesListList.add(d);
-          print(d.attributes.url);
+          mediaList.add(d);
+          //print(d.attributes.url);
         });
-      } else {
+        _containsPics = true;
+      }
+
+      if (videosList != null) {
+        videosList.forEach((datum) {
+          si.Datum d = datum;
+          mediaList.add(d);
+          //print(d.attributes.url);
+        });
+        _containsMovs = true;
+      }
+
+      if (_containsPics && _containsMovs) {
         setState(() {
-          infoFlash = 'Aucun media lié à ce status !';
+          infoFlash = 'Affichage des images et videos !';
+        });
+      } else if (_containsPics == true && _containsMovs == false) {
+        setState(() {
+          infoFlash = 'Affichage des photos (aucune vidéo trouvée) !';
+        });
+      } else if (_containsPics == false && _containsMovs == true) {
+        setState(() {
+          infoFlash = 'Affichage des vidéos (aucune photo trouvée) !';
+        });
+      } else if (_containsPics == false && _containsMovs == false) {
+        setState(() {
+          infoFlash = 'Aucun media trouvé pour ce status !';
         });
       }
     }
 
-    return imagesListList;
+    return mediaList;
   }
 
   Widget _showTopStatusInfos(String libelle, String value) {
@@ -151,9 +182,9 @@ class StatusDetailPageState extends State<StatusDetailPage> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
-                      return ImageItem(image: _allImages[i]);
+                      return MediaItem(mediaItem: _allmedias[i]);
                     },
-                    itemCount: _allImages.length,
+                    itemCount: _allmedias.length,
                   ),
                 ),
               ],

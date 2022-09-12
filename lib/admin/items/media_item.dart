@@ -80,56 +80,18 @@ class MediaItemState extends State<MediaItem> {
 
     return _mediaItemType != '.MOV'
         ? Card(
-            color: Colors.blue.shade800,
+            color: Colors.black,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
                   _showImage(widget.mediaItem),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            if (await confirm(
-                              context,
-                              title: const Text('Confirmez '),
-                              content: const Text('Voulez-vous supprimer ?'),
-                              textOK: const Text('Oui, supprimer !'),
-                              textCancel: const Text('Non'),
-                            )) {
-                              return _deleteMediaItem(widget.mediaItem.id);
-                            } else
-                              return (print('pressedCancel'));
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                'SUPPRIMER',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
           )
         : Card(
-            color: Colors.blue.shade800,
+            color: Colors.black,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -154,44 +116,6 @@ class MediaItemState extends State<MediaItem> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            if (await confirm(
-                              context,
-                              title: const Text('Confirmez '),
-                              content: const Text('Voulez-vous supprimer ?'),
-                              textOK: const Text('Oui, supprimer !'),
-                              textCancel: const Text('Non'),
-                            )) {
-                              return _deleteMediaItem(widget.mediaItem.id);
-                            } else
-                              return (print('pressedCancel'));
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                'SUPPRIMER',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),

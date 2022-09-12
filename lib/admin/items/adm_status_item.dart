@@ -15,7 +15,7 @@ class StatusItem extends StatefulWidget {
 class StatusItemState extends State<StatusItem> {
   bool _isSubmitting = false;
   //String _msg = 'PHOTOS: double-cliquer | VIDEOS: maintenir';
-  String _msg = 'Cliquer pour voir les photos';
+  String _msg = 'Cliquer pour voir les photos et videos ...';
 
   String dtformat(DateTime d) {
     return formatDate(d, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
