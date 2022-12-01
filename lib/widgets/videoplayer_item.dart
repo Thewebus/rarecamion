@@ -21,6 +21,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     String url =
         'http://rarecamion.com:1337' + this.widget.media.attributes.url;
 
+    print(url);
+
     // Create and store the VideoPlayerController. The VideoPlayerController
     // offers several different constructors to play videos from assets, files,
     // or the internet.

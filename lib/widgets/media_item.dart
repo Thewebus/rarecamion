@@ -78,14 +78,33 @@ class MediaItemState extends State<MediaItem> {
     String _mediaItemType = widget.mediaItem.attributes.ext;
     print(_mediaItemType);
 
-    return _mediaItemType != '.MOV'
+    return _mediaItemType.toUpperCase() != '.JPG'
         ? Card(
             color: Colors.blue.shade800,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  _showImage(widget.mediaItem),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return VideoPlayerScreen(media: widget.mediaItem);
+                            })),
+                            child: Text(
+                              'CLIQUER POUR VOIR LA VIDEO',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 10),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Row(
@@ -134,26 +153,7 @@ class MediaItemState extends State<MediaItem> {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return VideoPlayerScreen(media: widget.mediaItem);
-                            })),
-                            child: Text(
-                              'CLIQUER POUR VOIR LA VIDEO',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  _showImage(widget.mediaItem),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Row(
