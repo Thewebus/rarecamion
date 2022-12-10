@@ -45,7 +45,7 @@ class VehiculeDetailsPageState extends State<VehiculeDetailsPage> {
     String vehiculeRelatedID = widget.vehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID&sort[0]=updatedAt:desc';
+        'http://api.rarecamion.com/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID&sort[0]=updatedAt:desc';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 

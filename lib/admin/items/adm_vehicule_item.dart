@@ -73,7 +73,7 @@ class VehiculeItemState extends State<VehiculeItem> {
     StatusVehicule statusV = null;
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$_id&sort[0]=updatedAt:desc';
+        'http://api.rarecamion.com/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$_id&sort[0]=updatedAt:desc';
 
     try {
       http.Response response = await http.get(Uri.parse(url), headers: headers);

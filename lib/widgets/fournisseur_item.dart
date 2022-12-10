@@ -25,7 +25,7 @@ class _FournisseursItemState extends State<FournisseursItem> {
       'Accept': 'application/json'
     };
     String infoFlash = '';
-    String url = 'http://rarecamion.com:1337/api/fournisseurs/$_fID';
+    String url = 'http://api.rarecamion.com/api/fournisseurs/$_fID';
 
     http.Response response =
         await http.delete(Uri.parse(url), headers: headers);

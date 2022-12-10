@@ -139,7 +139,7 @@ class RegisterPageState extends State<RegisterPage> {
 
     try {
       http.Response response = await http.post(
-          Uri.parse('http://rarecamion.com:1337/api/auth/local/register'),
+          Uri.parse('http://api.rarecamion.com/api/auth/local/register'),
           body: {
             "username": "$_username",
             "email": "$_email",

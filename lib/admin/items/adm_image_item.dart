@@ -14,7 +14,7 @@ class ImageItem extends StatefulWidget {
 class ImageItemState extends State<ImageItem> {
   Widget _showImage(si.Datum photo) {
     return Image.network(
-      'http://rarecamion.com:1337' + photo.attributes.url,
+      'http://api.rarecamion.com' + photo.attributes.url,
       fit: BoxFit.fill,
       loadingBuilder: (BuildContext context, Widget child,
           ImageChunkEvent loadingProgress) {

@@ -24,7 +24,7 @@ class MediaItemState extends State<MediaItem> {
       'Accept': 'application/json'
     };
     String infoFlash = '';
-    String url = 'http://rarecamion.com:1337/api/upload/files/$imageRCID';
+    String url = 'http://api.rarecamion.com/api/upload/files/$imageRCID';
 
     http.Response response =
         await http.delete(Uri.parse(url), headers: headers);
@@ -53,7 +53,7 @@ class MediaItemState extends State<MediaItem> {
 
   Widget _showImage(si.Datum photo) {
     return Image.network(
-      'http://rarecamion.com:1337' + photo.attributes.url,
+      'http://api.rarecamion.com' + photo.attributes.url,
       fit: BoxFit.fill,
       loadingBuilder: (BuildContext context, Widget child,
           ImageChunkEvent loadingProgress) {

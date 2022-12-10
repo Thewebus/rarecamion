@@ -45,7 +45,7 @@ class StatusDetailPageState extends State<StatusDetailPage> {
     String statusRelatedID = widget.statusvehicule.id.toString();
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules/$statusRelatedID?populate[0]=Image,Video';
+        'http://api.rarecamion.com/api/status-vehicules/$statusRelatedID?populate[0]=Image,Video';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 

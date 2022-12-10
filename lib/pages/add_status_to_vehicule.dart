@@ -121,7 +121,7 @@ class AddStatusPageState extends State<AddStatusPage> {
     };
 
     http.Response response = await http.post(
-        Uri.parse('http://rarecamion.com:1337/api/status-vehicules'),
+        Uri.parse('http://api.rarecamion.com/api/status-vehicules'),
         headers: headers,
         body: jsonEncode({
           "data": {

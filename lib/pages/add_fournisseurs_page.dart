@@ -85,7 +85,7 @@ class AddFournisseurPageState extends State<AddFournisseurPage> {
     };
 
     http.Response response =
-        await http.post(Uri.parse('http://rarecamion.com:1337/api/vehicules'),
+        await http.post(Uri.parse('http://api.rarecamion.com/api/vehicules'),
             headers: headers,
             body: jsonEncode({
               "data": {
@@ -180,7 +180,7 @@ class AddFournisseurPageState extends State<AddFournisseurPage> {
     };
 
     String url =
-        'http://rarecamion.com:1337/api/fournisseurs?pagination[limit]=50';
+        'http://api.rarecamion.com/api/fournisseurs?pagination[limit]=50';
 
     http.Response response = await http.get(Uri.parse(url), headers: headers);
 

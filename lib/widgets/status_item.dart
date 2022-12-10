@@ -62,7 +62,7 @@ class StatusItemState extends State<StatusItem> {
         await File(photo.path).writeAsBytes(img.encodeJpg(orientedImage));
 
     final request = http.MultipartRequest(
-        'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
+        'POST', Uri.parse('http://api.rarecamion.com/api/upload/'));
 
     request.headers['Content-Type'] = "multipart/form-data;charset=utf-8";
     request.headers['Accept'] = "multipart/mixed'";
@@ -100,7 +100,7 @@ class StatusItemState extends State<StatusItem> {
         preferredCameraDevice: CameraDevice.rear);
 
     final request = http.MultipartRequest(
-        'POST', Uri.parse('http://rarecamion.com:1337/api/upload/'));
+        'POST', Uri.parse('http://api.rarecamion.com/api/upload/'));
 
     request.headers['Content-Type'] = "multipart/form-data;charset=utf-8";
     request.headers['Accept'] = "multipart/mixed'";
@@ -145,7 +145,7 @@ class StatusItemState extends State<StatusItem> {
       'Accept': 'application/json'
     };
     String infoFlash = '';
-    String url = 'http://rarecamion.com:1337/api/status-vehicules/$statusID';
+    String url = 'http://api.rarecamion.com/api/status-vehicules/$statusID';
 
     http.Response response =
         await http.delete(Uri.parse(url), headers: headers);

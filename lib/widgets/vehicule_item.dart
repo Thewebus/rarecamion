@@ -43,7 +43,7 @@ class VehiculeItemState extends State<VehiculeItem> {
     String _return = '';
 
     String url =
-        'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=${widget.vehicule.id}&sort[0]=updatedAt:desc';
+        'http://api.rarecamion.com/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=${widget.vehicule.id}&sort[0]=updatedAt:desc';
 
     //print(url);
 
@@ -74,7 +74,7 @@ class VehiculeItemState extends State<VehiculeItem> {
       'Accept': 'application/json'
     };
     String infoFlash = '';
-    String url = 'http://rarecamion.com:1337/api/vehicules/$vehiculeID';
+    String url = 'http://api.rarecamion.com/api/vehicules/$vehiculeID';
 
     http.Response response =
         await http.delete(Uri.parse(url), headers: headers);

@@ -127,7 +127,7 @@ class LoginPageState extends State<LoginPage> {
 
     setState(() => _isSubmitting = true);
     http.Response response = await http.post(
-        Uri.parse('http://rarecamion.com:1337/api/auth/local'),
+        Uri.parse('http://api.rarecamion.com/api/auth/local'),
         body: {"identifier": _email, "password": _password});
 
     if (response.statusCode == 200) {

@@ -42,7 +42,7 @@ class _UserItemState extends State<UserItem> {
     };
     String infoFlash = '';
 
-    String url = 'http://rarecamion.com:1337/api/users/$_userID';
+    String url = 'http://api.rarecamion.com/api/users/$_userID';
     String jsonReq = jsonEncode({"confirmed": "$_toggle"});
 
     http.Response response =

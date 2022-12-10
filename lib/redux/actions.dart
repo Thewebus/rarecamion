@@ -55,7 +55,7 @@ ThunkAction<AppState> getVehiculesAction = (Store<AppState> store) async {
     'Accept': 'application/json'
   };
   String url =
-      'http://rarecamion.com:1337/api/vehicules?populate=*&filters[user][email][\$eq]=$userEmail&sort[0]=updatedAt:desc';
+      'http://api.rarecamion.com/api/vehicules?populate=*&filters[user][email][\$eq]=$userEmail&sort[0]=updatedAt:desc';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -95,7 +95,7 @@ ThunkAction<AppState> getstatusAction = (Store<AppState> store) async {
   String vehiculeRelatedID = '';
 
   String url =
-      'http://rarecamion.com:1337/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
+      'http://api.rarecamion.com/api/status-vehicules?populate=*&filters[vehicule_related][id][\$eq]=$vehiculeRelatedID';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -128,7 +128,7 @@ ThunkAction<AppState> getFournisseursAction = (Store<AppState> store) async {
   };
 
   String url =
-      'http://rarecamion.com:1337/api/fournisseurs?pagination[limit]=100';
+      'http://api.rarecamion.com/api/fournisseurs?pagination[limit]=100';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -168,7 +168,7 @@ ThunkAction<AppState> getUsersListAction = (Store<AppState> store) async {
   };
 
   String url =
-      'http://rarecamion.com:1337/api/users?filters[status][\$eq]=normal';
+      'http://api.rarecamion.com/api/users?filters[status][\$eq]=normal';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 
@@ -207,7 +207,7 @@ ThunkAction<AppState> getVehiculesAllAction = (Store<AppState> store) async {
   };
 
   String url =
-      'http://rarecamion.com:1337/api/vehicules?populate=*&sort[0]=updatedAt:desc&pagination[limit]=5000';
+      'http://api.rarecamion.com/api/vehicules?populate=*&sort[0]=updatedAt:desc&pagination[limit]=5000';
 
   http.Response response = await http.get(Uri.parse(url), headers: headers);
 

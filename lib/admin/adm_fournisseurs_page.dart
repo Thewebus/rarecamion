@@ -28,7 +28,7 @@ class _FournisseursPageState extends State<FournisseursPage> {
     };
     String infoFlash = '';
     bool _return = false;
-    String url = 'http://rarecamion.com:1337/api/fournisseurs/$_fID';
+    String url = 'http://api.rarecamion.com/api/fournisseurs/$_fID';
 
     http.Response response =
         await http.delete(Uri.parse(url), headers: headers);
@@ -53,12 +53,12 @@ class _FournisseursPageState extends State<FournisseursPage> {
       'Accept': 'application/json'
     };
 
-    http.Response response = await http.post(
-        Uri.parse('http://rarecamion.com:1337/api/fournisseurs'),
-        headers: headers,
-        body: jsonEncode({
-          "data": {"nomFournisseur": _nomFournisseur}
-        }));
+    http.Response response =
+        await http.post(Uri.parse('http://api.rarecamion.com/api/fournisseurs'),
+            headers: headers,
+            body: jsonEncode({
+              "data": {"nomFournisseur": _nomFournisseur}
+            }));
 
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);

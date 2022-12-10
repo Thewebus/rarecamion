@@ -18,8 +18,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
 
-    String url =
-        'http://rarecamion.com:1337' + this.widget.media.attributes.url;
+    String url = 'http://api.rarecamion.com' + this.widget.media.attributes.url;
 
     print(url);
 
